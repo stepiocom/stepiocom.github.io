@@ -6,10 +6,12 @@
     <title>STEPIO | Intellectual Property Architecture</title>
     <style>
         :root {
-            --bg: #ffffff;
-            --text: #111111;
-            --accent: #555555;
-            --border: #eaeaea;
+            --bg: #fdfdfb; /* Warm premium alabaster */
+            --text: #1a1a1a; /* Deep soft charcoal */
+            --accent: #6e6e6e; /* Slate gray */
+            --gold: #8d7755; /* Muted bronze/gold for prestige framing */
+            --border: #e6e4e0;
+            --card-bg: #ffffff;
         }
         
         * {
@@ -19,68 +21,101 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Georgia", Garamond, serif; /* Elegant typographic mix */
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.6;
-            padding: 2rem 1rem;
+            line-height: 1.7;
+            padding: 4rem 2rem;
         }
 
         .container {
-            max-width: 650px;
+            max-width: 700px;
             margin: 0 auto;
-            padding-top: 4rem;
         }
 
         header {
-            margin-bottom: 3.5rem;
+            margin-bottom: 4rem;
+            border-left: 3px solid var(--gold);
+            padding-left: 1.5rem;
+        }
+
+        /* Logo styling container */
+        .brand-logo {
+            max-width: 120px;
+            height: auto;
+            margin-bottom: 1.5rem;
+            display: block;
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            font-size: 2.2rem;
             font-weight: 700;
-            letter-spacing: -0.02em;
+            letter-spacing: 0.05em;
             margin-bottom: 0.5rem;
-            text-transform: uppercase;
+            color: var(--text);
         }
 
         h2 {
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
             font-size: 1.25rem;
             font-weight: 500;
-            color: var(--text);
+            color: var(--gold);
             line-height: 1.4;
             letter-spacing: -0.01em;
+            margin-bottom: 0.5rem;
+        }
+
+        .slogan {
+            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
+            font-size: 1.15rem;
+            font-weight: 400;
+            color: var(--accent);
+            font-style: italic;
         }
 
         .intro {
-            font-size: 1.05rem;
-            margin-bottom: 2.5rem;
+            font-size: 1.1rem;
+            margin-bottom: 4rem;
             color: var(--text);
+            text-align: justify;
         }
 
         .section-title {
-            font-size: 0.9rem;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.85rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--accent);
-            margin-bottom: 1.5rem;
-            border-bottom: 1px solid var(--border);
-            padding-bottom: 0.25rem;
+            letter-spacing: 0.1em;
+            color: var(--gold);
+            margin-bottom: 2rem;
+            padding-bottom: 0.5rem;
         }
 
         .pipeline {
-            margin-bottom: 3rem;
+            margin-bottom: 4rem;
         }
 
         .step {
-            margin-bottom: 1.75rem;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            padding: 1.75rem;
+            margin-bottom: 1.5rem;
+            border-radius: 6px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.015);
+            transition: transform 0.2s ease;
+        }
+
+        .step:hover {
+            transform: translateY(-2px);
         }
 
         .step-title {
-            font-size: 1rem;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.05rem;
             font-weight: 600;
-            margin-bottom: 0.25rem;
+            margin-bottom: 0.5rem;
+            color: var(--text);
         }
 
         .step-desc {
@@ -89,96 +124,35 @@
         }
 
         .workspace {
-            margin-bottom: 3.5rem;
+            background: #f4f2ed;
+            border-radius: 6px;
+            padding: 2rem;
+            margin-bottom: 4rem;
+            border: 1px dashed var(--gold);
         }
 
         .workspace p {
-            font-size: 0.95rem;
+            font-size: 1rem;
             color: var(--text);
-            margin-bottom: 1rem;
         }
 
-        .cta-container {
-            margin-top: 2.5rem;
+        .faq-section {
+            margin-bottom: 4rem;
         }
 
-        .btn {
-            display: inline-block;
-            background-color: var(--text);
-            color: var(--bg);
-            text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.9rem;
+        .faq-item {
+            border-bottom: 1px solid var(--border);
+            padding: 1.5rem 0;
+        }
+
+        .faq-question {
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 1.05rem;
             font-weight: 600;
-            border-radius: 4px;
-            transition: opacity 0.15s ease;
+            color: var(--text);
+            margin-bottom: 0.5rem;
         }
 
-        .btn:hover {
-            opacity: 0.9;
-        }
-
-        footer {
-            margin-top: 6rem;
-            font-size: 0.8rem;
-            color: var(--accent);
-            text-align: center;
-        }
-
-        @media (max-width: 480px) {
-            body { padding: 1rem; }
-            .container { padding-top: 1.5rem; }
-        }
-    </style>
-</head>
-<body>
-
-    <div class="container">
-        <header>
-            <h1>STEPIO</h1>
-            <h2>You do the field work. We build your intellectual legacy.</h2>
-        </header>
-
-        <main>
-            <p class="intro">
-                Every elite professional sits on a goldmine of unorganized insights—unique shortcuts, industry critiques, and real-world experiences. But turning those scattered thoughts into a published book or a consistent social media presence takes time you don't have. We partner with researchers, executives, and specialists to extract, organize, and publish their mind capital asynchronously.
-            </p>
-
-            <section class="pipeline">
-                <div class="section-title">How We Partner</div>
-                
-                <div class="step">
-                    <div class="step-title">1. The Diagnostic Hook</div>
-                    <div class="step-desc">We take your rawest notes, slide decks, or audio files and reveal the high-level theoretical frameworks hidden inside your daily operations.</div>
-                </div>
-
-                <div class="step">
-                    <div class="step-title">2. The Weekly Show-Off</div>
-                    <div class="step-desc">We track real-time changes in your industry and instantly turn those developments into punchy, high-prestige social media messages and blogs that keep you visible.</div>
-                </div>
-
-                <div class="step">
-                    <div class="step-title">3. The Permanent Publication</div>
-                    <div class="step-desc">In the background, we systematically connect those insights into an ongoing, formal book manuscript, publication essay, or academic paper.</div>
-                </div>
-            </section>
-
-            <section class="workspace">
-                <div class="section-title">Your Private Workspace</div>
-                <p>
-                    We don't clog your inbox with email chains or complex software. Every project receives a private, secure, web-accessible <strong>Scrapbook</strong>—a single, clean digital ledger where your requirements sit alongside your weekly social posts and your growing book chapters for easy, remote collaboration.
-                </p>
-            </section>
-
-            <div class="cta-container">
-                <a href="https://www.fiverr.com/YOUR_USERNAME" class="btn" target="_blank">Start Your First Diagnostic on Fiverr</a>
-            </div>
-        </main>
-
-        <footer>
-            <p>&copy; 2026 STEPIO Advisory Systems. All rights reserved.</p>
-        </footer>
-    </div>
-
-</body>
-</html>
+        .faq-answer {
+            font-size: 0.95rem;
+            color: var
