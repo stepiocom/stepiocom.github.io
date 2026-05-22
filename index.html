@@ -3,487 +3,182 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>STEPIO | Institutional System Architecture & Personal IP Advisory</title>
-    
-    <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/stepiocom/stepiocom.github.io/main/29083386.png">
-    
-    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <title>STEPIO | Intellectual Property Architecture</title>
     <style>
-        .lang-zh, .lang-ja, .lang-fr { display: none; }
-        html { scroll-behavior: smooth; }
-        .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
-        .faq-active .faq-content { max-height: 1200px; }
-        .faq-active .faq-icon { transform: rotate(180deg); }
+        :root {
+            --bg: #ffffff;
+            --text: #111111;
+            --accent: #555555;
+            --border: #eaeaea;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 2rem 1rem;
+        }
+
+        .container {
+            max-width: 650px;
+            margin: 0 auto;
+            padding-top: 4rem;
+        }
+
+        header {
+            margin-bottom: 3.5rem;
+        }
+
+        h1 {
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.02em;
+            margin-bottom: 0.5rem;
+            text-transform: uppercase;
+        }
+
+        h2 {
+            font-size: 1.25rem;
+            font-weight: 500;
+            color: var(--text);
+            line-height: 1.4;
+            letter-spacing: -0.01em;
+        }
+
+        .intro {
+            font-size: 1.05rem;
+            margin-bottom: 2.5rem;
+            color: var(--text);
+        }
+
+        .section-title {
+            font-size: 0.9rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 0.25rem;
+        }
+
+        .pipeline {
+            margin-bottom: 3rem;
+        }
+
+        .step {
+            margin-bottom: 1.75rem;
+        }
+
+        .step-title {
+            font-size: 1rem;
+            font-weight: 600;
+            margin-bottom: 0.25rem;
+        }
+
+        .step-desc {
+            font-size: 0.95rem;
+            color: var(--accent);
+        }
+
+        .workspace {
+            margin-bottom: 3.5rem;
+        }
+
+        .workspace p {
+            font-size: 0.95rem;
+            color: var(--text);
+            margin-bottom: 1rem;
+        }
+
+        .cta-container {
+            margin-top: 2.5rem;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--text);
+            color: var(--bg);
+            text-decoration: none;
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: 600;
+            border-radius: 4px;
+            transition: opacity 0.15s ease;
+        }
+
+        .btn:hover {
+            opacity: 0.9;
+        }
+
+        footer {
+            margin-top: 6rem;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-align: center;
+        }
+
+        @media (max-width: 480px) {
+            body { padding: 1rem; }
+            .container { padding-top: 1.5rem; }
+        }
     </style>
 </head>
-<body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-slate-200">
+<body>
 
-    <nav class="sticky top-0 z-50 bg-white/80 backdrop-blur-md border-b border-slate-200">
-        <div class="max-w-6xl mx-auto px-4 sm:px-6 h-16 flex items-center justify-between">
-            <div class="flex items-center space-x-3 shrink-0">
-                <img src="https://raw.githubusercontent.com/stepiocom/stepiocom.github.io/main/29083386.png" alt="STEPIO Logo" class="w-6 h-6 object-contain">
-                <div class="flex flex-col sm:flex-row sm:items-center sm:space-x-3">
-                    <div class="text-lg font-bold tracking-wide text-slate-900">STEPIO</div>
-                    <div class="hidden md:block text-[11px] text-slate-400 font-mono border-l border-slate-200 pl-3">
-                        your Personal IP engineered in 1 STEP
-                    </div>
-                </div>
-            </div>
-            <div class="flex items-center space-x-3 sm:space-x-6">
-                <a href="#services" class="hidden sm:inline text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">Services</span><span class="lang-zh">服務範疇</span><span class="lang-ja">サービス</span><span class="lang-fr">Services</span></a>
-                <a href="#philosophy" class="hidden sm:inline text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">Philosophy</span><span class="lang-zh">核心理念</span><span class="lang-ja">理念</span><span class="lang-fr">Philosophie</span></a>
-                <a href="#faq" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">FAQ</span><span class="lang-zh">問答</span><span class="lang-ja">FAQ</span><span class="lang-fr">FAQ</span></a>
-                
-                <div class="flex space-x-1 bg-slate-100 p-1 rounded border border-slate-200 text-[10px] font-bold tracking-wider font-mono">
-                    <button onclick="setLang('en')" id="btn-en" class="px-1.5 py-0.5 rounded bg-white shadow-xs text-slate-900 cursor-pointer">EN</button>
-                    <button onclick="setLang('zh')" id="btn-zh" class="px-1.5 py-0.5 rounded text-slate-500 hover:text-slate-900 cursor-pointer">中文</button>
-                    <button onclick="setLang('ja')" id="btn-ja" class="px-1.5 py-0.5 rounded text-slate-500 hover:text-slate-900 cursor-pointer">JA</button>
-                    <button onclick="setLang('fr')" id="btn-fr" class="px-1.5 py-0.5 rounded text-slate-500 hover:text-slate-900 cursor-pointer">FR</button>
-                </div>
-            </div>
-        </div>
-    </nav>
+    <div class="container">
+        <header>
+            <h1>STEPIO</h1>
+            <h2>You do the field work. We build your intellectual legacy.</h2>
+        </header>
 
-    <header class="max-w-4xl mx-auto px-6 pt-24 pb-16 text-center">
-        <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-6">
-            <span class="lang-en">Materializing Real-World Experience into High-Value Personal IP</span>
-            <span class="lang-zh">將實踐經驗與專業底蘊 轉化為高價值個人核心IP</span>
-            <span class="lang-ja">現実世界の経験を個人の高価値な知的財産へ具現化する</span>
-            <span class="lang-fr">Matérialiser l'Expérience Réelle en Propriété Intellectuelle de Haute Valeur</span>
-        </h1>
-        <p class="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
-            <span class="lang-en">We translate industry complexity, unstructured workflows, and deep domain knowledge into rigorous, structured intellectual assets, augmented by secure, private Gemini AI infrastructure.</span>
-            <span class="lang-zh">我們專注於將複雜的行業實踐、無結構的工作流與深厚的領域知識，轉化為嚴謹、系統化的知識資產，並透過安全且專屬的 Gemini AI 架構實現全面私有化管理。</span>
-            <span class="lang-ja">複雑な業界実務、非構造化ワークフロー、深いドメイン知識を厳格で構造化された知的資産へと翻訳し、安全なプライベートGemini AIインフラで拡張します。</span>
-            <span class="lang-fr">Nous traduisons la complexité industrielle, les flux de travail non structurés et l'expertise approfondie en actifs intellectuels rigoureux et structurés, augmentés par une infrastructure IA Gemini privée et sécurisée.</span>
-        </p>
-    </header>
-
-    <section id="services" class="max-w-6xl mx-auto px-6 py-16 border-t border-slate-200">
-        <div class="text-center mb-16">
-            <h2 class="text-2xl font-bold tracking-tight uppercase text-slate-500">
-                <span class="lang-en">Service Pillars</span><span class="lang-zh">核心服務體系</span><span class="lang-ja">サービスの柱</span><span class="lang-fr">Piliers de Services</span>
-            </h2>
-        </div>
-        
-        <div class="grid md:grid-cols-3 gap-8 items-stretch">
-            <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between h-full">
-                <div>
-                    <div class="text-xs font-mono text-slate-400 mb-2">01 / DIAGNOSTIC</div>
-                    <h3 class="text-xl font-bold mb-4">
-                        <span class="lang-en">Knowledge Mapping & Strategy Session</span>
-                        <span class="lang-zh">核心知識內核診斷與對接</span>
-                        <span class="lang-ja">ナレッジマッピング＆戦略セッション</span>
-                        <span class="lang-fr">Cartographie des Connaissances & Session Stratégique</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        <span class="lang-en">A rigorous 1-on-1 operational audit. We review your professional domain background—regardless of your specific industry or topic—and distill your insights into structured, actionable intellectual property pillars.</span>
-                        <span class="lang-zh">深度的一對一專業審計。無論您的背景處於何種行業或領域，我們都將全面梳理您的實踐經驗，並將其提煉與編排為具備高度系統化的知識產權內核。</span>
-                        <span class="lang-ja">厳格な1対1の業務監査。特定の業界やテーマを問わず、あなたの専門領域の背景をレビューし、その洞察を構造化され実用的な知的財産の柱へと凝縮します。</span>
-                        <span class="lang-fr">Un audit opérationnel rigoureux en tête-à-tête. Nous examinons votre expertise professionnelle—quel que soit votre secteur—et distillons vos idées en piliers de propriété intellectuelle structurés et exploitables.</span>
-                    </p>
-                </div>
-                <div class="mt-auto">
-                    <div class="text-lg font-bold text-slate-900 mb-4">$90 USD</div>
-                    <a href="https://www.fiverr.com/edwardpak/deploy-a-managed-gemini-ai-research-engine-for-your-personal-ip" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">
-                        <span class="lang-en">Book Session</span><span class="lang-zh">預約診斷</span><span class="lang-ja">セッションを予約</span><span class="lang-fr">Réserver une Session</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-xl border-2 border-slate-900 shadow-sm flex flex-col justify-between h-full relative">
-                <span class="absolute -top-3 left-6 bg-slate-900 text-white font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full font-bold">
-                    <span class="lang-en">Enterprise SaaS</span><span class="lang-zh">企業級託管</span><span class="lang-ja">企業向けSaaS</span><span class="lang-fr">SaaS Entreprise</span>
-                </span>
-                <div>
-                    <div class="text-xs font-mono text-slate-400 mb-2">02 / INFRASTRUCTURE</div>
-                    <h3 class="text-xl font-bold mb-4">
-                        <span class="lang-en">Managed Gemini AI Cockpit</span>
-                        <span class="lang-zh">私有化 Gemini AI 知識研究引擎</span>
-                        <span class="lang-ja">マネージドGemini AI コックピット</span>
-                        <span class="lang-fr">Cockpit IA Gemini Géré</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        <span class="lang-en">Deployment of a secure, Python-backed continuous ingestion pipeline tailored to your unique topics. Features Google AI Studio sandbox partitioning, custom context linking, and daily data monitoring.</span>
-                        <span class="lang-zh">針對您的專屬領域知識，部署基於 Python 的自動化持續數據攝取管道。配置 Google AI Studio 開發者沙盒隔離、客製化上下文數據鏈接，以及每日管道運行維護。</span>
-                        <span class="lang-ja">独自のテーマに合わせた、安全なPython駆動の継続的データ取り込みパイプラインの構築。Google AI Studioサンドボックス分割、カスタム文脈連携、日々のデータ監視を含みます。</span>
-                        <span class="lang-fr">Déploiement d'un pipeline d'ingestion continue sécurisé, propulsé par Python, adapté à vos sujets uniques. Comprend le cloisonnement en bac à sable Google AI Studio, la liaison contextuelle sur mesure et un suivi quotidien.</span>
-                    </p>
-                </div>
-                <div class="mt-auto">
-                    <div class="text-lg font-bold text-slate-900 mb-4">$950 USD <span class="text-xs font-normal text-slate-400">/ mo</span></div>
-                    <a href="https://www.fiverr.com/edwardpak/deploy-a-managed-gemini-ai-research-engine-for-your-personal-ip" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">
-                        <span class="lang-en">Deploy Engine</span><span class="lang-zh">部署引擎</span><span class="lang-ja">エンジンを導入</span><span class="lang-fr">Déployer le Moteur</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between h-full">
-                <div>
-                    <div class="text-xs font-mono text-slate-400 mb-2">03 / MATERIALIZATION</div>
-                    <h3 class="text-xl font-bold mb-4">
-                        <span class="lang-en">Personal Publishing Blueprints</span>
-                        <span class="lang-zh">全球化出版與影響力矩陣</span>
-                        <span class="lang-ja">個人出版ブループリント</span>
-                        <span class="lang-fr">Plans d'Édition Personnels</span>
-                    </h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        <span class="lang-en">Transforming repository assets into recognized authority. Includes physical layout design, multi-platform digital formatting, global ISBN registry support, and executive brief outlines tailored for your target audience.</span>
-                        <span class="lang-zh">將沈澱的系統資產轉化為無可替代的市場權威。涵蓋實體排版、多平台電子書格式編排、全球 ISBN 註冊對接，以及面向您目標受眾的高階演講與內容矩陣設計。</span>
-                        <span class="lang-ja">リポジトリ資産を認知された権威へと変換。物理レイアウト設計、マルチプラットフォームのデジタルフォーマット、グローバルISBN登録サポート、ターゲット層に合わせたエグゼクティブ概要のアウトライン作成を含みます。</span>
-                        <span class="lang-fr">Transformer les actifs du référentiel en autorité reconnue. Comprend la conception de la mise en page physique, le formatage numérique multi-plateforme, le support d'enregistrement ISBN mondial et des ébauches de notes exécutives adaptées à votre public cible.</span>
-                    </p>
-                </div>
-                <div class="mt-auto">
-                    <div class="text-lg font-bold text-slate-900 mb-4">$250 - $1,200 USD</div>
-                    <a href="https://www.fiverr.com/edwardpak/structure-high-signal-corporate-communication-and-publishing-blueprints" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">
-                        <span class="lang-en">Initialize Blueprint</span><span class="lang-zh">啟動方案</span><span class="lang-ja">設計図を始動</span><span class="lang-fr">Initialiser le Plan</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="philosophy" class="bg-slate-900 text-white py-20">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4">
-                <span class="lang-en">The Prestige Engine</span><span class="lang-zh">權威轉化矩陣</span><span class="lang-ja">権威化エンジン</span><span class="lang-fr">Le Moteur de Prestige</span>
-            </div>
-            <h2 class="text-3xl font-bold tracking-tight mb-8">
-                <span class="lang-en">Converting Scattered Trends into Definitive Expert Opinions</span>
-                <span class="lang-zh">將碎片化的行業思潮 轉化為決定性的專家權威</span>
-                <span class="lang-ja">流動的なトレンドを決定的な専門家意見へと転換する</span>
-                <span class="lang-fr">Convertir les Tendances Éphémères en Opinions d'Experts Définitives</span>
-            </h2>
-            <div class="space-y-6 text-slate-300 leading-relaxed text-base">
-                <p>
-                    <span class="lang-en">In today's fast-paced landscape, transient news cycles, academic papers, and market movements pass by in milliseconds. Most professional leaders hold profound, instinctual breakthroughs regarding these shifts, yet lack the systematic bandwidth to capture and structure them before they dissolve.</span>
-                    <span class="lang-zh">在當前瞬息萬變的商業與學術環境中，瞬時的新聞週期、學術文獻與市場趨勢轉瞬即逝。大多數行業領袖對這些變革擁有極其深刻且敏銳的直覺突破，卻往往缺乏系統化的精力與工具，在這些靈感消散前將其捕捉並轉化為結構化的資產。</span>
-                    <span class="lang-ja">今日の変化の激しい環境下では、一時的なニュースサイクル、学術論文、市場の動きはミリ秒単位で通り過ぎていきます。多くのリーダーはこれらの変化に対して深く直感的なブレイクスルーを持っていますが、それらが霧散する前に捉えて構造化するためのシステム的リソースが不足しています。</span>
-                    <span class="lang-fr">Dans le paysage rapide d'aujourd'hui, les cycles d'actualités transitoires, les articles académiques et les mouvements de marché défilent en quelques millisecondes. La plupart des dirigeants possèdent des intuitions profondes sur ces mutations, mais manquent de la bande passante systématique pour les capturer et les structurer avant qu'elles ne se dissolvent.</span>
-                </p>
-                <p>
-                    <span class="lang-en">Our continuous data-ingestion pipeline changes this dynamic entirely. By isolating your thoughts, raw logs, or cross-disciplinary annotations into private repository hubs, your personal insights are instantly synthesized against global trend data. This turns raw observation into published frameworks, structured opinions, and market-shaping intellectual property.</span>
-                    <span class="lang-zh">我們的持續數據攝取管道徹底改變了這一現狀。透過將您的思考片段、原始日誌或跨學科批註隔離嵌入至專屬的知識倉儲中，您的個人洞察將立即與全球大趨勢進行深度對齊與綜合。這將原始觀察直接淬煉為可出版的理論架構、結構化的權威論述以及引領市場的知識產權。</span>
-                    <span class="lang-ja">当社の継続的なデータ取り込みパイプラインはこの動態を完全に変えます。あなたの思考、未加工のログ、あるいは分野横断的な注釈をプライベートなリポジトリハブに隔離することで、個人の洞察がグローバルトレンドデータと即座に統合され、生の観察が出版可能なフレームワーク、構造化された意見へと昇華されます。</span>
-                    <span class="lang-fr">Notre pipeline d'ingestion continue de données change totalement cette dynamique. En isolant vos réflexions, journaux bruts ou annotations interdisciplinaires dans des hubs de stockage privés, vos intuitions personnelles sont instantanément synthétisées face aux données mondiales, transformant l'observation brute en cadres publiés.</span>
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="max-w-4xl mx-auto px-6 py-20 border-t border-slate-200">
-        <div class="text-center mb-12">
-            <h2 class="text-2xl font-bold tracking-tight uppercase text-slate-900">
-                <span class="lang-en">Frequently Asked Questions</span><span class="lang-zh">常見問題及解答</span><span class="lang-ja">よくある質問</span><span class="lang-fr">Foire Aux Questions</span>
-            </h2>
-            <p class="text-sm text-slate-500 mt-2">
-                <span class="lang-en">Unabridged matrix balancing human scenarios, technical infrastructure, and commercial protocols.</span>
-                <span class="lang-zh">完整問答矩陣：平衡真實合作場景、技術基礎設施與商業權益協議。</span>
-                <span class="lang-ja">人間のシナリオ、技術的なインフラ、および商業的なプロトコルのバランスをとった完全なマトリックス。</span>
-                <span class="lang-fr">Matrice complète équilibrant les scénarios humains, l'infrastructure technique et les protocoles commerciaux.</span>
+        <main>
+            <p class="intro">
+                Every elite professional sits on a goldmine of unorganized insights—unique shortcuts, industry critiques, and real-world experiences. But turning those scattered thoughts into a published book or a consistent social media presence takes time you don't have. We partner with researchers, executives, and specialists to extract, organize, and publish their mind capital asynchronously.
             </p>
-        </div>
 
-        <div class="space-y-4">
-            
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-widest pt-4 pb-2 border-b border-slate-200">
-                <span class="lang-en">I. Real Client Scenarios</span><span class="lang-zh">第一部分：真實合作場景</span><span class="lang-ja">I. 実際のクライアントシナリオ</span><span class="lang-fr">I. Scénarios Clients Réels</span>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"I have a lot of experience and a great idea, but it's completely fragmented and not concrete yet. Can I still get started?"</span>
-                        <span class="lang-zh">「我有豐富的經驗和很好的想法，但它目前完全是碎片化的、不夠具體，我還能開始嗎？」</span>
-                        <span class="lang-ja">「豊富な経験と素晴らしいアイデアはありますが、完全に断片的で具体化していません。それでも始められますか？」</span>
-                        <span class="lang-fr">« J'ai beaucoup d'expérience et une excellente idée, mais c'est complètement fragmenté et pas encore concret. Puis-je quand même commencer ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">Yes, absolutely. This is the exact scenario where the <strong>01 / Diagnostic Mapping Session</strong> delivers its greatest impact. You do not need a beautifully polished outline or a completed draft before contacting us. Your unorganized notes, rough client logs, or intuitive insights are the ideal starting material. Our job is to act as your systematic architecture sparring partner—listening to your background, removing the background noise, and organizing your expertise into high-signal intellectual pillars.</span>
-                        <span class="lang-zh">是的，完全可以。這正是我們的 <strong>01 / 核心知識診斷對接</strong> 能夠發揮最大價值的場景。在與我們聯絡之前，您不需要準備一份完美的結構大綱或完成的草稿。您零散的筆記、粗糙的客戶日誌或直覺性的洞察，都是最理想的初始素材。我們的工作就是擔任您的系統架構對練夥伴——聆聽您的專業背景、剔除雜訊，並將您的經驗組織成高信號的知識產權核心支柱。</span>
-                        <span class="lang-ja">はい、もちろんです。これこそが <strong>01 / 診断マッピングセッション</strong> が最大の効果を発揮するシナリオです。連絡をいただく前に、洗練されたアウトラインや完成した草稿を用意する必要はありません。整理されていないメモ、大まかな業務ログ、直感的な洞察こそが理想的な素材です。私たちの役割は、あなたのシステム構築の伴走者として話を聞き、雑音を取り除き、あなたの専門知識を高シグナルな知的財産の柱へと組織化することです。</span>
-                        <span class="lang-fr">Oui, absolument. C'est exactement dans ce scénario que la <strong>01 / Session de Cartographie Diagnostique</strong> apporte sa plus grande valeur. Vous n'avez pas besoin d'un plan impeccable ou d'une ébauche finalisée avant de nous contacter. Vos notes éparses, vos journaux bruts ou vos intuitions sont le matériau de départ idéal. Notre rôle est de servir de partenaire de sparring systémique : écouter votre parcours, éliminer le bruit de fond et organiser votre expertise en piliers intellectuels à haut signal.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"I have a basic background but don't feel it is solid enough to build a global authority framework. Am I ready?"</span>
-                        <span class="lang-zh">「我只有基本的行業背景，總覺得它不夠紮實，無法建立全球級的權威框架。我準備好了嗎？」</span>
-                        <span class="lang-ja">「基本的な背景はありますが、グローバルな権威フレームワークを構築するほど強固ではないと感じています。準備はできていますか？」</span>
-                        <span class="lang-fr">« J'ai une formation de base mais je n'ai pas l'impression qu'elle soit assez solide pour construire un cadre d'autorité mondial. Suis-je prêt ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">Many elite professionals experience a form of domain imposter syndrome. High-value IP is not derived from abstract academic perfection; it is extracted directly from practical, day-to-day resolution of real-world friction. During our session, we cross-reference your existing baseline against structural frameworks, proving to you that your practical experience contains unique capital value that can be mapped into a high-signal communication blueprint.</span>
-                        <span class="lang-zh">許多優秀的專業人士都有某種程度的領域冒名頂替綜合症。真正高價值的知識產權並非源自抽象的學術完美度，而是直接從解決現實摩擦的日常實踐中提煉出來的。在我們的診斷會議中，我們將您的現有經驗基礎與結構化理論框架進行交叉對齊，向您證明您的實踐經驗中包含著獨特的資產價值，完全可以被繪製成高質量的權威傳播藍圖 Lights。</span>
-                        <span class="lang-ja">多くの優秀なプロフェッショナルが、ある種のインポスター症候群を経験しています。高価値な知的財産（IP）は、抽象的な学術的完璧さから生まれるのではありません。現実世界の摩擦を日々解決する実務から直接抽出されます。セッションでは、あなたの既存のベースラインと構造的フレームワークをクロスリファレンスし、あなたの実務経験に独自の資産価値が含まれていることを証明し、高シグナルな設計図へとマッピングします。</span>
-                        <span class="lang-fr">De nombreux professionnels de premier plan souffrent du syndrome de l'imposteur. Une PI de haute valeur ne découle pas d'une perfection académique abstraite ; elle est extraite directement de la résolution quotidienne des frictions du monde réel. Au cours de notre session, nous croisons vos bases existantes avec des cadres structurels, vous prouvant que votre expérience pratique contient une valeur unique qui peut être cartographiée dans un plan de communication à haut signal.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"My industry niche is incredibly specialized. Is your engine limited to specific business or scientific topics?"</span>
-                        <span class="lang-zh">「我的行業生態極其特殊與小眾。您的引擎是否僅限於特定的商業或科學領域？」</span>
-                        <span class="lang-ja">「私の業界のニッチは非常に専門的です。あなたのエンジンは特定のビジネスや科学のテーマに限定されていますか？」</span>
-                        <span class="lang-fr">« Mon secteur est incroyablement spécialisé. Votre moteur est-il limité à des sujets commerciaux ou scientifiques spécifiques ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">No. The operational architecture of our pipeline is completely topic-agnostic. Whether your domain involves complex physical assets like facilities management, specific data modeling pipelines, token economics, or niche logistical networks, the platform treats all uploaded information as high-value telemetry. The system focuses on engineering your custom institutional workflow logic, independent of market verticalities.</span>
-                        <span class="lang-zh">不。我們管道的運作架構完全不受特定主題的限制。無論您的專業涉及設施管理等複雜的實體資產維運、特定的數據建模管道、代幣經濟學，還是小眾的跨境物流網絡，平台都會將所有上傳的資訊視為高價值的結構化數據。系統的核心專注於構建您專屬的機構級工作流邏輯，完全獨立於任何垂直行業分類。</span>
-                        <span class="lang-ja">いいえ。当社のパイプラインの運用アーキテクチャは完全にテーマに依存しません。あなたの領域がファシリティマネジメントのような複雑な物理資産、特定のデータモデリングパイプライン、トークンエコノミクス、あるいはニッチな物流ネットワークであっても、プラットフォームはアップロードされたすべての情報を高価値なデータとして扱います。システムは、業界の垂直市場に関係なく、独自のカスタムワークフローロジックの構築に焦点を当てています。</span>
-                        <span class="lang-fr">Non. L'architecture opérationnelle de notre pipeline est totalement agnostique du sujet. Que votre domaine implique des actifs physiques complexes comme la gestion d'infrastructures, des pipelines spécifiques de modélisation de données, l'économie des jetons ou des réseaux logistiques de niche, la plateforme traite toutes les informations téléchargées comme des données de haute valeur. Le système se concentre sur l'ingénierie de la logique de votre flux de travail institutionnel, indépendamment des secteurs verticaux du marché.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-widest pt-6 pb-2 border-b border-slate-200">
-                <span class="lang-en">II. Commercial Protection & Safeguards</span><span class="lang-zh">第二部分：商業權益與保密協議條款</span><span class="lang-ja">II. 商業的保護と安全対策</span><span class="lang-fr">II. Protection Commerciale & Garanties</span>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"Can we execute a strict Non-Disclosure Agreement (NDA) before sharing my core proprietary files?"</span>
-                        <span class="lang-zh">「在分享我的核心專利文件或企業數據前，我們可以簽署嚴格的保密協議（NDA）嗎？」</span>
-                        <span class="lang-ja">「独自のコアファイルを共有する前に、厳格な秘密保持契約（NDA）を締結することはできますか？」</span>
-                        <span class="lang-fr">« Pouvons-nous signer un accord de non-divulgation (NDA) strict avant que je ne partage vos fichiers exclusifs ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">Yes, safeguarding your unique data boundaries is our primary operational standard. We are fully prepared to review, sign, and execute a standard mutual Non-Disclosure Agreement (NDA) before you grant access to any unpublished historical artifacts, proprietary consulting playbooks, or sensitive client files. Your operational privacy remains locked down legally and cryptographically.</span>
-                        <span class="lang-zh">是的，保護您獨特的數據邊界是我們最首要的營運準則。在您授予任何未公開的歷史資產、專利諮詢手冊或敏感客戶文件的存取權限之前，我們完全支持並準備好與您簽署標準的雙向保密協議（NDA）。您的智慧資產隱私在法律條款與架構配置上都將受到絕對的安全保護。</span>
-                        <span class="lang-ja">はい、独自のデータ境界を保護することは、当社の最優先の運用基準です。未公開の過去の成果物、独自のコンサルティングプレイブック、または機密性の高いクライアントファイルへのアクセスを許可していただく前に、標準的な相互秘密保持契約（NDA）を確認、署名、締結する体制を完全に整えています。運用のプライバシーは、法的および暗号的に厳重に保護されます。</span>
-                        <span class="lang-fr">Oui, la protection des frontières de vos données uniques est notre principale norme opérationnelle. Nous sommes entièrement prêts à examiner et à signer un accord de non-divulgation (NDA) mutuel standard avant que vous ne donniez accès à des documents historiques non publiés, des guides de conseil exclusifs ou des fichiers clients sensibles. Votre confidentialité opérationnelle reste verrouillée juridiquement et cryptographiquement.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"What is your exact refund policy if my scheduling needs change or I need to cancel?"</span>
-                        <span class="lang-zh">「如果我的行程安排有變動或需要取消，您的具體退款政策是什麼？」</span>
-                        <span class="lang-ja">「スケジュールの変更やキャンセルが必要になった場合、具体的な返金ポリシーはどうなっていますか？」</span>
-                        <span class="lang-fr">« Quelle est votre politique de remboursement exacte si mes besoins de planification changent ou si je dois annuler ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">To filter out speculative inquiries and support serious advisory, we adhere to a mutually transparent rule framework: Once a 1-on-1 diagnostic mapping session has been fully executed live, the $90 fee is non-refundable because dedicated professional time was completely spent. However, if you cancel or request a reschedule <em>prior</em> to the call timeline, a full refund is processed instantly without friction. For downstream, larger monthly engine pipelines or corporate publishing blueprints, milestone-based partial refunds are fully supported if you pause work before final publishing deployment.</span>
-                        <span class="lang-zh">為過濾投機性詢問並支持認真的諮詢合作，我們堅持透明且雙方公平的條款原則：一旦一對一核心知識診斷對接會議完全在線執行完畢，由於已投入專屬專家工時，該 $90 美元費用將不予退還。然而，若您在會議開始 <em>之前</em> 提出取消或調整時間，我們將立即為您辦理全額退款。對於後續更大規模的月度知識引擎管道或企業出版藍圖服務，若您在最終發佈部署前暫停工作，我們完全支持按階段里程碑辦理部分退款。</span>
-                        <span class="lang-ja">投機的な問い合わせを排除し、真剣なコンサルティングをサポートするため、相互に透明なルールフレームワークを遵守しています。1対1の診断マッピングセッションがライブで完全に実行された後は、専門的な時間が完全に消費されたため、90ドルの費用は返金されません。ただし、通話予定時刻の <em>前</em> にキャンセルまたは日程変更を要求された場合は、すぐに摩擦なく全額返金が処理されます。下流のより大規模な月次エンジンパイプラインや企業出版ブループリントについては、最終的な公開展開前に作業を停止した場合、マイルストーンに基づいた部分返金が完全にサポートされます。</span>
-                        <span class="lang-fr">Afin de filtrer les demandes spéculatives et de soutenir un conseil de qualité, nous adhérons à un cadre transparent et équitable : une fois qu'une session de cartographie diagnostique en tête-à-tête a été entièrement exécutée en direct, les frais de 90 USD sont non remboursables car le temps professionnel dédié a été entièrement consommé. Cependant, si vous annulez ou demandez un report <em>avant</em> l'heure de l'appel, un remboursement complet est traité instantanément et sans friction. Pour les pipelines mensuels plus importants ou les plans d'édition d'entreprise en aval, des remboursements partiels basés sur des jalons sont entièrement pris en charge si vous suspendez le travail avant le déploiement final de l'édition.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"What tangible strategy deliverable do I walk away with after the $90 session?"</span>
-                        <span class="lang-zh">「在結束這場 $90 美元的初階對接會後，我具體能獲得什麼實體策略成果？」</span>
-                        <span class="lang-ja">「90ドルのセッション終了後、具体的にどのような戦略的成果物を手にすることができますか？」</span>
-                        <span class="lang-fr">« Quel livrable stratégique tangible vais-je obtenir après la session à 90 USD ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">The mapping session is an intensive, high-signal operational synthesis. You walk away with a definitive structural diagnostic blueprint of your knowledge pillars. This includes a personalized matrix separating your core domain expertise from passing industry noise, a customized architectural outline for your future private repository database schema, and an implementation road map before you deploy any automated ingestion infrastructure.</span>
-                        <span class="lang-zh">此對接會是一次高強度、高信號的運作綜合分析。您將獲得一份關於您核心知識支柱的明確結構化診斷藍圖。這包含一個將您的核心領域專業與過渡性行業雜訊分開的客製化矩陣、一個為您未來的私有化知識引擎數據庫量身打造的架構大綱，以及一套在您部署任何自動化數據攝取基礎設施之前的完整實施路徑圖。</span>
-                        <span class="lang-ja">マッピングセッションは、集中的で高シグナルな運用統合です。あなたのナレッジの柱に関する明確な構造診断設計図を手にすることができます。これには、業界の一時的なノイズからコアなドメイン専門知識を分離するパーソナライズされたマトリックス、将来のプライベートリポジトリデータベーススキーマのためのカスタムアーキテクチャアウトライン、および自動取り込みインフラを展開する前の実装ロードマップが含まれます。</span>
-                        <span class="lang-fr">La session de cartographie est une synthèse opérationnelle intensive et à haut signal. Vous repartez avec un plan de diagnostic structurel définitif de vos piliers de connaissances. Cela comprend une matrice personnalisée séparant votre expertise métier des bruits passagers du secteur, un schéma architectural sur mesure pour votre future base de données de référentiel privé et une feuille de route de mise en œuvre avant de déployer toute infrastructure d'ingestion automatisée.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"Does the corporate communication layer support physical distribution alongside digital book formats?"</span>
-                        <span class="lang-zh">「企業傳播方案層面是否除了數位電子書之外，也支援實體印刷與分銷管道？」</span>
-                        <span class="lang-ja">「企業コミュニケーションレイヤーは、デジタル書籍フォーマットに加えて、物理的な配布もサポートしていますか？」</span>
-                        <span class="lang-fr">« La couche de communication d'entreprise prend-elle en charge la distribution physique en plus des formats de livres numériques ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">Yes. The materialization layer of Pillar 03 handles both deep digital distribution templates and full-scale print typesetting. This encompasses multi-platform e-book formatting, high-end physical layout blueprints tailored for corporate publication engines, seamless integration support for international distribution standards (including global ISBN registration), and organized multi-regional briefing frameworks optimized to position you as an undisputed market authority.</span>
-                        <span class="lang-zh">是的。第三模塊的落地層面同時兼顧了深度數位發行範本與全流程的實體印刷排版。這涵蓋多平台的電子書格式編排、為企業出版引擎量身定制的高階實體排版藍圖、國際標準書號註冊（包括全球 ISBN 申請對接）的完整支持，以及經過全面優化的多地區演講與高階簡報框架，旨在將您塑造成無可置疑的行業權威。</span>
-                        <span class="lang-ja">はい。第3の柱の具現化レイヤーは、高度なデジタル配布テンプレートと本格的な印刷組版の両方を処理します。これには、マルチプラットフォームのエレクトロニックブックフォーマット、企業出版エンジンに合わせた高級な物理レイアウト設計、国際配布標準（グローバルISBN登録を含む）のシームレスな統合サポート、および議論の余地のない市場の権威としてあなたを位置づけるために最適化された、組織化された多地域向けの概要フレームワークが含まれます。</span>
-                        <span class="lang-fr">Oui. La couche de matérialisation du Pilier 03 gère à la fois les modèles de distribution numérique approfondie et la mise en page d'impression à grande échelle. Cela englobe le formatage de livres électroniques multi-plateformes, des plans de mise en page physique haut de gamme adaptés aux moteurs de publication d'entreprise, un support d'intégration fluide pour les normes de distribution internationale (y compris l'enregistrement ISBN mondial) et des cadres de note d'information multirégionaux organisés pour vous positionner comme une autorité incontestée sur le marché.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-widest pt-6 pb-2 border-b border-slate-200">
-                <span class="lang-en">III. Advanced Infrastructure & Web3 Systems</span><span class="lang-zh">第三部分：前沿技術架構與 Web3 代幣系統</span><span class="lang-ja">III. 高度なインフラとWeb3システム</span><span class="lang-fr">III. Infrastructure Avancée & Systèmes Web3</span>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">Forward-Thinking Incentives: "How does the upcoming STEP referral coin matrix function for customers?"</span>
-                        <span class="lang-zh">前瞻激勵機制：「即將推出的 STEP 推薦代幣生態矩陣對客戶而言是如何運作的？」</span>
-                        <span class="lang-ja">先進的なインセンティブ：「近日導入予定のSTEPリファラルコインマトリックスは、顧客向けにどのように機能しますか？」</span>
-                        <span class="lang-fr">Incitations Innovantes : « Comment fonctionne la future matrice de jetons de parrainage STEP pour les clients ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">To let our clients know that we are continuously evolving, we are building a Web3 referral layer utilizing a proprietary token named <strong>STEP</strong>. When active ecosystem members introduce thoroughly vetted professional contacts to our advisory funnel, they are allocated secure cryptographic STEP tokens. These tokens can be directly redeemed for future private engine infrastructure compute extensions, advanced database storage upgrades, or bespoke media publishing additions. To protect the premium boutique positioning and maintain elite quality control, these utility units are subject to a strict non-resale policy on public secondary markets.</span>
-                        <span class="lang-zh">為了讓我們的客戶明確了解我們正在持續進化與創新，我們正構建一個基於專屬代幣 <strong>STEP</strong> 的 Web3 推薦獎勵機制層。當生態系統的現有成員向我們的諮詢管道成功引薦經過嚴格審核的專業人脈時，系統將為其分配安全的加密 STEP 代幣。這些代幣可以直接用於兌換未來的私有引擎算力資源擴展、高級數據庫倉儲升級或客製化的出版配套服務。為保障我們頂級精品的品牌定位並維持卓越的質量控制，這些實用型代幣嚴格禁止在公共外部二級市場進行轉售。</span>
-                        <span class="lang-ja">当社が絶えず進化していることをクライアントに伝えるため、独自のトークン <strong>STEP</strong> を活用したWeb3リファラルレイヤーを構築しています。アクティブなエコシステムメンバーが、厳密に審査された専門的な連絡先を当社のアドバイザリーに紹介すると、安全な暗号トークンSTEPが割り当てられます。これらのトークンは、将来のプライベートエンジンインフラのコンピュート拡張、高度なデータベースストレージのアップグレード、またはオーダーメイドのメディア出版機能の追加に直接充当できます。プレミアムなブティックとしての位置づけを保護し、エリートな品質管理を維持するため、これらのユーティリティユニットは公開二次市場での転売が厳格に禁止されています。</span>
-                        <span class="lang-fr">Pour montrer à nos clients que nous évoluons en permanence, nous construisons une couche de parrainage Web3 utilisant un jeton exclusif nommé <strong>STEP</strong>. Lorsque les membres actifs de l'écosystème introduisent des contacts professionnels rigoureusement vérifiés dans notre réseau de conseil, des jetons cryptographiques sécurisés STEP leur sont alloués. Ces jetons peuvent être directement échangés contre de futures extensions de calcul d'infrastructure de moteur privé, des mises à niveau avancées de stockage de base de données ou des ajouts d'édition média sur mesure. Afin de protéger notre positionnement haut de gamme et de maintenir un contrôle qualité d'élite, ces unités d'utilité sont soumises à une politique stricte de non-revente sur les marchés secondaires publics.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"How is my data privacy guaranteed inside the managed Gemini AI Cockpit?"</span>
-                        <span class="lang-zh">「在託管的 Gemini AI 決策引擎內部，我的數據隱私是如何得到保證的？」</span>
-                        <span class="lang-ja">「マネージドGemini AIコックピット内でのデータのプライバシーはどのように保証されますか？」</span>
-                        <span class="lang-fr">« Comment la confidentialité de mes données est-elle garantie dans le Cockpit IA Gemini géré ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">Your intellectual assets are completely containerized. Unlike mass-market consumer AI applications, your proprietary source code, case logs, and operational strategies are processed inside isolated API access profiles within segregated developer sandboxes. Your documentation is strictly private, never leaked to public networks, and is entirely exempted from public base-model feedback loops, securing your total data sovereignty.</span>
-                        <span class="lang-zh">您的知識資產是完全容器化隔離的。與大眾市場的消費級 AI 應用程式不同，您的專利原始代碼、案例日誌和運作策略都在獨立開發者沙盒內的隔離 API 存取配置文件中進行處理。您的所有文件都保持絕對私密，絕不會洩漏到公共網絡中，並且完全不參與公共基礎模型的反饋訓練循環，確保您擁有完整的數據主權。</span>
-                        <span class="lang-ja">あなたの知的資産は完全にコンテナ化されます。大衆市場向けの消費者用AIアプリケーションとは異なり、独自のソースコード、ケースログ、および運用戦略は、分離された開発者サンドボックス内の隔離されたAPIアクセスプロファイル内で処理されます。あなたのドキュメントは厳格にプライベートであり、公開ネットワークに漏洩することはなく、公開ベースモデルのフィードバックループから完全に免除され、完全なデータ主権が確保されます。</span>
-                        <span class="lang-fr">Vos actifs intellectuels sont entièrement conteneurisés. Contrairement aux applications d'IA grand public, votre code source exclusif, vos journaux de cas et vos stratégies opérationnelles sont traités à l'aide de profils d'accès API isolés au sein de bacs à sable de développement séparés. Vos documents sont strictement privés, ne fuient jamais sur les réseaux publics et sont entièrement exemptés des boucles de rétroaction des modèles de base publics, garantissant votre souveraineté totale sur vos données.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"Are there any systemic technical constraints regarding the speed of data ingestion pipelines?"</span>
-                        <span class="lang-zh">「關於數據攝取管道的處理速度，是否有任何系統性的技術限制？」</span>
-                        <span class="lang-ja">「データ取り込みパイプラインの速度に関して、システム的な技術制限はありますか？」</span>
-                        <span class="lang-fr">« Existe-t-il des contraintes techniques systémiques concernant la vitesse des pipelines d'ingestion de données ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">Yes. The production environment ingests streaming contextual assets sequentially through automated Python-backed background pipelines. Real-time availability thresholds depend on upstream API server sandboxing and customized text token-cleansing algorithms. Massive multi-modal institutional historical archives are deliberately processed via optimized asynchronous background schedules to prevent context-window saturation and maintain maximum system parsing telemetry.</span>
-                        <span class="lang-zh">是的。生產環境透過自動化 Python 後端腳本，按順序對串流上下文資產進行排隊處理。實時數據的可用性閾值取決於上游 API 伺服器的沙盒排隊機制以及客製化的文本代幣清洗算法。大型的多模態機構歷史檔案會被刻意安排在優化的異步後台計劃中進行批次處理，以防止上下文窗口達到飽和，並維持系統最精準的解析遥測表現。</span>
-                        <span class="lang-ja">はい。本番環境は、自動化されたPython駆動のバックグラウンドパイプラインを介して、ストリーミングコンテキスト資産を順次取り込みます。リアルタイムの可用性しきい値は、上流のAPIサーバーサンドボックスおよびカスタムテキストトークンクレンジングアルゴリズムに依存します。大規模なマルチモーダルな機関の過去のアーカイブは、コンテキストウィンドウの飽和を防ぎ、システムの最大解析テレメトリを維持するために、最適化された非同期バックグラウンドスケジュールを介して意図的に処理されます。</span>
-                        <span class="lang-fr">Oui. L'environnement de production ingère les actifs contextuels de streaming de manière séquentielle via des pipelines d'arrière-plan automatisés basés sur Python. Les seuils de disponibilité en temps réel dépendent du cloisonnement des serveurs API en amont et d'algorithmes personnalisés de nettoyage des jetons de texte. Les archives institutionnelles historiques multimodales massives sont délibérément traitées via des planifications d'arrière-plan asynchrones optimisées afin d'éviter la saturation de la fenêtre de contexte et de maintenir une télémétrie d'analyse système maximale.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"How does your framework address the Physical-Digital Paradox and infrastructure constraints?"</span>
-                        <span class="lang-zh">「您的理論架構如何解決智慧體生產中的『實體-數位悖論』與基礎設施限制？」</span>
-                        <span class="lang-ja">「あなたのフレームワークは、物理・デジタルパラドックスとインフラの制約にどのように対処していますか？」</span>
-                        <span class="lang-fr">« Comment votre cadre aborde-t-il le paradoxe physico-numérique et les contraintes d'infrastructure ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">As global agentic inference efficiency rises, the aggregate consumption of physical high-order capital assets—specifically clean energy power grids and High-Bandwidth Memory (HBM) allocation silicon—expands non-linearly. This creates economic calculation friction. STEPIO isolates client databases from these real-world supply bottlenecks. By modeling recursive inference tokens as a continuous capital asset structure rather than simple software, we preserve your repository’s equity from underlying hardware shortages.</span>
-                        <span class="lang-zh">隨著全球智慧體推理效率的提升，對於重型實體高階資本資產（特別是清潔能源電網與高頻寬記憶體 HBM 矽晶圓分配）的總體消耗反而呈現非線性擴張。這引發了傳統的經濟計算摩擦。STEPIO 的託管架構使客戶的知識庫完全與這些現實世界的供應瓶頸隔離開來。透過將遞迴推理代幣建模為持續性的資本資產結構而非單純的點狀軟體，我們保護您的智慧資產價值免受底層硬體短缺波動的衝擊。</span>
-                        <span class="lang-ja">世界的なエージェント推論効率が向上するにつれて、物理的な高次資本資産（特にクリーン電力網や高帯域幅メモリHBMの割り当てシリコン）の総消費量は非線形に拡大します。これにより経済計算摩擦が生じます。STEPIOは、クライアントデータベースをこれらの現実世界の供給ボトルネックから隔離します。再帰的推論トークンを単純なソフトウェアではなく継続的な資本資産構造としてモデリングすることにより、基礎となるハードウェア不足からリポジトリの価値を保護します。</span>
-                        <span class="lang-fr">À mesure que l'efficacité de l'inférence agentique mondiale augmente, la consommation globale d'actifs de capital physique d'ordre supérieur—en particulier les réseaux d'énergie propre et le silicium d'allocation de mémoire à haute bande passante (HBM)—augmente de manière non linéaire. Cela crée des frictions de calcul économique. STEPIO isole les bases de données de ses clients de ces goulots d'étranglement de l'approvisionnement réel. En modélisant les jetons d'inférence récursifs comme une structure d'actifs de capital continu plutôt que comme de simples logiciels, nous préservons la valeur de votre référentiel contre les pénuries de matériel sous-jacentes.</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="border border-slate-200 rounded-lg bg-white overflow-hidden">
-                <button onclick="toggleFaq(this)" class="w-full px-6 py-4 text-left font-bold text-slate-900 flex justify-between items-center hover:bg-slate-50 transition cursor-pointer">
-                    <span>
-                        <span class="lang-en">"How do your synthetic institutional frameworks define legal liability for Non-Human Identities (NHIs)?"</span>
-                        <span class="lang-zh">「您的合成機制框架是如何定義非人類身份（NHIs）的法律責任與產權邊界的？」</span>
-                        <span class="lang-ja">「あなたの合成機関フレームワークは、非人間アイデンティティ（NHI）の法的責任をどのように定義していますか？」</span>
-                        <span class="lang-fr">« Comment vos cadres institutionnels synthétiques définissent-ils la responsabilité juridique des identités non humaines (NHI) ? »</span>
-                    </span>
-                    <svg class="faq-icon w-4 h-4 text-slate-400 transition-transform duration-200" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" /></svg>
-                </button>
-                <div class="faq-content">
-                    <div class="px-6 pb-4 text-sm text-slate-600 leading-relaxed border-t border-slate-100 pt-3">
-                        <span class="lang-en">Automated systems routinely interact across distributed financial and corporate channels without static human identities, creating a major institutional liability gap. Our specialized advisory implements rule-based "synthetic institutions" directly into your private codebase infrastructure. This structural layout establishes rigorous, predefined agentic property rights and operating guardrails, permanently eliminating legal vulnerabilities and securing long-term brand equity.</span>
-                        <span class="lang-zh">自主化系統在分布式金融與企業管道中頻繁交互運作，卻缺乏固定的法律人類身份，這造成了重大的體制責任真空。我們的專業諮詢方法將基於規則的「合成機制」直接嵌入部署到您的私有代碼庫基礎設施中。這種結構化佈局確立了嚴謹、預先定義的智慧體財產權與運作護欄，從根本上消除法律漏洞，永久鎖定您的長遠品牌資產價值。</span>
-                        <span class="lang-ja">自律システムは、固定された人間のアイデンティティなしで、分散型の金融および企業チャネル間で日常的に相互作用しており、重大な法的責任の空白を生み出しています。当社の専門アドバイザリーは、ルールベースの「合成機関」をあなたのプライベートコードベースインフラに直接実装します。この構造的配置により、厳格かつ事前に定義されたエージェント財産権と運用ガードレールが確立され、法的な脆弱性が永久に排除され、長期的なブランド価値が確保されます。</span>
-                        <span class="lang-fr">Les systèmes automatisés interagissent régulièrement sur les canaux financiers et d'entreprise distribués sans identité humaine fixe, créant un vide majeur en matière de responsabilité institutionnelle. Notre conseil spécialisé met en œuvre des « institutions synthétiques » basées sur des règles directement dans l'infrastructure de votre base de code privée. Cette disposition structurelle établit des droits de propriété agentique et des garde-fous opérationnels rigoureux et prédéfinis, éliminant définitivement les vulnérabilités juridiques et sécurisant la valeur de votre marque à long terme.</span>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-    </section>
-
-    <footer class="max-w-6xl mx-auto px-6 py-12 text-center text-xs text-slate-400 font-mono">
-        &copy; 2026 STEPIO. ALL RIGHTS RESERVED. SECURED VIA GITHUB PAGES & CLOUDFLARE EDGE NETWORKS.
-    </footer>
-
-    <script>
-        let currentLang = 'en';
-        const langs = ['en', 'zh', 'ja', 'fr'];
-
-        function setLang(lang) {
-            currentLang = lang;
-            
-            langs.forEach(l => {
-                const displayStyle = (l === lang) ? 'inline' : 'none';
-                document.querySelectorAll('.lang-' + l).forEach(el => {
-                    if (el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'SPAN' && el.classList.contains('block')) {
-                        el.style.display = (l === lang) ? 'block' : 'none';
-                    } else {
-                        el.style.display = displayStyle;
-                    }
-                });
+            <section class="pipeline">
+                <div class="section-title">How We Partner</div>
                 
-                const btn = document.getElementById('btn-' + l);
-                if (l === lang) {
-                    btn.classList.add('bg-white', 'shadow-xs', 'text-slate-900');
-                    btn.classList.remove('text-slate-500');
-                } else {
-                    btn.classList.remove('bg-white', 'shadow-xs', 'text-slate-900');
-                    btn.classList.add('text-slate-500');
-                }
-            });
-        }
+                <div class="step">
+                    <div class="step-title">1. The Diagnostic Hook</div>
+                    <div class="step-desc">We take your rawest notes, slide decks, or audio files and reveal the high-level theoretical frameworks hidden inside your daily operations.</div>
+                </div>
 
-        function toggleFaq(button) {
-            const container = button.parentElement;
-            container.classList.toggle('faq-active');
-            const content = container.querySelector('.faq-content');
-            if (container.classList.contains('faq-active')) {
-                content.style.maxHeight = content.scrollHeight + "px";
-            } else {
-                content.style.maxHeight = "0px";
-            }
-        }
-    </script>
+                <div class="step">
+                    <div class="step-title">2. The Weekly Show-Off</div>
+                    <div class="step-desc">We track real-time changes in your industry and instantly turn those developments into punchy, high-prestige social media messages and blogs that keep you visible.</div>
+                </div>
+
+                <div class="step">
+                    <div class="step-title">3. The Permanent Publication</div>
+                    <div class="step-desc">In the background, we systematically connect those insights into an ongoing, formal book manuscript, publication essay, or academic paper.</div>
+                </div>
+            </section>
+
+            <section class="workspace">
+                <div class="section-title">Your Private Workspace</div>
+                <p>
+                    We don't clog your inbox with email chains or complex software. Every project receives a private, secure, web-accessible <strong>Scrapbook</strong>—a single, clean digital ledger where your requirements sit alongside your weekly social posts and your growing book chapters for easy, remote collaboration.
+                </p>
+            </section>
+
+            <div class="cta-container">
+                <a href="https://www.fiverr.com/YOUR_USERNAME" class="btn" target="_blank">Start Your First Diagnostic on Fiverr</a>
+            </div>
+        </main>
+
+        <footer>
+            <p>&copy; 2026 STEPIO Advisory Systems. All rights reserved.</p>
+        </footer>
+    </div>
+
 </body>
 </html>
