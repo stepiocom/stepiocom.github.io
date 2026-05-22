@@ -9,8 +9,11 @@
     
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
     <style>
-        .lang-zh { display: none; }
+        .lang-zh, .lang-ja, .lang-fr { display: none; }
         html { scroll-behavior: smooth; }
+        .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
+        .faq-active .faq-content { max-height: 500px; }
+        .faq-active .faq-icon { transform: rotate(180deg); }
     </style>
 </head>
 <body class="bg-slate-50 text-slate-900 font-sans antialiased selection:bg-slate-200">
@@ -26,13 +29,17 @@
                     </div>
                 </div>
             </div>
-            <div class="flex items-center space-x-4 sm:space-x-8">
-                <a href="#services" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">Services</span><span class="lang-zh">服務範疇</span></a>
-                <a href="#philosophy" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">Philosophy</span><span class="lang-zh">核心理念</span></a>
-                <a href="#faq" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">FAQ</span><span class="lang-zh">常見問題</span></a>
-                <button id="langToggle" class="px-2 sm:px-3 py-1 text-[10px] sm:text-xs font-semibold uppercase tracking-wider border border-slate-300 rounded hover:bg-slate-900 hover:text-white transition cursor-pointer shrink-0">
-                    中文
-                </button>
+            <div class="flex items-center space-x-3 sm:space-x-6">
+                <a href="#services" class="hidden sm:inline text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">Services</span><span class="lang-zh">服務範疇</span><span class="lang-ja">サービス</span><span class="lang-fr">Services</span></a>
+                <a href="#philosophy" class="hidden sm:inline text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">Philosophy</span><span class="lang-zh">核心理念</span><span class="lang-ja">理念</span><span class="lang-fr">Philosophie</span></a>
+                <a href="#faq" class="text-xs sm:text-sm font-medium text-slate-600 hover:text-slate-900 transition"><span class="lang-en">FAQ</span><span class="lang-zh">問答</span><span class="lang-ja">FAQ</span><span class="lang-fr">FAQ</span></a>
+                
+                <div class="flex space-x-1 bg-slate-100 p-1 rounded border border-slate-200 text-[10px] font-bold tracking-wider font-mono">
+                    <button onclick="setLang('en')" id="btn-en" class="px-1.5 py-0.5 rounded bg-white shadow-xs text-slate-900 cursor-pointer">EN</button>
+                    <button onclick="setLang('zh')" id="btn-zh" class="px-1.5 py-0.5 rounded text-slate-500 hover:text-slate-900 cursor-pointer">中文</button>
+                    <button onclick="setLang('ja')" id="btn-ja" class="px-1.5 py-0.5 rounded text-slate-500 hover:text-slate-900 cursor-pointer">JA</button>
+                    <button onclick="setLang('fr')" id="btn-fr" class="px-1.5 py-0.5 rounded text-slate-500 hover:text-slate-900 cursor-pointer">FR</button>
+                </div>
             </div>
         </div>
     </nav>
@@ -41,167 +48,34 @@
         <h1 class="text-4xl sm:text-5xl font-extrabold tracking-tight text-slate-900 mb-6">
             <span class="lang-en">Materializing Real-World Experience into High-Value Personal IP</span>
             <span class="lang-zh">將實踐經驗與專業底蘊 轉化為高價值個人核心IP</span>
+            <span class="lang-ja">現実世界の経験を個人の高価値な知的財産へ具現化する</span>
+            <span class="lang-fr">Matérialiser l'Expérience Réelle en Propriété Intellectuelle de Haute Valeur</span>
         </h1>
         <p class="text-xl text-slate-600 max-w-2xl mx-auto leading-relaxed">
             <span class="lang-en">We translate industry complexity, unstructured workflows, and deep domain knowledge into rigorous, structured intellectual assets, augmented by secure, private Gemini AI infrastructure.</span>
             <span class="lang-zh">我們專注於將複雜的行業實踐、無結構的工作流與深厚的領域知識，轉化為嚴謹、系統化的知識資產，並透過安全且專屬的 Gemini AI 架構實現全面私有化管理。</span>
+            <span class="lang-ja">複雑な業界実務、非構造化ワークフロー、深いドメイン知識を厳格で構造化された知的資産へと翻訳し、安全なプライベートGemini AIインフラで拡張します。</span>
+            <span class="lang-fr">Nous traduisons la complexité industrielle, les flux de travail non structurés et l'expertise approfondie en actifs intellectuels rigoureux et structurés, augmentés par une infrastructure IA Gemini privée et sécurisée.</span>
         </p>
     </header>
 
     <section id="services" class="max-w-6xl mx-auto px-6 py-16 border-t border-slate-200">
         <div class="text-center mb-16">
-            <h2 class="text-2xl font-bold tracking-tight uppercase text-slate-500"><span class="lang-en">Service Pillars</span><span class="lang-zh">核心服務體系</span></h2>
+            <h2 class="text-2xl font-bold tracking-tight uppercase text-slate-500">
+                <span class="lang-en">Service Pillars</span><span class="lang-zh">核心服務體系</span><span class="lang-ja">サービスの柱</span><span class="lang-fr">Piliers de Services</span>
+            </h2>
         </div>
         
         <div class="grid md:grid-cols-3 gap-8 items-stretch">
             <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between h-full">
                 <div>
                     <div class="text-xs font-mono text-slate-400 mb-2">01 / DIAGNOSTIC</div>
-                    <h3 class="text-xl font-bold mb-4"><span class="lang-en">Knowledge Mapping & Strategy Session</span><span class="lang-zh">核心知識內核診斷與對接</span></h3>
+                    <h3 class="text-xl font-bold mb-4">
+                        <span class="lang-en">Knowledge Mapping & Strategy Session</span>
+                        <span class="lang-zh">核心知識內核診斷與對接</span>
+                        <span class="lang-ja">ナレッジマッピング＆戦略セッション</span>
+                        <span class="lang-fr">Cartographie des Connaissances & Session Stratégique</span>
+                    </h3>
                     <p class="text-slate-600 text-sm leading-relaxed mb-6">
                         <span class="lang-en">A rigorous 1-on-1 operational audit. We review your professional domain background—regardless of your specific industry or topic—and distill your insights into structured, actionable intellectual property pillars.</span>
-                        <span class="lang-zh">深度的一對一專業審計。無論您的背景處於何種行業或領域，我們都將全面梳理您的實踐經驗，並將其提煉與編排為具備高度系統化的知識產權內核。</span>
-                    </p>
-                </div>
-                <div class="mt-auto">
-                    <div class="text-lg font-bold text-slate-900 mb-4">$90 USD</div>
-                    <a href="https://www.fiverr.com/edwardpak/deploy-a-managed-gemini-ai-research-engine-for-your-personal-ip" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">
-                        <span class="lang-en">Book Session</span><span class="lang-zh">預約診斷</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-xl border-2 border-slate-900 shadow-sm flex flex-col justify-between h-full relative">
-                <span class="absolute -top-3 left-6 bg-slate-900 text-white font-mono text-[10px] uppercase tracking-widest px-2.5 py-0.5 rounded-full font-bold"><span class="lang-en">Enterprise SaaS</span><span class="lang-zh">企業級託管</span></span>
-                <div>
-                    <div class="text-xs font-mono text-slate-400 mb-2">02 / INFRASTRUCTURE</div>
-                    <h3 class="text-xl font-bold mb-4"><span class="lang-en">Managed Gemini AI Cockpit</span><span class="lang-zh">私有化 Gemini AI 知識研究引擎</span></h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        <span class="lang-en">Deployment of a secure, Python-backed continuous ingestion pipeline tailored to your unique topics. Features Google AI Studio sandbox partitioning, custom context linking, and daily data monitoring.</span>
-                        <span class="lang-zh">針對您的專屬領域知識，部署基於 Python 的自動化持續數據攝取管道。配置 Google AI Studio 開發者沙盒隔離、客製化上下文數據鏈接，以及每日管道運行維護。</span>
-                    </p>
-                </div>
-                <div class="mt-auto">
-                    <div class="text-lg font-bold text-slate-900 mb-4">$950 USD <span class="text-xs font-normal text-slate-400">/ mo</span></div>
-                    <a href="https://www.fiverr.com/edwardpak/deploy-a-managed-gemini-ai-research-engine-for-your-personal-ip" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">
-                        <span class="lang-en">Deploy Engine</span><span class="lang-zh">部署引擎</span>
-                    </a>
-                </div>
-            </div>
-
-            <div class="bg-white p-8 rounded-xl border border-slate-200 shadow-xs flex flex-col justify-between h-full">
-                <div>
-                    <div class="text-xs font-mono text-slate-400 mb-2">03 / MATERIALIZATION</div>
-                    <h3 class="text-xl font-bold mb-4"><span class="lang-en">Personal Publishing Blueprints</span><span class="lang-zh">全球化出版與影響力矩陣</span></h3>
-                    <p class="text-slate-600 text-sm leading-relaxed mb-6">
-                        <span class="lang-en">Transforming repository assets into recognized authority. Includes physical layout design, multi-platform digital formatting, global ISBN registry support, and executive brief outlines tailored for your target audience.</span>
-                        <span class="lang-zh">將沈澱的系統資產轉化為無可替代的市場權威。涵蓋實體排版、多平台電子書格式編排、全球 ISBN 註冊對接，以及面向您目標受眾的高階演講與內容矩陣設計。</span>
-                    </p>
-                </div>
-                <div class="mt-auto">
-                    <div class="text-lg font-bold text-slate-900 mb-4">$250 - $1,200 USD</div>
-                    <a href="https://www.fiverr.com/edwardpak/structure-high-signal-corporate-communication-and-publishing-blueprints" target="_blank" class="block text-center bg-slate-900 hover:bg-slate-800 text-white text-sm font-semibold py-2 px-4 rounded-lg transition">
-                        <span class="lang-en">Initialize Blueprint</span><span class="lang-zh">啟動方案</span>
-                    </a>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <section id="philosophy" class="bg-slate-900 text-white py-20">
-        <div class="max-w-4xl mx-auto px-6">
-            <div class="text-xs font-mono text-slate-400 uppercase tracking-widest mb-4"><span class="lang-en">The Prestige Engine</span><span class="lang-zh">權威轉化矩陣</span></div>
-            <h2 class="text-3xl font-bold tracking-tight mb-8">
-                <span class="lang-en">Converting Passing Trends into Definitive Expert Opinions</span>
-                <span class="lang-zh">將碎片化的行業思潮 轉化為決定性的專家權威</span>
-            </h2>
-            <div class="space-y-6 text-slate-300 leading-relaxed text-base">
-                <p>
-                    <span class="lang-en">In today's fast-paced landscape, transient news cycles, academic papers, and market movements pass by in milliseconds. Most professional leaders hold profound, instinctual breakthroughs regarding these shifts, yet lack the systematic bandwidth to capture and structure them before they dissolve.</span>
-                    <span class="lang-zh">在當前瞬息萬變的商業與學術環境中，瞬時的新聞週期、學術文獻與市場趨勢轉瞬即逝。大多數行業領袖對這些變革擁有極其深刻且敏銳的直覺突破，卻往往缺乏系統化的精力與工具，在這些靈感消散前將其捕捉並轉化為結構化的資產。</span>
-                </p>
-                <p>
-                    <span class="lang-en">Our continuous data-ingestion pipeline changes this dynamic entirely. By isolating your thoughts, raw logs, or cross-disciplinary annotations into private repository hubs, your personal insights are instantly synthesized against global trend data. This turns raw observation into published frameworks, structured opinions, and market-shaping intellectual property. Any complex topic in your mind can officially become a world-class institutional asset.</span>
-                    <span class="lang-zh">我們的持續數據攝取管道徹底改變了這一現狀。透過將您的思考片段、原始日誌或跨學科批註隔離嵌入至專屬的知識倉儲中，您的個人洞察將立即與全球大趨勢進行深度對齊與綜合。這將原始觀察直接淬煉為可出版的理論架構、結構化的權威論述以及引領市場的知識產權。您腦海中的任何複雜思維，都將正式蛻變為世界級的體制資產。</span>
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <section id="faq" class="max-w-4xl mx-auto px-6 py-20 border-t border-slate-200">
-        <div class="text-center mb-16">
-            <h2 class="text-2xl font-bold tracking-tight uppercase text-slate-900"><span class="lang-en">Frequently Asked Questions</span><span class="lang-zh">常見問題及解答</span></h2>
-            <p class="text-sm text-slate-500 mt-2"><span class="lang-en">Operational details regarding data scoping, security pipelines, and platform configuration.</span><span class="lang-zh">關於數據範疇、安全管道及平台配置的完整技術細節。</span></p>
-        </div>
-
-        <div class="space-y-8">
-            <div class="border-b border-slate-200 pb-6">
-                <h4 class="text-base font-bold text-slate-900 mb-2">
-                    <span class="lang-en">Q: Is this system restricted to specific economic or scientific disciplines?</span>
-                    <span class="lang-zh">問：此系統是否僅限於特定的經濟學或科學領域？</span>
-                </h4>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    <span class="lang-en">No. The architectural design is entirely topic-agnostic. The ingestion backend treats all uploaded material—whether it is real estate operational logs, medical casework, philosophical analysis, or engineering blueprints—as high-value data. The platform structures your unique expertise regardless of the industry vertical.</span>
-                    <span class="lang-zh">不。本系統的架構設計具備完全的領域通用性。不論您上傳的是房地產營運日誌、醫療案例分析、哲學思辨還是工程藍圖，後端攝取管道皆將其視為高價值數據。平台專注於結構化您的獨特專業底蘊，不受任何特定行業垂直領域的限制。</span>
-                </p>
-            </div>
-
-            <div class="border-b border-slate-200 pb-6">
-                <h4 class="text-base font-bold text-slate-900 mb-2">
-                    <span class="lang-en">Q: How is data privacy managed inside the Gemini AI Cockpit?</span>
-                    <span class="lang-zh">問：私有化 Gemini AI 引擎內的數據隱私是如何管理的？</span>
-                </h4>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    <span class="lang-en">Your intellectual assets are strictly partitioned using isolated API access profiles within developer sandbox configurations. Unlike standard public consumer tools, your proprietary documentation, logs, and drafts are never fed back into public model sets, maintaining strict intellectual property boundaries.</span>
-                    <span class="lang-zh">您的知識資產在開發者沙盒配置中透過隔離的 API 存取權限進行嚴格分區。與標準的公共消費級 AI 工具不同，您的專有文檔、日誌與草稿絕不會被反饋至公共模型訓練集中，從而保障絕對的知識產權邊界。</span>
-                </p>
-            </div>
-
-            <div class="border-b border-slate-200 pb-6">
-                <h4 class="text-base font-bold text-slate-900 mb-2">
-                    <span class="lang-en">Q: What is included in the $90 Diagnostic Mapping session?</span>
-                    <span class="lang-zh">問：價值 $90 美元的「核心知識診斷」包含哪些具體內容？</span>
-                </h4>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    <span class="lang-en">The mapping session is a rigorous 1-on-1 operational review designed to map out your core intellectual pillars. We assess your loose resources, formulate a definitive structure for your knowledge engine database, and provide a comprehensive blueprint before you initiate any monthly infrastructure deployment.</span>
-                    <span class="lang-zh">診斷對接是一次嚴謹的一對一專業審計，旨在梳理出您的核心核心知識支柱。我們將評估您的零散文檔資源，為您的知識引擎數據庫制定明確的結構藍圖，並在您啟動任何月度基礎設施部署前提供完整的實施方案。</span>
-                </p>
-            </div>
-
-            <div class="border-b border-slate-200 pb-6">
-                <h4 class="text-base font-bold text-slate-900 mb-2">
-                    <span class="lang-en">Q: Can the corporate publishing blueprint support both physical and digital formats?</span>
-                    <span class="lang-zh">問：全球化出版藍圖是否同時支持實體與數位格式？</span>
-                </h4>
-                <p class="text-slate-600 text-sm leading-relaxed">
-                    <span class="lang-en">Yes. The publishing materialization layer covers full-scale typesetting for physical print distribution, complete digital e-book formatting, integration into international distribution standard registries (ISBN), and organized multi-regional outlines optimized for market authority positioning.</span>
-                    <span class="lang-zh">是的。出版物落地層面涵蓋了面向實體印刷分銷的全面排版、完整的數位電子書格式編排、對接國際標準書號註冊（ISBN），以及針對建立市場權威話語權進行全面優化的多地區演講簡報大綱設計。</span>
-                </p>
-            </div>
-        </div>
-    </section>
-
-    <footer class="max-w-6xl mx-auto px-6 py-12 text-center text-xs text-slate-400 font-mono">
-        &copy; 2026 STEPIO. ALL RIGHTS RESERVED. SECURED VIA GITHUB PAGES & CLOUDFLARE EDGE NETWORKS.
-    </footer>
-
-    <script>
-        const btn = document.getElementById('langToggle');
-        let currentLang = 'en';
-
-        btn.addEventListener('click', () => {
-            if (currentLang === 'en') {
-                document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.lang-zh').forEach(el => el.style.display = 'inline');
-                btn.textContent = 'ENGLISH';
-                currentLang = 'zh';
-            } else {
-                document.querySelectorAll('.lang-zh').forEach(el => el.style.display = 'none');
-                document.querySelectorAll('.lang-en').forEach(el => el.style.display = 'inline');
-                btn.textContent = '中文';
-                currentLang = 'en';
-            }
-        });
-    </script>
-</body>
-</html>
+                        <span class="lang-zh">深度的一對一專業審計。無論您的背景處於
