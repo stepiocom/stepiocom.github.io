@@ -499,92 +499,42 @@
 
         </div>
     </section>
+</div>
+    </section>
 
-    <footer class="max-w-6xl mx-auto px-6 py-12 text-center text-xs text-slate-400 font-mono">
-        &copy; 2026 STEPIO. ALL RIGHTS RESERVED. SECURED VIA GITHUB PAGES & CLOUDFLARE EDGE NETWORKS.
-    </footer>
-
-    <script>
-        let currentLang = 'en';
-        const langs = ['en', 'zh', 'ja', 'fr'];
-
-        function setLang(lang) {
-            currentLang = lang;
-            
-            langs.forEach(l => {
-                const displayStyle = (l === lang) ? 'inline' : 'none';
-                document.querySelectorAll('.lang-' + l).forEach(el => {
-                    if (el.tagName === 'P' || el.tagName === 'DIV' || el.tagName === 'SPAN' && el.classList.contains('block')) {
-                        el.style.display = (l === lang) ? 'block' : 'none';
-                    } else {
-                        el.style.display = displayStyle;
-                    }
-                });
-                
-                const btn = document.getElementById('btn-' + l);
-                if (l === lang) {
-                    btn.classList.add('bg-white', 'shadow-xs', 'text-slate-900');
-                    btn.classList.remove('text-slate-500');
-                } else {
-                    btn.classList.remove('bg-white', 'shadow-xs', 'text-slate-900');
-                    btn.classList.add('text-slate-500');
-                }
-            });
-        }
-
-        function toggleFaq(button) {
-            const container = button.parentElement;
-            container.classList.toggle('faq-active');
-            const content = container.querySelector('.faq-content');
-            if (container.classList.contains('faq-active')) {
-                content.style.maxHeight = content.scrollHeight + "px";
-            } else {
-                content.style.maxHeight = "0px";
-            }
-        }
-    </script>
-<div class="fixed bottom-6 right-6 z-50 font-sans">
-    <button onclick="toggleChat()" id="chat-trigger" class="bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-full shadow-xl flex items-center justify-center cursor-pointer transition relative group">
-        <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
+    <button onclick="toggleChat()" class="fixed bottom-6 right-6 z-50 bg-slate-900 hover:bg-slate-800 text-white p-4 rounded-full shadow-xl transition cursor-pointer flex items-center justify-center border border-slate-700">
+        <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path>
         </svg>
-        <span class="absolute right-14 bg-slate-800 text-white text-[11px] font-mono tracking-wide px-2.5 py-1 rounded shadow-md opacity-0 group-hover:opacity-100 transition whitespace-nowrap hidden sm:inline">
-            <span class="lang-en">Connect with Advisory Architecture</span>
-            <span class="lang-zh">對接知識架構諮詢顧問</span>
-            <span class="lang-ja">アドバイザリーアーキテクチャに接続</span>
-            <span class="lang-fr">Contacter l'Architecture de Conseil</span>
-        </span>
     </button>
 
-    <div id="chat-window" class="hidden fixed bottom-24 right-6 w-80 sm:w-96 bg-white border border-slate-200 rounded-2xl shadow-2xl overflow-hidden flex flex-col h-[450px]">
-        <div class="bg-slate-900 text-white p-4 flex items-center justify-between">
-            <div class="flex items-center space-x-3">
-                <img src="https://raw.githubusercontent.com/stepiocom/stepiocom.github.io/main/29083386.png" class="w-5 h-5 object-contain invert">
-                <div>
-                    <div class="text-xs font-bold tracking-wide">STEPIO | Knowledge Engine</div>
-                    <div class="text-[10px] font-mono text-slate-400">Powered by Google Omni Sandbox</div>
-                </div>
+    <div id="chat-window" class="hidden fixed bottom-24 right-6 z-50 w-[92vw] sm:w-[400px] h-[500px] bg-white rounded-2xl shadow-2xl border border-slate-200 flex flex-col overflow-hidden transition-all duration-200">
+        <div class="bg-slate-900 text-white p-4 flex justify-between items-center">
+            <div>
+                <h3 class="font-bold text-sm tracking-wide">STEPIO Sovereign Sandbox</h3>
+                <p class="text-[11px] text-teal-400 font-mono">Status: Private Container Active</p>
             </div>
-            <button onclick="toggleChat()" class="text-slate-400 hover:text-white text-sm cursor-pointer">&times;</button>
+            <button onclick="toggleChat()" class="text-slate-400 hover:text-white transition cursor-pointer text-xl font-bold">&times;</button>
         </div>
         
-        <div class="flex-1 p-4 overflow-y-auto space-y-3 bg-slate-50 text-xs leading-relaxed" id="chat-messages">
+        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 flex flex-col text-sm">
             <div class="bg-white border border-slate-200 p-3 rounded-xl max-w-[85%] text-slate-800 shadow-xs">
-                <span class="lang-en block">Greetings. I am the STEPIO architectural agent. Whether your expertise involves institutional asset layouts, workflow engineering, or token economics, I can structure your framework. Ask me anything, or secure a Tier I Live Mapping Session above.</span>
-                <span class="lang-zh block">您好。我是 STEPIO 系統架構專員。無論您的專業底蘊屬於機構資產管理、流程自動化還是代幣分派，我都能協助您構建高信號產權框架。歡迎在此提問，或直接預約一對一對接會。</span>
-                <span class="lang-ja block">お疲れ様です。私はSTEPIOの建築エージェントです。あなたの専門知識が機関資産、ワークフローエンジニアリング、またはトークンエコノミクスに関連しているかどうかにかかわらず、フレームワークの構造化をサポートします。</span>
-                <span class="lang-fr block">Salutations. Je suis l'agent architectural de STEPIO. Que votre expertise concerne les actifs institutionnels, l'ingénierie des flux ou l'économie des jetons, je peux structurer votre cadre.</span>
+                <span class="lang-en">Welcome to your dedicated IP engineering sandbox. Inquire about custom repository sandboxing...</span>
+                <span class="lang-zh">歡迎來到專屬知識產權工程沙盒。您可以詢問關於私有化知識引擎與庫架構限制...</span>
+                <span class="lang-ja">専用の知的財産構築サンドボックスへようこそ。プライベートリポジトリについて質問する...</span>
+                <span class="lang-fr">Bienvenue dans votre bac à sable d'ingénierie PI dédié. Poser une question sur le référentiel privé...</span>
             </div>
         </div>
-
-        <div class="p-3 border-t border-slate-200 bg-white flex space-x-2">
-            <input type="text" id="chat-input" placeholder="..." class="flex-1 border border-slate-200 rounded-lg px-3 py-2 text-xs focus:outline-hidden focus:border-slate-900 font-sans">
-            <button onclick="sendChatMessage()" class="bg-slate-900 text-white px-3 py-2 rounded-lg text-xs font-semibold hover:bg-slate-800 cursor-pointer transition">
-                <span class="lang-en">Send</span><span class="lang-zh">發送</span><span class="lang-ja">送信</span><span class="lang-fr">Envoyer</span>
+        
+        <div class="p-3 border-t border-slate-200 bg-white flex items-center space-x-2">
+            <input type="text" id="chat-input" placeholder="Inquire about custom repository sandboxing..." onkeydown="if(event.key === 'Enter') sendChatMessage()" class="flex-1 bg-slate-100 border border-slate-200 rounded-xl px-4 py-2 text-sm focus:outline-hidden focus:border-slate-400 font-sans">
+            <button onclick="sendChatMessage()" class="bg-slate-900 hover:bg-slate-800 text-white p-2 rounded-xl transition cursor-pointer shrink-0">
+                <svg class="w-4 h-4 transform rotate-90" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 19l9 2-9-18-9 18 9-2zm0 0v-8"></path></svg>
             </button>
         </div>
     </div>
-</div>
+
+
     <script>
         let currentLang = 'en';
         const langs = ['en', 'zh', 'ja', 'fr'];
@@ -629,17 +579,11 @@
             windowEl.classList.toggle('hidden');
         }
 
-
-        // =========================================================================
-        // PASTE 'Integrating Language Context in Your Scripts' DIRECTLY HERE:
-        // =========================================================================
-
-        // Extend your existing setLang(lang) logic to dynamically handle chat infrastructure placeholders
+        // --- Extends base language matrix to dynamically update Chat Input Context Placeholders ---
         const originalSetLang = setLang;
         setLang = function(lang) {
-            originalSetLang(lang); // Run original layout switches
+            originalSetLang(lang); // Execute layout text toggles
             
-            // Dynamically adjust the Chat Input Placeholder text
             const inputEl = document.getElementById('chat-input');
             if (!inputEl) return;
             if (lang === 'zh') inputEl.placeholder = "詢問私有化知識引擎與庫架構限制...";
@@ -648,7 +592,7 @@
             else inputEl.placeholder = "Inquire about custom repository sandboxing...";
         };
 
-        // Update placeholder on cold boot load
+        // Cold-boot engine initialization
         document.addEventListener("DOMContentLoaded", () => {
             setLang('en');
         });
@@ -661,7 +605,7 @@
 
             const messagesContainer = document.getElementById('chat-messages');
             
-            // User Message Node Rendering
+            // Render User Message Node
             const userDiv = document.createElement('div');
             userDiv.className = "bg-slate-900 text-white p-3 rounded-xl max-w-[85%] ml-auto shadow-xs text-right";
             userDiv.textContent = text;
@@ -670,7 +614,7 @@
             input.value = '';
             messagesContainer.scrollTop = messagesContainer.scrollHeight;
 
-            // Localized Response Matrix mapping based on current active language
+            // Localized Response Matrix mapping based on active interface language
             let aiResponse = "<em>Acknowledged. Signal routing through private sandbox config... Booking a Tier I Diagnostic Session provides an instant operational gateway.</em>";
             if (currentLang === 'zh') {
                 aiResponse = "<em>系統已確認接收。訊號正經由私有獨立開發者沙盒配置文件進行路由中... 預約第一階段核心診斷對接會，可立即獲得專屬專家工時支持。</em>";
@@ -680,7 +624,7 @@
                 aiResponse = "<em>Signal reçu. Routage via la configuration du bac à sable privé... La réservation d'une session de diagnostic de niveau I fournit une passerelle opérationnelle instantanée.</em>";
             }
 
-            // Delayed Asynchronous Asymmetric Feedback Injection simulation
+            // Delayed Asynchronous Feedback Injection simulation
             setTimeout(() => {
                 const aiDiv = document.createElement('div');
                 aiDiv.className = "bg-white border border-slate-200 p-3 rounded-xl max-w-[85%] text-slate-800 shadow-xs";
@@ -690,6 +634,12 @@
             }, 850);
         }
     </script>
+</body>
+</html>
+    <footer class="max-w-6xl mx-auto px-6 py-12 text-center text-xs text-slate-400 font-mono">
+        &copy; 2026 STEPIO. ALL RIGHTS RESERVED. SECURED VIA GITHUB PAGES & CLOUDFLARE EDGE NETWORKS.
+    </footer>
+
 </body>
 </html>
 </body>
