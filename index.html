@@ -6,12 +6,10 @@
     <title>STEPIO | Intellectual Property Architecture</title>
     <style>
         :root {
-            --bg: #fdfdfb; /* Warm premium alabaster */
-            --text: #1a1a1a; /* Deep soft charcoal */
-            --accent: #6e6e6e; /* Slate gray */
-            --gold: #8d7755; /* Muted bronze/gold for prestige framing */
-            --border: #e6e4e0;
-            --card-bg: #ffffff;
+            --bg: #ffffff;
+            --text: #111111;
+            --accent: #555555;
+            --border: #eaeaea;
         }
         
         * {
@@ -21,25 +19,23 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Georgia", Garamond, serif;
+            font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.7;
+            line-height: 1.6;
             padding: 4rem 2rem;
         }
 
         .container {
-            max-width: 700px;
+            max-width: 650px;
             margin: 0 auto;
         }
 
-        /* Language Selector Bar */
         .lang-selector {
             display: flex;
             justify-content: flex-end;
-            gap: 1rem;
-            margin-bottom: 2rem;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            gap: 1.25rem;
+            margin-bottom: 3rem;
             font-size: 0.85rem;
         }
 
@@ -48,18 +44,16 @@
             border: none;
             color: var(--accent);
             cursor: pointer;
-            padding: 0.25rem 0.5rem;
-            transition: color 0.2s, border-bottom 0.2s;
-            font-weight: 500;
+            font-family: inherit;
+            padding: 0;
         }
 
         .lang-btn.active {
-            color: var(--gold);
-            font-weight: 700;
-            border-bottom: 1px solid var(--gold);
+            color: var(--text);
+            font-weight: bold;
+            text-decoration: underline;
         }
 
-        /* Language Content Visibility Logic */
         [lang-content] {
             display: none;
         }
@@ -72,121 +66,86 @@
         }
 
         header {
-            margin-bottom: 4rem;
-            border-left: 3px solid var(--gold);
-            padding-left: 1.5rem;
+            margin-bottom: 3.5rem;
         }
 
         .brand-logo {
-            max-width: 120px;
+            max-width: 100px;
             height: auto;
-            margin-bottom: 1.5rem;
+            margin-bottom: 2rem;
             display: block;
         }
 
         h1 {
-            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            font-size: 2.2rem;
+            font-size: 1.5rem;
             font-weight: 700;
-            letter-spacing: 0.05em;
+            letter-spacing: -0.02em;
             margin-bottom: 0.5rem;
-            color: var(--text);
+            text-transform: uppercase;
         }
 
         h2 {
-            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            font-size: 1.25rem;
+            font-size: 1.15rem;
             font-weight: 500;
-            color: var(--gold);
+            color: var(--text);
             line-height: 1.4;
-            letter-spacing: -0.01em;
             margin-bottom: 0.5rem;
         }
 
         .slogan {
-            font-family: -apple-system, BlinkMacSystemFont, "Helvetica Neue", Arial, sans-serif;
-            font-size: 1.15rem;
-            font-weight: 400;
+            font-size: 0.95rem;
             color: var(--accent);
-            font-style: italic;
         }
 
         .intro {
-            font-size: 1.1rem;
-            margin-bottom: 4rem;
-            color: var(--text);
+            font-size: 1rem;
+            margin-bottom: 3rem;
             text-align: justify;
         }
 
         .section-title {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 0.85rem;
+            font-size: 0.9rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.1em;
-            color: var(--gold);
-            margin-bottom: 2rem;
-            padding-bottom: 0.5rem;
+            letter-spacing: 0.05em;
+            color: var(--accent);
+            margin-bottom: 1.5rem;
+            border-bottom: 1px solid var(--text);
+            padding-bottom: 0.25rem;
         }
 
-        .pipeline {
-            margin-bottom: 4rem;
+        .pipeline, .workspace, .faq-section {
+            margin-bottom: 3.5rem;
         }
 
         .step {
-            background: var(--card-bg);
-            border: 1px solid var(--border);
-            padding: 1.75rem;
-            margin-bottom: 1.5rem;
-            border-radius: 6px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.015);
-            transition: transform 0.2s ease;
-        }
-
-        .step:hover {
-            transform: translateY(-2px);
+            margin-bottom: 2rem;
         }
 
         .step-title {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 1.05rem;
-            font-weight: 600;
+            font-size: 1rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
-            color: var(--text);
         }
 
         .step-desc {
             font-size: 0.95rem;
             color: var(--accent);
-        }
-
-        .workspace {
-            background: #f4f2ed;
-            border-radius: 6px;
-            padding: 2rem;
-            margin-bottom: 4rem;
-            border: 1px dashed var(--gold);
+            text-align: justify;
         }
 
         .workspace p {
-            font-size: 1rem;
-            color: var(--text);
-        }
-
-        .faq-section {
-            margin-bottom: 4rem;
+            font-size: 0.95rem;
+            text-align: justify;
         }
 
         .faq-item {
-            border-bottom: 1px solid var(--border);
-            padding: 1.5rem 0;
+            margin-bottom: 2rem;
         }
 
         .faq-question {
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            font-size: 1.05rem;
-            font-weight: 600;
-            color: var(--text);
+            font-size: 0.95rem;
+            font-weight: 700;
             margin-bottom: 0.5rem;
         }
 
@@ -197,32 +156,27 @@
         }
 
         .cta-container {
-            margin-top: 3.5rem;
-            text-align: center;
+            margin-top: 4rem;
         }
 
         .btn {
             display: inline-block;
             background-color: var(--text);
-            color: #ffffff;
+            color: var(--bg);
             text-decoration: none;
-            padding: 1rem 2rem;
-            font-size: 0.95rem;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
-            font-weight: 600;
-            letter-spacing: 0.02em;
-            border-radius: 4px;
-            transition: background-color 0.15s ease;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+            padding: 0.75rem 1.5rem;
+            font-size: 0.9rem;
+            font-weight: bold;
+            border-radius: 0px;
+            transition: opacity 0.15s ease;
         }
 
         .btn:hover {
-            background-color: var(--gold);
+            opacity: 0.85;
         }
 
         footer {
             margin-top: 6rem;
-            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
             font-size: 0.8rem;
             color: var(--accent);
             text-align: center;
@@ -230,10 +184,9 @@
             padding-top: 2rem;
         }
 
-        @media (max-width: 600px) {
+        @media (max-width: 480px) {
             body { padding: 2rem 1rem; }
-            header { margin-bottom: 2.5rem; }
-            .step { padding: 1.25rem; }
+            .container { padding-top: 1rem; }
         }
     </style>
 </head>
@@ -279,12 +232,24 @@
                 </section>
 
                 <section class="workspace">
-                    <div class="section-title" style="margin-bottom: 0.75rem;">Your Private Workspace</div>
+                    <div class="section-title">Your Private Workspace</div>
                     <p>We don't clog your inbox with email chains or complex project management software. Every project receives a private, secure, web-accessible <strong>Scrapbook</strong>—a single, clean digital ledger where your requirements sit alongside your weekly social posts and your growing book chapters for easy, remote collaboration.</p>
                 </section>
 
                 <section class="faq-section">
                     <div class="section-title">Frequently Asked Questions</div>
+                    <div class="faq-item">
+                        <div class="faq-question">How are non-disclosure agreements (NDAs) handled?</div>
+                        <div class="faq-answer">Confidentiality is fundamental to intellectual architecture. We strictly adhere to the standard marketplace non-disclosure framework upon order activation. Your raw text layer, data parameters, and structural insights remain entirely confidential and secure within your unindexed dashboard directory.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Who owns the intellectual property and copyright of the output?</div>
+                        <div class="faq-answer">You do. Upon full completion and release of each micro-retatiner or service milestone, 100% of the copyright, exploitation rights, and intellectual property layers transfer directly to you. We act strictly as your engineering vehicle; your legacy remains entirely your own.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">What is your refund policy for these services?</div>
+                        <div class="faq-answer">Due to the custom, labor-intensive, and immediate structural processing involved in extracting and engineering personal mind capital, we maintain a strict non-refundable policy once diagnostics or active sprint phases begin. Every engineering step is final.</div>
+                    </div>
                     <div class="faq-item">
                         <div class="faq-question">Do I need to have a book outline or paper ready before we start?</div>
                         <div class="faq-answer">No. In fact, we prefer you don't. Our process is designed to extract value from your rawest, unedited field notes, quick voice memos, or standard company slide decks. We clean the mess for you.</div>
@@ -294,17 +259,13 @@
                         <div class="faq-answer">Your Scrapbook is a private, unindexed digital environment built specifically for your project. No search engines can crawl it, and no third parties can access it. It acts strictly as your private collaborative dashboard.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">Can I use this content for academic journals as well as social media?</div>
-                        <div class="faq-answer">Yes. Our higher-tier services are deliberately built using rigorous institutional and academic formatting. The weekly content builds your immediate platform, while the core architecture is designed to meet journal or book publishing standards.</div>
-                    </div>
-                    <div class="faq-item">
                         <div class="faq-question">How do you fix broken layouts or configuration assets on the Scrapbook?</div>
                         <div class="faq-answer">Every custom workspace dashboard includes standard responsive adjustments and standalone layout configurations (such as asset paths and favicon paths) built right into the backend repository root. This ensures your private digital portal remains fast, pristine, and accessible from any desktop or mobile interface.</div>
                     </div>
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Secure Your Entry Diagnostic on Fiverr</a>
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Secure Your Entry Diagnostic on Fiverr ──►</a>
                 </div>
             </main>
         </div>
@@ -338,12 +299,24 @@
                 </section>
 
                 <section class="workspace">
-                    <div class="section-title" style="margin-bottom: 0.75rem;">您的專屬私密空間</div>
+                    <div class="section-title">您的專屬私密空間</div>
                     <p>我們絕不使用繁雜的通訊軟體或繁瑣的專案管理工具來打擾您。每個合作項目都將配置一個專屬、安全且不對外公開的 <strong>Scrapbook</strong> 數位帳本——這是一個極簡的網頁操作台，您可以在此一目了然地審閱每週的社群文案以及逐步成型的書籍章節，實現完全自由的遠端協作。</p>
                 </section>
 
                 <section class="faq-section">
                     <div class="section-title">常見問題</div>
+                    <div class="faq-item">
+                        <div class="faq-question">保密協定（NDA）如何執行？</div>
+                        <div class="faq-answer">保密性是構建知識產權的根本前提。當您在平台上啟動訂單時，我們即嚴格遵循標準市場保密協議。您的原始文本層、數據參數以及核心思維框架，都將在未被搜尋引擎編入索引的私密目錄中得到絕對保密與安全保障。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">輸出成果的智慧財產權與著作權歸誰所有？</div>
+                        <div class="faq-answer">完全歸您所有。在每個服務里程碑或微型階段性合作完整交付並結案時，100% 的著作權、商業開發權利以及智慧財產權架構都將直接且無條件移交給您。我們僅作為您知識產權的工程載體；您的思維遺產完全屬於您自己。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">你們的退款政策是什麼？</div>
+                        <div class="faq-answer">由於提煉與構建個人智慧資產屬於高度客製化、且需即時投入大量高階學術與時間成本的結構化工程，因此一旦診斷程序或正式衝刺階段啟動，我們將嚴格執行「不予退款」政策。每一步工程輸出皆為最終結果。</div>
+                    </div>
                     <div class="faq-item">
                         <div class="faq-question">在開始之前，我需要準備好完整的書籍大綱或論文嗎？</div>
                         <div class="faq-answer">完全不需要。事實上，我們更希望您直接提供未經修飾的素材。我們的核心價值正是從您零散的現場紀錄、語音想法或公司內部簡報中提煉結構，為您清理所有思緒的雜亂。</div>
@@ -353,17 +326,13 @@
                         <div class="faq-answer">您的 Scrapbook 部署在一個完全獨立、且禁止任何搜尋引擎編入索引的私密環境中。外界無法搜尋或存取，它將嚴格作為您與我們之間進行智慧資產堆疊的隱密工作台。</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">這些內容除了社群媒體，還能用於學術期刊嗎？</div>
-                        <div class="faq-answer">可以。我們的高階服務完全遵循嚴謹的制度經濟學與學術文獻格式進行撰寫。每週的精簡內容用於幫您快速累積當下的產業聲譽，而其底層架構則完全按照書籍出版與學術引用的規格打造。</div>
-                    </div>
-                    <div class="faq-item">
                         <div class="faq-question">如果 Scrapbook 頁面出現排版異常或設定資產失效，該如何處理？</div>
                         <div class="faq-answer">每一個定制的專屬工作台均已將標準的響應式適配及獨立版面設定（包括資產路徑與網頁圖標路徑）直接寫入底層存儲庫根目錄。這能確保您的私密門戶在任何桌上型電腦或行動裝置上皆維持流暢、完美的極簡呈現。</div>
                     </div>
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">在 Fiverr 上啟動您的首次全面診斷</a>
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">在 Fiverr 上啟動您的首次全面診斷 ──►</a>
                 </div>
             </main>
         </div>
@@ -397,12 +366,24 @@
                 </section>
 
                 <section class="workspace">
-                    <div class="section-title" style="margin-bottom: 0.75rem;">あなただけのプライベート空間</div>
+                    <div class="section-title">あなただけのプライベート空間</div>
                     <p>私たちは、大量のEメールチェーンや複雑なタスク管理ツールであなたの時間を奪いません。すべてのプロジェクトに、セキュアで検索エンジン非公開の専用デジタル台帳<strong>「Scrapbook」</strong>を提供します。このシンプルなワークスペース上で、週次のSNS原稿の確認や、徐々に執筆される書籍の章を遠隔からいつでも確認・編集できます。</p>
                 </section>
 
                 <section class="faq-section">
                     <div class="section-title">よくある質問</div>
+                    <div class="faq-item">
+                        <div class="faq-question">守秘義務契約（NDA）はどのように適用されますか？</div>
+                        <div class="faq-answer">機密保持は知的財産構築の基本です。マーケットプレイスでの注文確定と同時に、標準的な機密保持フレームワークが厳格に適用されます。お客様の生テキストデータ、パラメーター、および構造的インサイトは、検索エンジン非公開のディレクトリ内で完全に保護されます。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">成果物の知的財産権および著作権は誰に帰属しますか？</div>
+                        <div class="faq-answer">すべてお客様に帰属します。各マイクロリテイナーまたはサービスフェーズが完了し引き渡された時点で、著作権、商業利用権、および知的財産権のすべてが100%直接お客様に移転します。私たちはあなたの知的財産を構築するためのエンジニアリング機関であり、その遺産は完全にあなただけのものです。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">返金ポリシーはどのようになっていますか？</div>
+                        <div class="faq-answer">個人の思考資本を抽出・構築する工程は、高度にカスタマイズされ、即座に多大なコストと時間を投入する構造的エンジニアリングであるため、診断またはアクティブなスプリントフェーズが開始された後は、一律で「返金不可」のポリシーを適用しています。</div>
+                    </div>
                     <div class="faq-item">
                         <div class="faq-question">開始する前に、本の目次や論文のアウトラインを用意する必要がありますか？</div>
                         <div class="faq-answer">いいえ、その必要は全くありません。むしろ、ありのままの素材からスタートすることを推奨します。私たちの核心的価値は、未編集のフィールドノートや社内プレゼン資料から本質的な構造を抽出し、あなたの思考の混乱をきれいに整理することにあります。</div>
@@ -412,17 +393,13 @@
                         <div class="faq-answer">お客様のScrapbookは、検索エンジンのクローリングを完全に遮断した独立したプライベート環境に構築されます。第三者がアクセスすることは一切なく、あなたと私たちの間の知的資産の積み上げ専用の安全なプラットフォームとして機能します。</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">このコンテンツをSNSだけでなく、学術誌やジャーナルにも使用できますか？</div>
-                        <div class="faq-answer">はい、可能です。当社のハイエンドサービスは、厳格な制度経済学および学術論文のフォーマットに基づいて執筆されます。週次の発信で目先の業界認知度を高めつつ、その根底にあるテキストは書籍出版や論文引用の基準を満たすよう設計されています。</div>
-                    </div>
-                    <div class="faq-item">
                         <div class="faq-question">Scrapbookのレイアウト崩れやアセットの読み込みエラーが発生した場合はどうなりますか？</div>
                         <div class="faq-answer">各専用ワークスペースは、標準のレスポンシブ対応および独立したレイアウト構成（アセットパスやファビコンパスなど）がリポジトリのルートに直接組み込まれています。これにより、PC・モバイルを問わず、常に高速かつ美しい極簡インターフェースが維持されます。</div>
                     </div>
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Fiverrで初回診断を確定する</a>
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Fiverrで初回診断を確定する ──►</a>
                 </div>
             </main>
         </div>
@@ -447,7 +424,7 @@
                     </div>
                     <div class="step">
                         <div class="step-title">2. La Visibilité Hebdomadaire (The Weekly Show-Off)</div>
-                        <div class="step-desc">Nous suivons en temps réel les mutations de votre industrie et traduisons instantanément ces signaux en publications LinkedIn et articles de haute influence pour asseoir votre autorité.</div>
+                        <div class="step-desc">Le suivi en temps réel des mutations de votre industrie nous permet de traduire instantanément ces signaux en publications LinkedIn et articles de haute influence pour asseoir votre autorité.</div>
                     </div>
                     <div class="step">
                         <div class="step-title">3. La Publication Permanente (The Permanent Publication)</div>
@@ -456,12 +433,24 @@
                 </section>
 
                 <section class="workspace">
-                    <div class="section-title" style="margin-bottom: 0.75rem;">Votre Espace Privé</div>
+                    <div class="section-title">Votre Espace Privé</div>
                     <p>Nous n'encombrons pas votre boîte de réception avec des chaînes d'e-mails interminables ou des logiciels de gestion de projet complexes. Chaque projet bénéficie d'un <strong>Scrapbook</strong> privé, sécurisé et accessible en ligne — un registre digital unique et épuré où vos exigences côtoient vos publications hebdomadaires et vos chapitres de livre en cours de rédaction pour une collaboration fluide à distance.</p>
                 </section>
 
                 <section class="faq-section">
                     <div class="section-title">Foire Aux Questions</div>
+                    <div class="faq-item">
+                        <div class="faq-question">Comment sont gérés les accords de confidentialité (NDA) ?</div>
+                        <div class="faq-answer">La confidentialité est fondamentale pour l'architecture intellectuelle. Nous appliquons strictement le cadre d'accord de non-divulgation standard dès la validation de la commande. Vos données textuelles brutes, vos paramètres et vos insights structurels restent entièrement confidentiels et protégés au sein de votre répertoire non indexé.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">À qui appartiennent la propriété intellectuelle et les droits d'auteur des livrables ?</div>
+                        <div class="faq-answer">À vous, exclusivement. Dès la validation de chaque jalon de service, 100% des droits d'auteur, des droits d'exploitation et de la propriété intellectuelle vous sont directement transférés. Nous agissons strictement comme l'ingénieur de vos actifs ; votre héritage vous appartient intégralement.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Quelle est votre politique de remboursement pour ces services ?</div>
+                        <div class="faq-answer">En raison de la nature sur-mesure et de l'investissement immédiat en temps et expertise requis pour extraire et modéliser votre capital intellectuel, nous appliquons une politique stricte de non-remboursement dès qu'une phase de diagnostic ou de sprint actif est lancée. Chaque livrable intermédiaire est définitif.</div>
+                    </div>
                     <div class="faq-item">
                         <div class="faq-question">Dois-je avoir un plan de livre ou un article prêt avant de commencer ?</div>
                         <div class="faq-answer">Non. En réalité, nous préférons que ce ne soit pas le cas. Notre méthode est conçue pour extraire la valeur de vos notes de terrain non éditées, de vos mémos vocaux rapides ou de vos présentations internes. Nous trions la complexité pour vous.</div>
@@ -471,17 +460,13 @@
                         <div class="faq-answer">Votre Scrapbook est un environnement numérique privé, non indexé par les moteurs de recherche. Aucun tiers ne peut y accéder. Il fait strictement office de tableau de bord collaboratif et confidentiel pour la construction de vos actifs intellectuels.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">Puis-je utiliser ce contenu pour des revues académiques autant que pour les réseaux sociaux ?</div>
-                        <div class="faq-answer">Oui. Nos services de haut niveau sont délibérément structurés selon des formats institutionnels et académiques rigoureux. Les contenus courts alimentent votre influence immédiate, tandis que l'architecture textuelle profonde est calibrée pour répondre aux normes de l'édition et des revues scientifiques.</div>
-                    </div>
-                    <div class="faq-item">
                         <div class="faq-question">Comment gérez-vous les erreurs de mise en page ou de configuration sur le Scrapbook ?</div>
                         <div class="faq-answer">Chaque espace de travail personnalisé intègre des ajustements réactifs standards et des configurations de mise en page autonomes (telles que les chemins d'accès des fichiers et des icônes) directement intégrés à la racine du dépôt. Cela garantit que votre portail privé reste rapide, impeccable et accessible depuis n'importe quel ordinateur ou interface mobile.</div>
                     </div>
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Sécurisez Votre Diagnostic Initial sur Fiverr</a>
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Sécurisez Votre Diagnostic Initial sur Fiverr ──►</a>
                 </div>
             </main>
         </div>
@@ -493,10 +478,7 @@
 
     <script>
         function setLang(langCode) {
-            // Update background state trigger
             document.body.className = 'lang-' + langCode;
-            
-            // Handle buttons active states
             const buttons = document.querySelectorAll('.lang-btn');
             buttons.forEach(btn => {
                 if(btn.textContent.toLowerCase().includes(langCode) || 
