@@ -21,7 +21,7 @@
         }
 
         body {
-            font-family: -apple-system, BlinkMacSystemFont, "Georgia", Garamond, serif; /* Elegant typographic mix */
+            font-family: -apple-system, BlinkMacSystemFont, "Georgia", Garamond, serif;
             background-color: var(--bg);
             color: var(--text);
             line-height: 1.7;
@@ -33,13 +33,50 @@
             margin: 0 auto;
         }
 
+        /* Language Selector Bar */
+        .lang-selector {
+            display: flex;
+            justify-content: flex-end;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.85rem;
+        }
+
+        .lang-btn {
+            background: none;
+            border: none;
+            color: var(--accent);
+            cursor: pointer;
+            padding: 0.25rem 0.5rem;
+            transition: color 0.2s, border-bottom 0.2s;
+            font-weight: 500;
+        }
+
+        .lang-btn.active {
+            color: var(--gold);
+            font-weight: 700;
+            border-bottom: 1px solid var(--gold);
+        }
+
+        /* Language Content Visibility Logic */
+        [lang-content] {
+            display: none;
+        }
+        
+        body.lang-en [lang-content="en"],
+        body.lang-zh [lang-content="zh"],
+        body.lang-ja [lang-content="ja"],
+        body.lang-fr [lang-content="fr"] {
+            display: block;
+        }
+
         header {
             margin-bottom: 4rem;
             border-left: 3px solid var(--gold);
             padding-left: 1.5rem;
         }
 
-        /* Logo styling container */
         .brand-logo {
             max-width: 120px;
             height: auto;
@@ -155,4 +192,323 @@
 
         .faq-answer {
             font-size: 0.95rem;
-            color: var
+            color: var(--accent);
+            text-align: justify;
+        }
+
+        .cta-container {
+            margin-top: 3.5rem;
+            text-align: center;
+        }
+
+        .btn {
+            display: inline-block;
+            background-color: var(--text);
+            color: #ffffff;
+            text-decoration: none;
+            padding: 1rem 2rem;
+            font-size: 0.95rem;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-weight: 600;
+            letter-spacing: 0.02em;
+            border-radius: 4px;
+            transition: background-color 0.15s ease;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+        }
+
+        .btn:hover {
+            background-color: var(--gold);
+        }
+
+        footer {
+            margin-top: 6rem;
+            font-family: -apple-system, BlinkMacSystemFont, sans-serif;
+            font-size: 0.8rem;
+            color: var(--accent);
+            text-align: center;
+            border-top: 1px solid var(--border);
+            padding-top: 2rem;
+        }
+
+        @media (max-width: 600px) {
+            body { padding: 2rem 1rem; }
+            header { margin-bottom: 2.5rem; }
+            .step { padding: 1.25rem; }
+        }
+    </style>
+</head>
+<body class="lang-en">
+
+    <div class="container">
+        
+        <nav class="lang-selector">
+            <button class="lang-btn active" onclick="setLang('en')">EN</button>
+            <button class="lang-btn" onclick="setLang('zh')">繁中</button>
+            <button class="lang-btn" onclick="setLang('ja')">JA</button>
+            <button class="lang-btn" onclick="setLang('fr')">FR</button>
+        </nav>
+
+        <img src="logo.png" alt="STEPIO Logo" class="brand-logo" onerror="this.style.display='none'">
+
+        <div lang-content="en">
+            <header>
+                <h1>STEPIO</h1>
+                <h2>You do the field work. We build your intellectual legacy.</h2>
+                <div class="slogan">Your Personal IP engineered in 1 STEP.</div>
+            </header>
+
+            <main>
+                <p class="intro">
+                    Every elite professional sits on a goldmine of unorganized insights—unique shortcuts, industry critiques, and real-world experiences. But turning those scattered thoughts into a published book or a consistent social media presence takes time you don't have. We partner with researchers, executives, and specialists to extract, organize, and publish their mind capital asynchronously.
+                </p>
+
+                <section class="pipeline">
+                    <div class="section-title">The Operational Pipeline</div>
+                    <div class="step">
+                        <div class="step-title">1. The Diagnostic Hook</div>
+                        <div class="step-desc">We take your rawest notes, slide decks, or audio files and reveal the high-level theoretical frameworks hidden inside your daily operations.</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">2. The Weekly Show-Off</div>
+                        <div class="step-desc">We track real-time changes in your industry and instantly turn those developments into punchy, high-prestige social media messages and blogs that keep you visible.</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">3. The Permanent Publication</div>
+                        <div class="step-desc">In the background, we systematically connect those insights into an ongoing, formal book manuscript, publication essay, or academic paper.</div>
+                    </div>
+                </section>
+
+                <section class="workspace">
+                    <div class="section-title" style="margin-bottom: 0.75rem;">Your Private Workspace</div>
+                    <p>We don't clog your inbox with email chains or complex project management software. Every project receives a private, secure, web-accessible <strong>Scrapbook</strong>—a single, clean digital ledger where your requirements sit alongside your weekly social posts and your growing book chapters for easy, remote collaboration.</p>
+                </section>
+
+                <section class="faq-section">
+                    <div class="section-title">Frequently Asked Questions</div>
+                    <div class="faq-item">
+                        <div class="faq-question">Do I need to have a book outline or paper ready before we start?</div>
+                        <div class="faq-answer">No. In fact, we prefer you don't. Our process is designed to extract value from your rawest, unedited field notes, quick voice memos, or standard company slide decks. We clean the mess for you.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How does the asynchronous "Scrapbook" system protect my privacy?</div>
+                        <div class="faq-answer">Your Scrapbook is a private, unindexed digital environment built specifically for your project. No search engines can crawl it, and no third parties can access it. It acts strictly as your private collaborative dashboard.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Can I use this content for academic journals as well as social media?</div>
+                        <div class="faq-answer">Yes. Our higher-tier services are deliberately built using rigorous institutional and academic formatting. The weekly content builds your immediate platform, while the core architecture is designed to meet journal or book publishing standards.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">How do you fix broken layouts or configuration assets on the Scrapbook?</div>
+                        <div class="faq-answer">Every custom workspace dashboard includes standard responsive adjustments and standalone layout configurations (such as asset paths and favicon paths) built right into the backend repository root. This ensures your private digital portal remains fast, pristine, and accessible from any desktop or mobile interface.</div>
+                    </div>
+                </section>
+
+                <div class="cta-container">
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Secure Your Entry Diagnostic on Fiverr</a>
+                </div>
+            </main>
+        </div>
+
+        <div lang-content="zh">
+            <header>
+                <h1>STEPIO</h1>
+                <h2>您專注前線實踐。我們構建您的學術與知識遺產。</h2>
+                <div class="slogan">Your Personal IP engineered in 1 STEP.</div>
+            </header>
+
+            <main>
+                <p class="intro">
+                    每位頂尖專家的心中與手稿裡，都蘊藏著未經系統化整理的珍貴洞察——獨特的心得、對行業的深刻批判以及無可替代的實戰經驗。然而，將這些碎片化的想法轉化為一本出版著作或持續產出的社群影響力，需要耗費您大量的核心時間。我們與研究人員、高階主管及領域專家緊密合作，以非同步的專業模式，為您提煉、組織並發表您的思維資本。
+                </p>
+
+                <section class="pipeline">
+                    <div class="section-title">運作流程</div>
+                    <div class="step">
+                        <div class="step-title">1. 核心觀點診斷 (The Diagnostic Hook)</div>
+                        <div class="step-desc">我們直接梳理您最原始的筆記、簡報草稿或語音備忘錄，挖掘並還原隱含在您日常工作背後的高階理論架構。</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">2. 每週權威輸出 (The Weekly Show-Off)</div>
+                        <div class="step-desc">我們即時追蹤行業動態與宏觀信號，將最新進展精準轉化為具備高度專業說服力的 LinkedIn 訊息與專欄文章，確保您的產業話語權不間斷。</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">3. 永久文獻編纂 (The Permanent Publication)</div>
+                        <div class="step-desc">在背景作業中，我們將這些產出的核心觀點進行系統化串聯，逐步撰寫成正式的書籍初稿、Medium 深度專論或學術期刊論文。</div>
+                    </div>
+                </section>
+
+                <section class="workspace">
+                    <div class="section-title" style="margin-bottom: 0.75rem;">您的專屬私密空間</div>
+                    <p>我們絕不使用繁雜的通訊軟體或繁瑣的專案管理工具來打擾您。每個合作項目都將配置一個專屬、安全且不對外公開的 <strong>Scrapbook</strong> 數位帳本——這是一個極簡的網頁操作台，您可以在此一目了然地審閱每週的社群文案以及逐步成型的書籍章節，實現完全自由的遠端協作。</p>
+                </section>
+
+                <section class="faq-section">
+                    <div class="section-title">常見問題</div>
+                    <div class="faq-item">
+                        <div class="faq-question">在開始之前，我需要準備好完整的書籍大綱或論文嗎？</div>
+                        <div class="faq-answer">完全不需要。事實上，我們更希望您直接提供未經修飾的素材。我們的核心價值正是從您零散的現場紀錄、語音想法或公司內部簡報中提煉結構，為您清理所有思緒的雜亂。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">非同步的 "Scrapbook" 系統如何保障我的隱私？</div>
+                        <div class="faq-answer">您的 Scrapbook 部署在一個完全獨立、且禁止任何搜尋引擎編入索引的私密環境中。外界無法搜尋或存取，它將嚴格作為您與我們之間進行智慧資產堆疊的隱密工作台。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">這些內容除了社群媒體，還能用於學術期刊嗎？</div>
+                        <div class="faq-answer">可以。我們的高階服務完全遵循嚴謹的制度經濟學與學術文獻格式進行撰寫。每週的精簡內容用於幫您快速累積當下的產業聲譽，而其底層架構則完全按照書籍出版與學術引用的規格打造。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">如果 Scrapbook 頁面出現排版異常或設定資產失效，該如何處理？</div>
+                        <div class="faq-answer">每一個定制的專屬工作台均已將標準的響應式適配及獨立版面設定（包括資產路徑與網頁圖標路徑）直接寫入底層存儲庫根目錄。這能確保您的私密門戶在任何桌上型電腦或行動裝置上皆維持流暢、完美的極簡呈現。</div>
+                    </div>
+                </section>
+
+                <div class="cta-container">
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">在 Fiverr 上啟動您的首次全面診斷</a>
+                </div>
+            </main>
+        </div>
+
+        <div lang-content="ja">
+            <header>
+                <h1>STEPIO</h1>
+                <h2>現場の知見を、確固たる知的遺産へ。</h2>
+                <div class="slogan">Your Personal IP engineered in 1 STEP.</div>
+            </header>
+
+            <main>
+                <p class="intro">
+                    一流の専門家はみな、未整理のインサイト、独自の視点、そして貴重な実戦経験という名の金鉱の上に座っています。しかし、それらの断片的な思考を体系的な書籍にまとめ上げたり、一貫したSNS発信を通じて市場への影響力を構築したりするには、多大な時間がかかります。私たちは研究者、経営幹部、専門家とパートナーシップを結び、非同期のプロセスであなたの思考資本を抽出し、体系化し、世に送り出します。
+                </p>
+
+                <section class="pipeline">
+                    <div class="section-title">業務プロセス</div>
+                    <div class="step">
+                        <div class="step-title">1. 思考の診断と抽出 (The Diagnostic Hook)</div>
+                        <div class="step-desc">あなたの最も削ぎ落とされていないノート、スライド資料、または音声メモをインテークし、日々の業務の背後に隠されている高度な理論的枠組みを浮き彫りにします。</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">2. 週次の権威発信 (The Weekly Show-Off)</div>
+                        <div class="step-desc">業界の動向やマクロ信号をリアルタイムで追跡し、最新の進展を洗練されたLinkedIn投稿やコラム記事へ即座に昇華させ、市場における存在感を維持します。</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">3. 永久文庫の編纂 (The Permanent Publication)</div>
+                        <div class="step-desc">バックグラウンドで、これらの検証されたインサイトを体系的に連結し、正式な書籍の原稿、Mediumの深度論文、または学術論文へと昇華させていきます。</div>
+                    </div>
+                </section>
+
+                <section class="workspace">
+                    <div class="section-title" style="margin-bottom: 0.75rem;">あなただけのプライベート空間</div>
+                    <p>私たちは、大量のEメールチェーンや複雑なタスク管理ツールであなたの時間を奪いません。すべてのプロジェクトに、セキュアで検索エンジン非公開の専用デジタル台帳<strong>「Scrapbook」</strong>を提供します。このシンプルなワークスペース上で、週次のSNS原稿の確認や、徐々に執筆される書籍の章を遠隔からいつでも確認・編集できます。</p>
+                </section>
+
+                <section class="faq-section">
+                    <div class="section-title">よくある質問</div>
+                    <div class="faq-item">
+                        <div class="faq-question">開始する前に、本の目次や論文のアウトラインを用意する必要がありますか？</div>
+                        <div class="faq-answer">いいえ、その必要は全くありません。むしろ、ありのままの素材からスタートすることを推奨します。私たちの核心的価値は、未編集のフィールドノートや社内プレゼン資料から本質的な構造を抽出し、あなたの思考の混乱をきれいに整理することにあります。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">非同期システム「Scrapbook」はどのようにプライバシーを保護しますか？</div>
+                        <div class="faq-answer">お客様のScrapbookは、検索エンジンのクローリングを完全に遮断した独立したプライベート環境に構築されます。第三者がアクセスすることは一切なく、あなたと私たちの間の知的資産の積み上げ専用の安全なプラットフォームとして機能します。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">このコンテンツをSNSだけでなく、学術誌やジャーナルにも使用できますか？</div>
+                        <div class="faq-answer">はい、可能です。当社のハイエンドサービスは、厳格な制度経済学および学術論文のフォーマットに基づいて執筆されます。週次の発信で目先の業界認知度を高めつつ、その根底にあるテキストは書籍出版や論文引用の基準を満たすよう設計されています。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Scrapbookのレイアウト崩れやアセットの読み込みエラーが発生した場合はどうなりますか？</div>
+                        <div class="faq-answer">各専用ワークスペースは、標準のレスポンシブ対応および独立したレイアウト構成（アセットパスやファビコンパスなど）がリポジトリのルートに直接組み込まれています。これにより、PC・モバイルを問わず、常に高速かつ美しい極簡インターフェースが維持されます。</div>
+                    </div>
+                </section>
+
+                <div class="cta-container">
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Fiverrで初回診断を確定する</a>
+                </div>
+            </main>
+        </div>
+
+        <div lang-content="fr">
+            <header>
+                <h1>STEPIO</h1>
+                <h2>Vous menez le travail de terrain. Nous bâtissons votre héritage intellectuel.</h2>
+                <div class="slogan">Your Personal IP engineered in 1 STEP.</div>
+            </header>
+
+            <main>
+                <p class="intro">
+                    Chaque professionnel d'élite est assis sur une mine d'or d'insights non organisés : méthodes uniques, critiques sectorielles et expériences réelles du terrain. Mais transformer ces pensées éparses en un livre publié ou en une présence cohérente sur les réseaux sociaux demande un temps que vous n'avez pas. Nous nous associons aux chercheurs, dirigeants et spécialistes pour extraire, structurer et publier leur capital intellectuel de manière asynchrone.
+                </p>
+
+                <section class="pipeline">
+                    <div class="section-title">Le Processus Opérationnel</div>
+                    <div class="step">
+                        <div class="step-title">1. Le Diagnostic Initial (The Diagnostic Hook)</div>
+                        <div class="step-desc">Nous analysons vos notes les plus brutes, vos supports de présentation ou vos mémos vocaux pour révéler les cadres théoriques de haut niveau dissimulés derrière vos opérations quotidiennes.</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">2. La Visibilité Hebdomadaire (The Weekly Show-Off)</div>
+                        <div class="step-desc">Nous suivons en temps réel les mutations de votre industrie et traduisons instantanément ces signaux en publications LinkedIn et articles de haute influence pour asseoir votre autorité.</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-title">3. La Publication Permanente (The Permanent Publication)</div>
+                        <div class="step-desc">En arrière-plan, nous connectons systématiquement ces insights validés pour rédiger progressivement le manuscrit final de votre livre, vos essais Medium ou vos articles académiques.</div>
+                    </div>
+                </section>
+
+                <section class="workspace">
+                    <div class="section-title" style="margin-bottom: 0.75rem;">Votre Espace Privé</div>
+                    <p>Nous n'encombrons pas votre boîte de réception avec des chaînes d'e-mails interminables ou des logiciels de gestion de projet complexes. Chaque projet bénéficie d'un <strong>Scrapbook</strong> privé, sécurisé et accessible en ligne — un registre digital unique et épuré où vos exigences côtoient vos publications hebdomadaires et vos chapitres de livre en cours de rédaction pour une collaboration fluide à distance.</p>
+                </section>
+
+                <section class="faq-section">
+                    <div class="section-title">Foire Aux Questions</div>
+                    <div class="faq-item">
+                        <div class="faq-question">Dois-je avoir un plan de livre ou un article prêt avant de commencer ?</div>
+                        <div class="faq-answer">Non. En réalité, nous préférons que ce ne soit pas le cas. Notre méthode est conçue pour extraire la valeur de vos notes de terrain non éditées, de vos mémos vocaux rapides ou de vos présentations internes. Nous trions la complexité pour vous.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Comment le système asynchrone "Scrapbook" protège-t-il ma confidentialité ?</div>
+                        <div class="faq-answer">Votre Scrapbook est un environnement numérique privé, non indexé par les moteurs de recherche. Aucun tiers ne peut y accéder. Il fait strictement office de tableau de bord collaboratif et confidentiel pour la construction de vos actifs intellectuels.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Puis-je utiliser ce contenu pour des revues académiques autant que pour les réseaux sociaux ?</div>
+                        <div class="faq-answer">Oui. Nos services de haut niveau sont délibérément structurés selon des formats institutionnels et académiques rigoureux. Les contenus courts alimentent votre influence immédiate, tandis que l'architecture textuelle profonde est calibrée pour répondre aux normes de l'édition et des revues scientifiques.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Comment gérez-vous les erreurs de mise en page ou de configuration sur le Scrapbook ?</div>
+                        <div class="faq-answer">Chaque espace de travail personnalisé intègre des ajustements réactifs standards et des configurations de mise en page autonomes (telles que les chemins d'accès des fichiers et des icônes) directement intégrés à la racine du dépôt. Cela garantit que votre portail privé reste rapide, impeccable et accessible depuis n'importe quel ordinateur ou interface mobile.</div>
+                    </div>
+                </section>
+
+                <div class="cta-container">
+                    <a href="https://www.fiverr.com/edwardpak" class="btn" target="_blank">Sécurisez Votre Diagnostic Initial sur Fiverr</a>
+                </div>
+            </main>
+        </div>
+
+        <footer>
+            <p>&copy; 2026 STEPIO Advisory Systems. All rights reserved.</p>
+        </footer>
+    </div>
+
+    <script>
+        function setLang(langCode) {
+            // Update background state trigger
+            document.body.className = 'lang-' + langCode;
+            
+            // Handle buttons active states
+            const buttons = document.querySelectorAll('.lang-btn');
+            buttons.forEach(btn => {
+                if(btn.textContent.toLowerCase().includes(langCode) || 
+                   (langCode === 'zh' && btn.textContent.includes('繁中')) ||
+                   (langCode === 'ja' && btn.textContent.includes('JA')) ||
+                   (langCode === 'fr' && btn.textContent.includes('FR'))) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+        }
+    </script>
+</body>
+</html>
