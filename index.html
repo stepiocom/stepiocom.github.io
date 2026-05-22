@@ -8,8 +8,8 @@
     <link rel="icon" type="image/png" href="https://raw.githubusercontent.com/stepiocom/stepiocom.github.io/main/29083386.png">
     
     <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
-    <style>
-        .lang-zh, .lang-ja, .lang-fr { display: none; }
+<style>
+        .lang-zh, .lang-ja, .lang-fr { display: none !important; }
         html { scroll-behavior: smooth; }
         .faq-content { max-height: 0; overflow: hidden; transition: max-height 0.3s ease-out; }
         .faq-active .faq-content { max-height: 1200px; }
@@ -517,13 +517,14 @@
             <button onclick="toggleChat()" class="text-slate-400 hover:text-white transition cursor-pointer text-xl font-bold">&times;</button>
         </div>
         
-        <div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 flex flex-col text-sm">
+<div id="chat-messages" class="flex-1 p-4 overflow-y-auto space-y-4 bg-slate-50 flex flex-col text-sm">
             <div class="bg-white border border-slate-200 p-3 rounded-xl max-w-[85%] text-slate-800 shadow-xs">
-                <span class="lang-en">Welcome to your dedicated IP engineering sandbox. Inquire about custom repository sandboxing...</span>
-                <span class="lang-zh">歡迎來到專屬知識產權工程沙盒。您可以詢問關於私有化知識引擎與庫架構限制...</span>
-                <span class="lang-ja">専用の知的財産構築サンドボックスへようこそ。プライベートリポジトリについて質問する...</span>
+                <span class="lang-en">Welcome to your dedicated STEPIO Customer Services. Inquire about custom repository sandboxing...</span>
+                <span class="lang-zh">歡迎來到專屬 STEPIO 客服。您可以詢問我...</span>
+                <span class="lang-ja">専用の知的 STEPIO 財産構築サンドボックスへようこそ。プライベートリポジトリについて質問する...</span>
                 <span class="lang-fr">Bienvenue dans votre bac à sable d'ingénierie PI dédié. Poser une question sur le référentiel privé...</span>
             </div>
+        </div>
         </div>
         
         <div class="p-3 border-t border-slate-200 bg-white flex items-center space-x-2">
