@@ -22,21 +22,24 @@
             font-family: ui-monospace, SFMono-Regular, SF Mono, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
             background-color: var(--bg);
             color: var(--text);
-            line-height: 1.6;
-            padding: 4rem 2rem;
+            line-height: 1.5;
+            padding: 5rem 2rem;
+            -webkit-font-smoothing: antialiased;
         }
 
         .container {
-            max-width: 650px;
+            max-width: 620px;
             margin: 0 auto;
         }
 
+        /* Compressed Text-Only Language Switching Rail */
         .lang-selector {
             display: flex;
             justify-content: flex-end;
-            gap: 1.25rem;
-            margin-bottom: 3rem;
-            font-size: 0.85rem;
+            gap: 1rem;
+            margin-bottom: 3.5rem;
+            font-size: 0.75rem;
+            letter-spacing: 0.05em;
         }
 
         .lang-btn {
@@ -46,14 +49,16 @@
             cursor: pointer;
             font-family: inherit;
             padding: 0;
+            text-transform: uppercase;
         }
 
         .lang-btn.active {
             color: var(--text);
-            font-weight: bold;
+            font-weight: 700;
             text-decoration: underline;
         }
 
+        /* Multilingual Functional Toggles */
         [lang-content] {
             display: none;
         }
@@ -66,97 +71,96 @@
         }
 
         header {
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
         }
 
         .brand-logo {
-            max-width: 100px;
+            max-width: 85px;
             height: auto;
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
             display: block;
         }
 
         h1 {
-            font-size: 1.5rem;
+            font-size: 1.25rem;
             font-weight: 700;
-            letter-spacing: -0.02em;
-            margin-bottom: 0.5rem;
-            text-transform: uppercase;
+            letter-spacing: -0.01em;
+            margin-bottom: 0.35rem;
         }
 
         h2 {
-            font-size: 1.15rem;
+            font-size: 0.95rem;
             font-weight: 500;
             color: var(--text);
             line-height: 1.4;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .slogan {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--accent);
         }
 
         .intro {
-            font-size: 1rem;
+            font-size: 0.9rem;
             margin-bottom: 3rem;
             text-align: justify;
         }
 
         .section-title {
-            font-size: 0.9rem;
+            font-size: 0.8rem;
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.05em;
-            color: var(--accent);
+            letter-spacing: 0.08em;
+            color: var(--text);
             margin-bottom: 1.5rem;
             border-bottom: 1px solid var(--text);
-            padding-bottom: 0.25rem;
+            padding-bottom: 0.2rem;
         }
 
         .pipeline, .workspace, .faq-section {
-            margin-bottom: 3.5rem;
+            margin-bottom: 3rem;
         }
 
         .step {
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
         }
 
         .step-title {
-            font-size: 1rem;
+            font-size: 0.9rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .step-desc {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--accent);
             text-align: justify;
         }
 
         .workspace p {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             text-align: justify;
         }
 
         .faq-item {
-            margin-bottom: 2rem;
+            margin-bottom: 1.75rem;
         }
 
         .faq-question {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             font-weight: 700;
-            margin-bottom: 0.5rem;
+            margin-bottom: 0.35rem;
         }
 
         .faq-answer {
-            font-size: 0.95rem;
+            font-size: 0.85rem;
             color: var(--accent);
             text-align: justify;
         }
 
         .cta-container {
-            margin-top: 4rem;
+            margin-top: 3.5rem;
         }
 
         .btn {
@@ -164,11 +168,12 @@
             background-color: var(--text);
             color: var(--bg);
             text-decoration: none;
-            padding: 0.75rem 1.5rem;
-            font-size: 0.9rem;
-            font-weight: bold;
+            padding: 0.6rem 1.2rem;
+            font-size: 0.8rem;
+            font-weight: 700;
             border-radius: 0px;
             transition: opacity 0.15s ease;
+            letter-spacing: 0.02em;
         }
 
         .btn:hover {
@@ -176,17 +181,16 @@
         }
 
         footer {
-            margin-top: 6rem;
-            font-size: 0.8rem;
+            margin-top: 5rem;
+            font-size: 0.75rem;
             color: var(--accent);
             text-align: center;
             border-top: 1px solid var(--border);
-            padding-top: 2rem;
+            padding-top: 1.5rem;
         }
 
         @media (max-width: 480px) {
-            body { padding: 2rem 1rem; }
-            .container { padding-top: 1rem; }
+            body { padding: 2.5rem 1rem; }
         }
     </style>
 </head>
@@ -195,10 +199,10 @@
     <div class="container">
         
         <nav class="lang-selector">
-            <button class="lang-btn active" onclick="setLang('en')">EN</button>
+            <button class="lang-btn active" onclick="setLang('en')">en</button>
             <button class="lang-btn" onclick="setLang('zh')">繁中</button>
-            <button class="lang-btn" onclick="setLang('ja')">JA</button>
-            <button class="lang-btn" onclick="setLang('fr')">FR</button>
+            <button class="lang-btn" onclick="setLang('ja')">ja</button>
+            <button class="lang-btn" onclick="setLang('fr')">fr</button>
         </nav>
 
         <img src="logo.png" alt="STEPIO Logo" class="brand-logo" onerror="this.style.display='none'">
@@ -239,28 +243,28 @@
                 <section class="faq-section">
                     <div class="section-title">Frequently Asked Questions</div>
                     <div class="faq-item">
+                        <div class="faq-question">Scenario: I can only send unedited voice notes and unformatted field logs. Is that enough?</div>
+                        <div class="faq-answer">Yes. That is precisely what our workflow is engineered for. You do not need to provide structured outlines or clean text. We process raw inputs—voice memos, internal slide decks, or scattered operational notes—and systematically extract the underlying architectural frameworks for you.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Scenario: My work involves multiple languages (e.g., English, Chinese, Japanese, French). Can you synthesize them?</div>
+                        <div class="faq-answer">Absolutely. We operate natively across English, Traditional Chinese, Japanese, and French. If your field materials are bilingual or written in a mix of these languages, our pipeline synthesizes them accurately without losing the original technical depth, cultural nuance, or commercial value.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Scenario: What if I have a heavy operational season and need to pause input?</div>
+                        <div class="faq-answer">Our architecture is entirely asynchronous. Because everything is managed through your private, centralized Scrapbook ledger, you can submit raw data whenever your schedule allows. Production moves at your pace, and your historical data remain secured indefinitely.</div>
+                    </div>
+                    <div class="faq-item">
                         <div class="faq-question">How are non-disclosure agreements (NDAs) handled?</div>
-                        <div class="faq-answer">Confidentiality is fundamental to intellectual architecture. We strictly adhere to the standard marketplace non-disclosure framework upon order activation. Your raw text layer, data parameters, and structural insights remain entirely confidential and secure within your unindexed dashboard directory.</div>
+                        <div class="faq-answer">Confidentiality is fundamental to our system. We strictly adhere to standard marketplace non-disclosure terms upon order activation. Your raw texts, internal business data, and proprietary frameworks remain entirely confidential within your unindexed workspace directory.</div>
                     </div>
                     <div class="faq-item">
                         <div class="faq-question">Who owns the intellectual property and copyright of the output?</div>
-                        <div class="faq-answer">You do. Upon full completion and release of each micro-retatiner or service milestone, 100% of the copyright, exploitation rights, and intellectual property layers transfer directly to you. We act strictly as your engineering vehicle; your legacy remains entirely your own.</div>
+                        <div class="faq-answer">You do. Upon completion and settlement of each milestone or retainer phase, 100% of the copyrights, publishing rights, and intellectual property layers transfer entirely to you. We act strictly as an engineering vehicle; your legacy remains yours.</div>
                     </div>
                     <div class="faq-item">
-                        <div class="faq-question">What is your refund policy for these services?</div>
-                        <div class="faq-answer">Due to the custom, labor-intensive, and immediate structural processing involved in extracting and engineering personal mind capital, we maintain a strict non-refundable policy once diagnostics or active sprint phases begin. Every engineering step is final.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">Do I need to have a book outline or paper ready before we start?</div>
-                        <div class="faq-answer">No. In fact, we prefer you don't. Our process is designed to extract value from your rawest, unedited field notes, quick voice memos, or standard company slide decks. We clean the mess for you.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">How does the asynchronous "Scrapbook" system protect my privacy?</div>
-                        <div class="faq-answer">Your Scrapbook is a private, unindexed digital environment built specifically for your project. No search engines can crawl it, and no third parties can access it. It acts strictly as your private collaborative dashboard.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">How do you fix broken layouts or configuration assets on the Scrapbook?</div>
-                        <div class="faq-answer">Every custom workspace dashboard includes standard responsive adjustments and standalone layout configurations (such as asset paths and favicon paths) built right into the backend repository root. This ensures your private digital portal remains fast, pristine, and accessible from any desktop or mobile interface.</div>
+                        <div class="faq-question">What is your refund policy for these architectural services?</div>
+                        <div class="faq-answer">Due to the highly customized, labor-intensive nature of real-time mind-capital extraction and text engineering, we maintain a strict non-refundable policy once diagnostics or active production sprint phases begin. Every engineering step is final.</div>
                     </div>
                 </section>
 
@@ -306,6 +310,18 @@
                 <section class="faq-section">
                     <div class="section-title">常見問題</div>
                     <div class="faq-item">
+                        <div class="faq-question">實際情境：我只能發送未經修飾的語音備忘錄和零散的現場日誌，這足夠嗎？</div>
+                        <div class="faq-answer">完全足夠。這正是我們工作流程的核心設計目的。您不需要提供具備結構的大綱或乾淨的文字。我們專門處理最原始的輸入——無論是語音、內部簡報還是零碎的運作筆記——並系統化地為您提煉出底層的架構。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">實際情境：我的工作涉及多種語言（例如英文、中文、日文、法文），你們能整合嗎？</div>
+                        <div class="faq-answer">完全可以。我們原生支援英文、繁體中文、日文及法文。如果您的原始資料是雙語或混合多國語言編寫，我們的系統能在不流失核心學術深度、文化細節與商業價值的狀況下，進行精確的轉化與整合。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">實際情境：如果遇到前線工作的高峰期，我需要暫時停止提供素材怎麼辦？</div>
+                        <div class="faq-answer">我們的架構完全採取「非同步」模式。由於所有進度都透過您的專屬 Scrapbook 帳本進行管理，您可以在時間允許的任何時候提交原始數據。產出速度完全配合您的節奏，且您的歷史資產將無限期安全留存。</div>
+                    </div>
+                    <div class="faq-item">
                         <div class="faq-question">保密協定（NDA）如何執行？</div>
                         <div class="faq-answer">保密性是構建知識產權的根本前提。當您在平台上啟動訂單時，我們即嚴格遵循標準市場保密協議。您的原始文本層、數據參數以及核心思維框架，都將在未被搜尋引擎編入索引的私密目錄中得到絕對保密與安全保障。</div>
                     </div>
@@ -316,18 +332,6 @@
                     <div class="faq-item">
                         <div class="faq-question">你們的退款政策是什麼？</div>
                         <div class="faq-answer">由於提煉與構建個人智慧資產屬於高度客製化、且需即時投入大量高階學術與時間成本的結構化工程，因此一旦診斷程序或正式衝刺階段啟動，我們將嚴格執行「不予退款」政策。每一步工程輸出皆為最終結果。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">在開始之前，我需要準備好完整的書籍大綱或論文嗎？</div>
-                        <div class="faq-answer">完全不需要。事實上，我們更希望您直接提供未經修飾的素材。我們的核心價值正是從您零散的現場紀錄、語音想法或公司內部簡報中提煉結構，為您清理所有思緒的雜亂。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">非同步的 "Scrapbook" 系統如何保障我的隱私？</div>
-                        <div class="faq-answer">您的 Scrapbook 部署在一個完全獨立、且禁止任何搜尋引擎編入索引的私密環境中。外界無法搜尋或存取，它將嚴格作為您與我們之間進行智慧資產堆疊的隱密工作台。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">如果 Scrapbook 頁面出現排版異常或設定資產失效，該如何處理？</div>
-                        <div class="faq-answer">每一個定制的專屬工作台均已將標準的響應式適配及獨立版面設定（包括資產路徑與網頁圖標路徑）直接寫入底層存儲庫根目錄。這能確保您的私密門戶在任何桌上型電腦或行動裝置上皆維持流暢、完美的極簡呈現。</div>
                     </div>
                 </section>
 
@@ -346,7 +350,7 @@
 
             <main>
                 <p class="intro">
-                    一流の専門家はみな、未整理のインサイト、独自の視点、そして貴重な実戦経験という名の金鉱の上に座っています。しかし、それらの断片的な思考を体系的な書籍にまとめ上げたり、一貫したSNS発信を通じて市場への影響力を構築したりするには、多大な時間がかかります。私たちは研究者、経営幹部、専門家とパートナーシップを結び、非同期のプロセスであなたの思考資本を抽出し、体系化し、世に送り出します。
+                    一流の専門家はみな、未整理のインサイト、独自の視点、 bottlenecks、そして貴重な実戦経験という名の金鉱の上に座っています。しかし、それらの断片的な思考を体系的な書籍にまとめ上げたり、一貫したSNS発信を通じて市場への影響力を構築したりするには、多大な時間がかかります。私たちは研究者、経営幹部、専門家とパートナーシップを結び、非同期のプロセスであなたの思考資本を抽出し、体系化し、世に送り出します。
                 </p>
 
                 <section class="pipeline">
@@ -373,6 +377,18 @@
                 <section class="faq-section">
                     <div class="section-title">よくある質問</div>
                     <div class="faq-item">
+                        <div class="faq-question">想定シナリオ：未編集の音声メモや乱雑な現場ログしか送れませんが、それでも対応可能ですか？</div>
+                        <div class="faq-answer">はい、可能です。それこそがまさに当社のワークフローが設計された目的です。構成案や整ったテキストを用意していただく必要はありません。音声メモ、社内スライド、断片的な業務記録などの「生のインプット」から、私たちがその底流にある理論的枠組みを体系的に抽出します。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">想定シナリオ：業務で複数の言語（英語、中国語、日本語、フランス語など）を使用していますが、統合できますか？</div>
+                        <div class="faq-answer">完全に可能です。当社は英語、伝統的中国語、日本語、フランス語にネイティブ対応しています。現場の素材がバイリンガルであったり、これらの言語が混在して記述されていても、本来の技術的深み、文化的ニュアンス、または商業的価値を損なうことなく正確に統合・転化します。</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">想定シナリオ：前線の仕事が繁忙期に入り、素材の提供を一時的に止めたい場合はどうなりますか？</div>
+                        <div class="faq-answer">当社のシステムは完全に非同期です。進行状況はすべてお客様専用のScrapbook台帳で一元管理されるため、スケジュールが許す任意のタイミングでデータを提出していただけます。制作はあなたのペースで進行し、過去の資産は永続的に安全に保管されます。</div>
+                    </div>
+                    <div class="faq-item">
                         <div class="faq-question">守秘義務契約（NDA）はどのように適用されますか？</div>
                         <div class="faq-answer">機密保持は知的財産構築の基本です。マーケットプレイスでの注文確定と同時に、標準的な機密保持フレームワークが厳格に適用されます。お客様の生テキストデータ、パラメーター、および構造的インサイトは、検索エンジン非公開のディレクトリ内で完全に保護されます。</div>
                     </div>
@@ -383,18 +399,6 @@
                     <div class="faq-item">
                         <div class="faq-question">返金ポリシーはどのようになっていますか？</div>
                         <div class="faq-answer">個人の思考資本を抽出・構築する工程は、高度にカスタマイズされ、即座に多大なコストと時間を投入する構造的エンジニアリングであるため、診断またはアクティブなスプリントフェーズが開始された後は、一律で「返金不可」のポリシーを適用しています。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">開始する前に、本の目次や論文のアウトラインを用意する必要がありますか？</div>
-                        <div class="faq-answer">いいえ、その必要は全くありません。むしろ、ありのままの素材からスタートすることを推奨します。私たちの核心的価値は、未編集のフィールドノートや社内プレゼン資料から本質的な構造を抽出し、あなたの思考の混乱をきれいに整理することにあります。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">非同期システム「Scrapbook」はどのようにプライバシーを保護しますか？</div>
-                        <div class="faq-answer">お客様のScrapbookは、検索エンジンのクローリングを完全に遮断した独立したプライベート環境に構築されます。第三者がアクセスすることは一切なく、あなたと私たちの間の知的資産の積み上げ専用の安全なプラットフォームとして機能します。</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">Scrapbookのレイアウト崩れやアセットの読み込みエラーが発生した場合はどうなりますか？</div>
-                        <div class="faq-answer">各専用ワークスペースは、標準のレスポンシブ対応および独立したレイアウト構成（アセットパスやファビコンパスなど）がリポジトリのルートに直接組み込まれています。これにより、PC・モバイルを問わず、常に高速かつ美しい極簡インターフェースが維持されます。</div>
                     </div>
                 </section>
 
@@ -429,8 +433,7 @@
                     <div class="step">
                         <div class="step-title">3. La Publication Permanente (The Permanent Publication)</div>
                         <div class="step-desc">En arrière-plan, nous connectons systématiquement ces insights validés pour rédiger progressivement le manuscrit final de votre livre, vos essais Medium ou vos articles académiques.</div>
-                    </div>
-                </section>
+                    </section>
 
                 <section class="workspace">
                     <div class="section-title">Votre Espace Privé</div>
@@ -439,6 +442,18 @@
 
                 <section class="faq-section">
                     <div class="section-title">Foire Aux Questions</div>
+                    <div class="faq-item">
+                        <div class="faq-question">Scénario : Je ne peux envoyer que des mémos vocaux bruts et des notes de terrain non structurées. Est-ce suffisant ?</div>
+                        <div class="faq-answer">Oui. C'est précisément l'objectif de notre infrastructure. Vous n'avez pas besoin de fournir de plan propre ou de textes rédigés. Nous traitons les données brutes — mémos audio, présentations internes ou notes éparses — et nous extrayons systématiquement l'architecture conceptuelle sous-jacente pour vous.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Scénario : Mon travail implique plusieurs langues (ex. anglais, chinois, japonais, français). Pouvez-vous les synthétiser ?</div>
+                        <div class="faq-answer">Absolument. Nous opérons nativement en anglais, chinois traditionnel, japonais et français. Si vos documents de travail sont bilingues ou rédigés dans un mélange de ces langues, nos moteurs les synthétisent avec précision sans en altérer la profondeur technique, les nuances culturelles ou la valeur commerciale.</div>
+                    </div>
+                    <div class="faq-item">
+                        <div class="faq-question">Scénario : Que se passe-t-il si j'ai une saison de terrain intensive et que je dois suspendre l'envoi de documents ?</div>
+                        <div class="faq-answer">Notre architecture est entièrement asynchrone. Comme tout est centralisé sur votre registre Scrapbook privé, vous soumettez vos données brutes dès que votre emploi du temps le permet. La production s'adapte à votre rythme et vos archives restent sécurisées indéfiniment.</div>
+                    </div>
                     <div class="faq-item">
                         <div class="faq-question">Comment sont gérés les accords de confidentialité (NDA) ?</div>
                         <div class="faq-answer">La confidentialité est fondamentale pour l'architecture intellectuelle. Nous appliquons strictement le cadre d'accord de non-divulgation standard dès la validation de la commande. Vos données textuelles brutes, vos paramètres et vos insights structurels restent entièrement confidentiels et protégés au sein de votre répertoire non indexé.</div>
@@ -450,18 +465,6 @@
                     <div class="faq-item">
                         <div class="faq-question">Quelle est votre politique de remboursement pour ces services ?</div>
                         <div class="faq-answer">En raison de la nature sur-mesure et de l'investissement immédiat en temps et expertise requis pour extraire et modéliser votre capital intellectuel, nous appliquons une politique stricte de non-remboursement dès qu'une phase de diagnostic ou de sprint actif est lancée. Chaque livrable intermédiaire est définitif.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">Dois-je avoir un plan de livre ou un article prêt avant de commencer ?</div>
-                        <div class="faq-answer">Non. En réalité, nous préférons que ce ne soit pas le cas. Notre méthode est conçue pour extraire la valeur de vos notes de terrain non éditées, de vos mémos vocaux rapides ou de vos présentations internes. Nous trions la complexité pour vous.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">Comment le système asynchrone "Scrapbook" protège-t-il ma confidentialité ?</div>
-                        <div class="faq-answer">Votre Scrapbook est un environnement numérique privé, non indexé par les moteurs de recherche. Aucun tiers ne peut y accéder. Il fait strictement office de tableau de bord collaboratif et confidentiel pour la construction de vos actifs intellectuels.</div>
-                    </div>
-                    <div class="faq-item">
-                        <div class="faq-question">Comment gérez-vous les erreurs de mise en page ou de configuration sur le Scrapbook ?</div>
-                        <div class="faq-answer">Chaque espace de travail personnalisé intègre des ajustements réactifs standards et des configurations de mise en page autonomes (telles que les chemins d'accès des fichiers et des icônes) directement intégrés à la racine du dépôt. Cela garantit que votre portail privé reste rapide, impeccable et accessible depuis n'importe quel ordinateur ou interface mobile.</div>
                     </div>
                 </section>
 
@@ -481,10 +484,10 @@
             document.body.className = 'lang-' + langCode;
             const buttons = document.querySelectorAll('.lang-btn');
             buttons.forEach(btn => {
-                if(btn.textContent.toLowerCase().includes(langCode) || 
-                   (langCode === 'zh' && btn.textContent.includes('繁中')) ||
-                   (langCode === 'ja' && btn.textContent.includes('JA')) ||
-                   (langCode === 'fr' && btn.textContent.includes('FR'))) {
+                if(btn.textContent.toLowerCase() === langCode || 
+                   (langCode === 'zh' && btn.textContent === '繁中') ||
+                   (langCode === 'ja' && btn.textContent === 'ja') ||
+                   (langCode === 'fr' && btn.textContent === 'fr')) {
                     btn.classList.add('active');
                 } else {
                     btn.classList.remove('active');
