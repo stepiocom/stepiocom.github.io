@@ -16,11 +16,11 @@
         }
         body { background: var(--bg-main); color: var(--text-main); font-family: var(--font-mono); font-size: 13px; padding: 40px; }
         header { border-bottom: 2px solid var(--text-main); padding-bottom: 16px; margin-bottom: 32px; }
-        .form-container { max-width: 700px; background: var(--bg-surface); border: 1px solid var(--border-color); padding: 32px; box-shadow: 6px 6px 0px var(--text-main); }
+        .form-container { max-width: 750px; background: var(--bg-surface); border: 1px solid var(--border-color); padding: 32px; box-shadow: 6px 6px 0px var(--text-main); }
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; font-size: 11px; color: var(--text-muted); }
-        input[type="text"], input[type="password"], textarea, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 13px; background: #ffffff; }
-        textarea { height: 220px; resize: vertical; }
+        input[type="text"], input[type="password"], textarea { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 13px; background: #ffffff; }
+        textarea { height: 200px; resize: vertical; }
         .btn { background: var(--text-main); color: #ffffff; border: none; padding: 12px 24px; font-family: var(--font-mono); font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn:hover { background: #0284c7; }
         .status-box { margin-top: 20px; padding: 12px; border: 1px dashed var(--border-color); font-size: 12px; display: none; line-height: 1.5; white-space: pre-wrap; }
@@ -50,30 +50,28 @@
         </div>
 
         <div class="form-group">
-            <label>4. Asset Content Format Classification</label>
-            <select id="asset-type">
-                <option value="TEXT">RAW TEXT MANIFEST</option>
-                <option value="VIDEO">EXTERNAL VIDEO LINK (DRIVE)</option>
-                <option value="GRAPHIC">EXTERNAL GRAPHIC LINK (DRIVE)</option>
-            </select>
-        </div>
-
-        <div class="form-group">
-            <label>5. Asset Document Title (English Only)</label>
+            <label>4. Asset Document Title (English Only)</label>
             <input type="text" id="title-en" placeholder="e.g., Morning Brief">
         </div>
 
+        <hr style="border: 0; border-top: 1px solid var(--border-color); margin: 24px 0;">
+
         <div class="form-group">
-            <label>6. External Storage Media Hyperlink (Google Drive / Dropbox)</label>
-            <input type="text" id="media-url" placeholder="https://drive.google.com/file/d/...">
+            <label>5. Video File Hyperlink (Optional - Google Drive / Dropbox Link)</label>
+            <input type="text" id="video-url" placeholder="https://drive.google.com/file/d/video-id...">
         </div>
 
         <div class="form-group">
-            <label>7. Master English Text Payload</label>
-            <textarea id="payload-en" placeholder="Paste single master English content block here..."></textarea>
+            <label>6. Graphic / Picture Hyperlink (Optional - Google Drive Link)</label>
+            <input type="text" id="image-url" placeholder="https://drive.google.com/file/d/image-id...">
         </div>
 
-        <button class="btn" onclick="executeDispatch()">// Translate & Dispatch Asset</button>
+        <div class="form-group">
+            <label>7. Master English Text Manifest Copy</label>
+            <textarea id="payload-en" placeholder="Paste unformatted English text layout content blocks here..."></textarea>
+        </div>
+
+        <button class="btn" onclick="executeDispatch()">// Translate & Dispatch Asset Asset Matrix</button>
         
         <div id="status-display" class="status-box"></div>
     </div>
@@ -81,11 +79,9 @@
     <script>
         document.getElementById('asset-date').value = new Date().toISOString().split('T')[0];
 
-        // Helper function to translate text via public API blocks sequentially
         async function fetchTranslation(text, targetLang) {
             if (!text.trim()) return "";
             try {
-                // Splits massive documents safely into paragraphs to bypass basic API string limits
                 const paragraphs = text.split('\n');
                 const translatedParagraphs = await Promise.all(paragraphs.map(async (para) => {
                     if (!para.trim()) return "";
@@ -96,7 +92,7 @@
                 }));
                 return translatedParagraphs.join('\n');
             } catch (e) {
-                return text; // Fallback to raw text if connection flickers
+                return text;
             }
         }
 
@@ -104,27 +100,25 @@
             const token = document.getElementById('gh-token').value;
             const clientId = document.getElementById('client-id').value.trim();
             const date = document.getElementById('asset-date').value;
-            const type = document.getElementById('asset-type').value;
-            const titleEn = document.getElementById('title-en').value || "Document";
-            const mediaUrl = document.getElementById('media-url').value;
+            const titleEn = document.getElementById('title-en').value || "Document Manifest";
+            const videoUrl = document.getElementById('video-url').value.trim();
+            const imageUrl = document.getElementById('image-url').value.trim();
             const payloadEn = document.getElementById('payload-en').value;
             
             const statusBox = document.getElementById('status-display');
             statusBox.style.display = "block";
             statusBox.style.color = "var(--text-main)";
-            statusBox.innerText = "[TRANSLATING] Processing automated English structural analysis into localized matrices (ZH, JA, FR)...";
+            statusBox.innerText = "[TRANSLATING] Executing pipeline machine language translation matrices (ZH, JA, FR)...";
 
             if(!token || !clientId) {
-                statusBox.innerText = "[ERROR] Authority token and client identifier signature are strictly required.";
+                statusBox.innerText = "[ERROR] Credentials required to build connection pipe.";
                 return;
             }
 
-            // Execute on-the-fly parallel translation sequence
             let titleZh = titleEn, titleJa = titleEn, titleFr = titleEn;
-            let payloadZh = payloadEn, payloadJa = payloadEn, payloadFr = payloadEn;
+            let payloadZh = payloadEn, payloadJa = payloadEn, payloadFr = payloadFr;
 
             try {
-                // Sequential execution to keep public API gateways steady
                 titleZh = await fetchTranslation(titleEn, "zh");
                 titleJa = await fetchTranslation(titleEn, "ja");
                 titleFr = await fetchTranslation(titleEn, "fr");
@@ -132,10 +126,8 @@
                 payloadZh = await fetchTranslation(payloadEn, "zh");
                 payloadJa = await fetchTranslation(payloadEn, "ja");
                 payloadFr = await fetchTranslation(payloadEn, "fr");
-                
-                statusBox.innerText = "[TRANSLATION COMPLETE] Accessing client vault repository architecture...";
             } catch (err) {
-                statusBox.innerText = "[WARNING] Translation gateway timed out. Defaulting localized nodes to base template...";
+                console.log("Translation service bottleneck fallback activated.");
             }
 
             const owner = "stepio-scrapbooks";
@@ -159,21 +151,13 @@
 
                 const uniqueId = `asset-${clientId}-${Date.now().toString().slice(-4)}`;
                 
-                // Formulate complete multi-lingual ledger object dynamically out of the translation loops
+                // Package the dynamic structural object containing all potential variations cleanly
                 const newAssetObj = {
                     id: uniqueId,
                     date: date,
-                    type: type,
                     title: { en: titleEn, zh: titleZh, ja: titleJa, fr: titleFr },
-                    description: { 
-                        en: "Dispatched from central operations terminal.", 
-                        zh: "自中央控制台分发交付。",
-                        ja: "中央運用ターミナルから配信されました。",
-                        fr: "Distribué depuis le terminal des opérations centrales."
-                    },
-                    downloadUrl: mediaUrl || "#",
-                    downloadLabel: type === "TEXT" ? "// View Manifest" : `// Open Shared Media Vault (${type})`,
-                    copyBoxTitle: { en: "Clean Text Output", zh: "净值内容输出", ja: "クリーンテキスト出力", fr: "Contenu de sortie" },
+                    videoUrl: videoUrl || null,
+                    imageUrl: imageUrl || null,
                     copyBoxContent: { en: payloadEn, zh: payloadZh, ja: payloadJa, fr: payloadFr }
                 };
 
@@ -192,7 +176,7 @@
                     method: "PUT",
                     headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        message: `SYSTEM AUTOMATION DISPATCH // ADDED ASSET ${uniqueId}`,
+                        message: `SYSTEM AUTOMATION DISPATCH // ADDED BUNDLE ${uniqueId}`,
                         content: btoa(unescape(encodeURIComponent(updatedFileContent))),
                         sha: sha || undefined
                     })
@@ -200,14 +184,14 @@
 
                 if(putRes.ok) {
                     statusBox.style.color = "var(--accent-green)";
-                    statusBox.innerText = `[SUCCESS] Automated translation injection finalized.\nTarget Repository: [${repo}]\nLanguages Localized: EN, ZH, JA, FR.\nClient workspace updated instantly.`;
+                    statusBox.innerText = `[SUCCESS] Translation pipeline execution completed successfully.\nTarget Client Vault Repo: [${repo}]\nPayload parsed cleanly. Refresh client scrapbook interface to see updates.`;
                 } else {
                     const errData = await putRes.json();
-                    statusBox.innerText = `[API ERROR] Commit execution failed: ${errData.message}`;
+                    statusBox.innerText = `[API ERROR] Push failed: ${errData.message}`;
                 }
 
             } catch (err) {
-                statusBox.innerText = `[CRITICAL FAILURE] Pipeline crash: ${err.message}`;
+                statusBox.innerText = `[CRITICAL FAILURE] Connection lost: ${err.message}`;
             }
         }
     </script>
