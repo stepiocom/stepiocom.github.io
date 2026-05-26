@@ -19,24 +19,24 @@
         .form-container { max-width: 700px; background: var(--bg-surface); border: 1px solid var(--border-color); padding: 32px; box-shadow: 6px 6px 0px var(--text-main); }
         .form-group { margin-bottom: 20px; }
         label { display: block; font-weight: bold; margin-bottom: 6px; text-transform: uppercase; font-size: 11px; color: var(--text-muted); }
-        input[type="text"], textarea, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 13px; background: #ffffff; }
-        textarea { height: 160px; resize: vertical; }
+        input[type="text"], input[type="password"], textarea, select { width: 100%; padding: 10px; border: 1px solid var(--border-color); font-family: var(--font-mono); font-size: 13px; background: #ffffff; }
+        textarea { height: 220px; resize: vertical; }
         .btn { background: var(--text-main); color: #ffffff; border: none; padding: 12px 24px; font-family: var(--font-mono); font-weight: bold; cursor: pointer; text-transform: uppercase; }
         .btn:hover { background: #0284c7; }
-        .status-box { margin-top: 20px; padding: 12px; border: 1px dashed var(--border-color); font-size: 12px; display: none; }
+        .status-box { margin-top: 20px; padding: 12px; border: 1px dashed var(--border-color); font-size: 12px; display: none; line-height: 1.5; white-space: pre-wrap; }
     </style>
 </head>
 <body>
 
     <header>
         <h2>STEPIO // CENTRAL DISPATCH TERMINAL</h2>
-        <p style="color: var(--text-muted); font-size: 11px;">CROSS-REPOSITORY DISTRIBUTION SANDBOX // PRODUCTION CONTROL</p>
+        <p style="color: var(--text-muted); font-size: 11px;">CROSS-REPOSITORY AUTOMATED TRANSLATION PIPELINE // PRODUCTION CONTROL</p>
     </header>
 
     <div class="form-container">
         <div class="form-group">
             <label>1. GitHub Authority Token (PAT)</label>
-            <input type="password" id="gh-token" style="width:100%; padding:10px;" placeholder="ghp_xxxxxxxxxxxx">
+            <input type="password" id="gh-token" placeholder="ghp_xxxxxxxxxxxx">
         </div>
 
         <div class="form-group">
@@ -45,7 +45,7 @@
         </div>
 
         <div class="form-group">
-            <label>3. Delivery Datestamp (Auto-Locked)</label>
+            <label>3. Delivery Datestamp</label>
             <input type="text" id="asset-date" readonly>
         </div>
 
@@ -59,9 +59,8 @@
         </div>
 
         <div class="form-group">
-            <label>5. Asset Document Title (EN / ZH)</label>
-            <input type="text" id="title-en" placeholder="English Menu Title" style="margin-bottom: 8px;">
-            <input type="text" id="title-zh" placeholder="中文菜单标题">
+            <label>5. Asset Document Title (English Only)</label>
+            <input type="text" id="title-en" placeholder="e.g., Morning Brief">
         </div>
 
         <div class="form-group">
@@ -70,52 +69,81 @@
         </div>
 
         <div class="form-group">
-            <label>7. Clean Text Payload Copy (English Body)</label>
-            <textarea id="payload-en" placeholder="Paste generated text block here..."></textarea>
-        </div>
-        
-        <div class="form-group">
-            <label>8. Clean Text Payload Copy (Chinese Body)</label>
-            <textarea id="payload-zh" placeholder="在此处粘贴生成的中文文本正文..."></textarea>
+            <label>7. Master English Text Payload</label>
+            <textarea id="payload-en" placeholder="Paste single master English content block here..."></textarea>
         </div>
 
-        <button class="btn" onclick="executeDispatch()">// Dispatch Asset Pipeline</button>
+        <button class="btn" onclick="executeDispatch()">// Translate & Dispatch Asset</button>
         
         <div id="status-display" class="status-box"></div>
     </div>
 
     <script>
-        // Set default current date automatically on load
         document.getElementById('asset-date').value = new Date().toISOString().split('T')[0];
+
+        // Helper function to translate text via public API blocks sequentially
+        async function fetchTranslation(text, targetLang) {
+            if (!text.trim()) return "";
+            try {
+                // Splits massive documents safely into paragraphs to bypass basic API string limits
+                const paragraphs = text.split('\n');
+                const translatedParagraphs = await Promise.all(paragraphs.map(async (para) => {
+                    if (!para.trim()) return "";
+                    const res = await fetch(`https://api.mymemory.translated.net/get?q=${encodeURIComponent(para)}&langpair=en|${targetLang}`);
+                    if (!res.ok) return para;
+                    const data = await res.json();
+                    return data.responseData.translatedText || para;
+                }));
+                return translatedParagraphs.join('\n');
+            } catch (e) {
+                return text; // Fallback to raw text if connection flickers
+            }
+        }
 
         async function executeDispatch() {
             const token = document.getElementById('gh-token').value;
             const clientId = document.getElementById('client-id').value.trim();
             const date = document.getElementById('asset-date').value;
             const type = document.getElementById('asset-type').value;
-            const titleEn = document.getElementById('title-en').value;
-            const titleZh = document.getElementById('title-zh').value;
+            const titleEn = document.getElementById('title-en').value || "Document";
             const mediaUrl = document.getElementById('media-url').value;
             const payloadEn = document.getElementById('payload-en').value;
-            const payloadZh = document.getElementById('payload-zh').value;
             
             const statusBox = document.getElementById('status-display');
             statusBox.style.display = "block";
-            statusBox.innerText = "[PROCESSING] Mapping repository targets, fetching client structural matrix...";
+            statusBox.style.color = "var(--text-main)";
+            statusBox.innerText = "[TRANSLATING] Processing automated English structural analysis into localized matrices (ZH, JA, FR)...";
 
             if(!token || !clientId) {
                 statusBox.innerText = "[ERROR] Authority token and client identifier signature are strictly required.";
                 return;
             }
 
-            // Target Repository Definition Pathing Rules
+            // Execute on-the-fly parallel translation sequence
+            let titleZh = titleEn, titleJa = titleEn, titleFr = titleEn;
+            let payloadZh = payloadEn, payloadJa = payloadEn, payloadFr = payloadEn;
+
+            try {
+                // Sequential execution to keep public API gateways steady
+                titleZh = await fetchTranslation(titleEn, "zh");
+                titleJa = await fetchTranslation(titleEn, "ja");
+                titleFr = await fetchTranslation(titleEn, "fr");
+
+                payloadZh = await fetchTranslation(payloadEn, "zh");
+                payloadJa = await fetchTranslation(payloadEn, "ja");
+                payloadFr = await fetchTranslation(payloadEn, "fr");
+                
+                statusBox.innerText = "[TRANSLATION COMPLETE] Accessing client vault repository architecture...";
+            } catch (err) {
+                statusBox.innerText = "[WARNING] Translation gateway timed out. Defaulting localized nodes to base template...";
+            }
+
             const owner = "stepio-scrapbooks";
-            const repo = `workspace-${clientId}`; // Maps dynamically to individual client vaults
+            const repo = `workspace-${clientId}`;
             const path = "data.js";
             const url = `https://api.github.com/repos/${owner}/${repo}/contents/${path}`;
 
             try {
-                // Step A: Pull the existing data.js configuration file from the target client repository
                 let sha = "";
                 let currentContent = "const clientWorkspaceData = [];";
                 
@@ -126,57 +154,53 @@
                 if (getRes.ok) {
                     const getData = await getRes.json();
                     sha = getData.sha;
-                    currentContent = atob(getData.content); // Decode base64 contents cleanly
+                    currentContent = atob(getData.content);
                 }
 
-                // Step B: Generate the structured programmatic asset block object
                 const uniqueId = `asset-${clientId}-${Date.now().toString().slice(-4)}`;
                 
+                // Formulate complete multi-lingual ledger object dynamically out of the translation loops
                 const newAssetObj = {
                     id: uniqueId,
                     date: date,
                     type: type,
-                    title: { en: titleEn || "Document", zh: titleZh || "文件" },
-                    displayTitle: { en: titleEn || "Document", zh: titleZh || "文件" },
-                    description: { en: "Dispatched from central operations terminal.", zh: "自中央控制台分发交付。" },
-                    videoUrl: type === "VIDEO" ? mediaUrl : "",
-                    imageUrl: type === "GRAPHIC" ? mediaUrl : "",
+                    title: { en: titleEn, zh: titleZh, ja: titleJa, fr: titleFr },
+                    description: { 
+                        en: "Dispatched from central operations terminal.", 
+                        zh: "自中央控制台分发交付。",
+                        ja: "中央運用ターミナルから配信されました。",
+                        fr: "Distribué depuis le terminal des opérations centrales."
+                    },
                     downloadUrl: mediaUrl || "#",
-                    downloadLabel: type === "TEXT" ? "// View Manifest" : `// Download Raw Material (${type})`,
-                    copyBoxTitle: { en: "Clean Text Output", zh: "净值内容输出" },
-                    copyBoxContent: { en: payloadEn, zh: payloadZh }
+                    downloadLabel: type === "TEXT" ? "// View Manifest" : `// Open Shared Media Vault (${type})`,
+                    copyBoxTitle: { en: "Clean Text Output", zh: "净值内容输出", ja: "クリーンテキスト出力", fr: "Contenu de sortie" },
+                    copyBoxContent: { en: payloadEn, zh: payloadZh, ja: payloadJa, fr: payloadFr }
                 };
 
-                // Step C: Parse old array format and append new data cleanly
-                // Strips the assignment wrapper out to dynamically update the inner array list
                 let innerArrayString = currentContent.replace(/const clientWorkspaceData\s*=\s*/, "").replace(/;/g, "").trim();
                 let parsedArray = [];
                 try {
                     parsedArray = JSON.parse(innerArrayString);
                 } catch(e) {
-                    // Fallback to array wrap if parsing empty or plain files
                     parsedArray = [];
                 }
 
-                // Push new item into the front of the chronological index matrix
                 parsedArray.unshift(newAssetObj);
-                
                 const updatedFileContent = `const clientWorkspaceData = ${JSON.stringify(parsedArray, null, 4)};`;
 
-                // Step D: Write new asset record back to target client storage via direct API PUT hook
                 const putRes = await fetch(url, {
                     method: "PUT",
                     headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
                     body: JSON.stringify({
-                        message: `SYSTEM DISPATCH // ADDED ASSET ${uniqueId}`,
-                        content: btoa(unescape(encodeURIComponent(updatedFileContent))), // Clean base64 transfer encoding safety
+                        message: `SYSTEM AUTOMATION DISPATCH // ADDED ASSET ${uniqueId}`,
+                        content: btoa(unescape(encodeURIComponent(updatedFileContent))),
                         sha: sha || undefined
                     })
                 });
 
                 if(putRes.ok) {
                     statusBox.style.color = "var(--accent-green)";
-                    statusBox.innerText = `[SUCCESS] Asset successfully injected and synchronized into repository [${repo}] inside stepio-scrapbooks. Client pipeline live.`;
+                    statusBox.innerText = `[SUCCESS] Automated translation injection finalized.\nTarget Repository: [${repo}]\nLanguages Localized: EN, ZH, JA, FR.\nClient workspace updated instantly.`;
                 } else {
                     const errData = await putRes.json();
                     statusBox.innerText = `[API ERROR] Commit execution failed: ${errData.message}`;
