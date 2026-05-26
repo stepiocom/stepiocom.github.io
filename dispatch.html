@@ -1,31 +1,61 @@
-<button class="btn" style="margin-top:10px; background:#444;" onclick="viewCatalog()">// VIEW ALL ASSETS</button>
-<div id="catalog-view" style="margin-top:20px; border-top:1px solid #000; padding-top:10px;"></div>
+async function dispatch() {
+    const token = document.getElementById('token').value;
+    const wsId = document.getElementById('ws-id').value;
+    const status = document.getElementById('status');
+    
+    // 1. Prepare your new asset object
+    const newAsset = {
+        id: `asset-${wsId}-${Math.floor(Math.random() * 9000)}`,
+        date: new Date().toISOString().split('T')[0],
+        type: document.getElementById('type').value,
+        title: { en: document.getElementById('title-en').value },
+        description: { en: "Dispatched from central operations terminal." },
+        downloadUrl: "https://docs.google.com/document/d/1DJr3ba_0QsZzMznmXlOswqCpP_Vjcvwl4wtcXTNHnl8/edit?tab=t.0",
+        downloadLabel: "// Open Shared Media Vault",
+        copyBoxTitle: { en: "Clean Text Output" },
+        copyBoxContent: { en: document.getElementById('payload-en').value }
+    };
 
-<script>
-    // Existing dispatch() function remains the same...
+    const url = `https://api.github.com/repos/stepiocom/stepioscrapbook-${wsId}/contents/data.js`;
 
-    async function viewCatalog() {
-        const token = document.getElementById('token').value;
-        const wsId = document.getElementById('ws-id').value;
-        const catalog = document.getElementById('catalog-view');
-        const url = `https://api.github.com/repos/stepiocom/stepioscrapbook-${wsId}/contents/data.js`;
+    try {
+        status.innerText = "[CONNECTING] Fetching current data...";
+        
+        // 2. Fetch the file
+        const getRes = await fetch(url, { headers: { "Authorization": `token ${token}` } });
+        const data = await getRes.json();
+        
+        // 3. Clean the string to get the array
+        const rawContent = atob(data.content.replace(/\n/g, ''));
+        const jsonString = rawContent.replace('const clientWorkspaceData = ', '').replace(';', '');
+        let currentArray = JSON.parse(jsonString);
 
-        catalog.innerText = "[LOADING] Fetching all assets...";
+        // 4. Update the array
+        currentArray.unshift(newAsset);
+        const newFileContent = `const clientWorkspaceData = ${JSON.stringify(currentArray, null, 4)};`;
 
-        try {
-            const res = await fetch(url, { headers: { "Authorization": `token ${token}` } });
-            const data = await res.json();
-            const content = JSON.parse(atob(data.content.replace(/\n/g, '')).replace('const clientWorkspaceData = ', '').replace(';', ''));
-            
-            // Generate list
-            let html = "<h4>CURRENT ASSETS:</h4><ul>";
-            content.forEach(item => {
-                html += `<li><strong>[${item.type}]</strong> ${item.title} <small>(${item.date})</small></li>`;
-            });
-            html += "</ul>";
-            catalog.innerHTML = html;
-        } catch (err) {
-            catalog.innerText = "[ERROR] Could not load catalog: " + err.message;
+        // 5. Push the update
+        const putRes = await fetch(url, {
+            method: "PUT",
+            headers: { 
+                "Authorization": `token ${token}`, 
+                "Content-Type": "application/json" 
+            },
+            body: JSON.stringify({
+                message: "SYSTEM DISPATCH // ADDED " + newAsset.type,
+                content: btoa(newFileContent),
+                sha: data.sha // Mandatory for GitHub API updates
+            })
+        });
+
+        if (putRes.ok) {
+            status.innerText = "[SUCCESS] Content pushed to stepiocom/stepioscrapbook-" + wsId;
+        } else {
+            const errorText = await putRes.text();
+            status.innerText = "[ERROR] API Push Failed: " + errorText;
         }
+    } catch (err) {
+        status.innerText = "[ERROR] " + err.message;
+        console.error(err);
     }
-</script>
+}
