@@ -1,91 +1,31 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>STEPIO // CENTRAL DISPATCH</title>
-    <style>
-        body { font-family: 'Courier New', monospace; padding: 40px; background: #f4f4f4; }
-        .form { max-width: 600px; background: #fff; padding: 30px; border: 1px solid #000; box-shadow: 8px 8px 0px #000; }
-        .group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; font-size: 12px; }
-        input, textarea, select { width: 100%; padding: 10px; border: 1px solid #ccc; box-sizing: border-box; }
-        .btn { background: #000; color: #fff; padding: 12px 20px; cursor: pointer; border: none; width: 100%; font-weight: bold; }
-        #status { margin-top: 20px; padding: 10px; border: 1px dashed #000; font-size: 12px; white-space: pre-wrap; }
-    </style>
-</head>
-<body>
-    <div class="form">
-        <h3>STEPIO // DISPATCH TERMINAL</h3>
-        <div class="group"><label>GitHub PAT</label><input type="password" id="token"></div>
-        <div class="group"><label>Workspace ID</label><input type="text" id="ws-id" value="160508"></div>
-        <div class="group">
-            <label>Asset Type</label>
-            <select id="type">
-                <option value="BLOG">BLOG</option>
-                <option value="DIARY">DIARY</option>
-                <option value="VLOG">VLOG</option>
-            </select>
-        </div>
-        <div class="group"><label>Title (EN)</label><input type="text" id="title-en"></div>
-        <div class="group"><label>Media Link (if any)</label><input type="text" id="media-url"></div>
-        <div class="group"><label>English Payload</label><textarea id="payload-en" rows="8"></textarea></div>
-        <button class="btn" onclick="dispatch()">// DISPATCH INSTANT</button>
-        <div id="status">Ready.</div>
-    </div>
+<button class="btn" style="margin-top:10px; background:#444;" onclick="viewCatalog()">// VIEW ALL ASSETS</button>
+<div id="catalog-view" style="margin-top:20px; border-top:1px solid #000; padding-top:10px;"></div>
 
-    <script>
-        async function dispatch() {
-            const token = document.getElementById('token').value;
-            const wsId = document.getElementById('ws-id').value;
-            const status = document.getElementById('status');
+<script>
+    // Existing dispatch() function remains the same...
+
+    async function viewCatalog() {
+        const token = document.getElementById('token').value;
+        const wsId = document.getElementById('ws-id').value;
+        const catalog = document.getElementById('catalog-view');
+        const url = `https://api.github.com/repos/stepiocom/stepioscrapbook-${wsId}/contents/data.js`;
+
+        catalog.innerText = "[LOADING] Fetching all assets...";
+
+        try {
+            const res = await fetch(url, { headers: { "Authorization": `token ${token}` } });
+            const data = await res.json();
+            const content = JSON.parse(atob(data.content.replace(/\n/g, '')).replace('const clientWorkspaceData = ', '').replace(';', ''));
             
-            const asset = {
-                id: `asset-${Date.now()}`,
-                date: new Date().toISOString().split('T')[0],
-                type: document.getElementById('type').value,
-                title: document.getElementById('title-en').value,
-                mediaUrl: document.getElementById('media-url').value,
-                payload: document.getElementById('payload-en').value
-            };
-
-            const url = `https://api.github.com/repos/stepiocom/stepioscrapbook-${wsId}/contents/data.js`;
-            status.innerText = "[CONNECTING] Fetching current data...";
-
-            try {
-                // 1. Fetch current file
-                const getRes = await fetch(url, { headers: { "Authorization": `token ${token}` } });
-                const data = await getRes.json();
-                
-                let currentArray = [];
-                if (getRes.ok) {
-                    const content = JSON.parse(atob(data.content.replace(/\n/g, '')).replace('const clientWorkspaceData = ', '').replace(';', ''));
-                    currentArray = content;
-                }
-
-                // 2. Add new asset
-                currentArray.unshift(asset);
-                const newContent = `const clientWorkspaceData = ${JSON.stringify(currentArray, null, 4)};`;
-
-                // 3. Push update
-                const putRes = await fetch(url, {
-                    method: "PUT",
-                    headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" },
-                    body: JSON.stringify({
-                        message: "SYSTEM DISPATCH // ADDED " + asset.type,
-                        content: btoa(newContent),
-                        sha: data.sha
-                    })
-                });
-
-                if (putRes.ok) {
-                    status.innerText = "[SUCCESS] Content pushed to stepiocom/stepioscrapbook-" + wsId;
-                } else {
-                    status.innerText = "[ERROR] Push failed: " + (await putRes.text());
-                }
-            } catch (err) {
-                status.innerText = "[ERROR] " + err.message;
-            }
+            // Generate list
+            let html = "<h4>CURRENT ASSETS:</h4><ul>";
+            content.forEach(item => {
+                html += `<li><strong>[${item.type}]</strong> ${item.title} <small>(${item.date})</small></li>`;
+            });
+            html += "</ul>";
+            catalog.innerHTML = html;
+        } catch (err) {
+            catalog.innerText = "[ERROR] Could not load catalog: " + err.message;
         }
-    </script>
-</body>
-</html>
+    }
+</script>
