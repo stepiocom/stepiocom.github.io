@@ -5,22 +5,28 @@
     <style>
         body { font-family: monospace; padding: 20px; max-width: 800px; }
         .group { margin-bottom: 15px; }
-        label { display: block; font-weight: bold; margin-bottom: 5px; }
-        input, textarea, select { width: 100%; padding: 8px; box-sizing: border-box; }
-        button { padding: 10px; cursor: pointer; }
+        input, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        .action-bar { display: flex; gap: 10px; margin-top: 10px; }
+        button { padding: 10px; cursor: pointer; flex: 1; }
         #catalog { margin-top: 30px; border-top: 2px solid #000; padding-top: 10px; }
-        .asset-card { border-bottom: 1px solid #ccc; padding: 5px 0; }
+        .asset-card { border-bottom: 1px solid #ccc; padding: 10px 0; }
+        .type-label { font-weight: bold; color: #555; }
     </style>
 </head>
 <body>
     <h3>CENTRAL DISPATCH</h3>
     <div class="group"><label>GitHub PAT</label><input type="password" id="token"></div>
-    <div class="group"><label>Type</label><select id="type"><option>BLOG</option><option>DIARY</option><option>VLOG</option></select></div>
     <div class="group"><label>Title (EN)</label><input type="text" id="title"></div>
     <div class="group"><label>Payload (EN)</label><textarea id="payload" rows="4"></textarea></div>
     
-    <button onclick="dispatch()">DISPATCH NEW ASSET</button>
-    <button onclick="loadCatalog()">VIEW ALL ASSETS</button>
+    <div class="action-bar">
+        <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
+        <button onclick="dispatch('DIARY')">DISPATCH DIARY</button>
+        <button onclick="dispatch('VLOG')">DISPATCH VLOG</button>
+    </div>
+    <div style="margin-top:10px;">
+        <button style="width:100%" onclick="loadCatalog()">VIEW ALL ASSETS</button>
+    </div>
     
     <div id="status"></div>
     <div id="catalog"></div>
@@ -39,24 +45,34 @@
                 
                 catDiv.innerHTML = "<h4>MASTER CATALOG:</h4>";
                 content.forEach(a => {
-                    catDiv.innerHTML += `<div class="asset-card"><strong>[${a.type}]</strong> ${a.title.en} <em>(${a.date})</em></div>`;
+                    catDiv.innerHTML += `<div class="asset-card">
+                        <span class="type-label">[${a.type}]</span> 
+                        <strong>${a.title.en}</strong> 
+                        <em>(${a.date})</em>
+                    </div>`;
                 });
             } catch (e) { catDiv.innerHTML = "Error loading catalog: " + e.message; }
         }
 
-        async function dispatch() {
+        async function dispatch(type) {
             const token = document.getElementById('token').value;
             const status = document.getElementById('status');
-            const newAsset = { id: `a-${Date.now()}`, date: new Date().toISOString().split('T')[0], type: document.getElementById('type').value, title: { en: document.getElementById('title').value }, payload: document.getElementById('payload').value };
+            const newAsset = { 
+                id: `a-${Date.now()}`, 
+                date: new Date().toISOString().split('T')[0], 
+                type: type, 
+                title: { en: document.getElementById('title').value }, 
+                payload: document.getElementById('payload').value 
+            };
 
             try {
                 const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
                 const data = await res.json();
                 let arr = JSON.parse(atob(data.content.replace(/\n/g, '')).replace('const clientWorkspaceData = ', '').replace(';', ''));
                 arr.unshift(newAsset);
-                await fetch(API_URL, { method: "PUT", headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ message: "Dispatch", content: btoa(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), sha: data.sha }) });
-                status.innerText = "SUCCESS: " + newAsset.type + " added.";
-                loadCatalog(); // Refresh list automatically
+                await fetch(API_URL, { method: "PUT", headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ message: "Dispatch " + type, content: btoa(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), sha: data.sha }) });
+                status.innerText = "SUCCESS: " + type + " added.";
+                loadCatalog();
             } catch (e) { status.innerText = "ERROR: " + e.message; }
         }
     </script>
