@@ -1,66 +1,15 @@
-<script>
-    const API_URL = "https://api.github.com/repos/stepiocom/stepioscrapbook-160508/contents/data.js";
-
-    // This helper extracts the array correctly, even if there's junk or wrappers
-    function extractArray(rawContent) {
-        // Find the first '[' and last ']'
-        const start = rawContent.indexOf('[');
-        const end = rawContent.lastIndexOf(']') + 1;
-        const jsonOnly = rawContent.substring(start, end);
-        return JSON.parse(jsonOnly);
-    }
-
-    async function loadCatalog() {
-        const token = document.getElementById('token').value;
-        const catDiv = document.getElementById('catalog');
-        catDiv.innerHTML = "Loading...";
-        try {
-            const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
-            const data = await res.json();
-            const rawContent = atob(data.content.replace(/\n/g, ''));
-            const arr = extractArray(rawContent);
-            
-            catDiv.innerHTML = "<h4>MASTER CATALOG:</h4>";
-            arr.forEach(a => {
-                catDiv.innerHTML += `<div class="asset-card">
-                    <span class="type-label">[${a.type || 'N/A'}]</span> 
-                    <strong>${a.title?.en || 'Untitled'}</strong> 
-                    <em>(${a.date})</em>
-                </div>`;
-            });
-        } catch (e) { catDiv.innerHTML = "CRITICAL ERROR: " + e.message; }
-    }
-
-    async function dispatch(type) {
-        const token = document.getElementById('token').value;
-        const status = document.getElementById('status');
-        const newAsset = { 
-            id: `a-${Date.now()}`, 
-            date: new Date().toISOString().split('T')[0], 
-            type: type, 
-            title: { en: document.getElementById('title').value }, 
-            payload: document.getElementById('payload').value 
-        };
-
-        try {
-            const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
-            const data = await res.json();
-            const rawContent = atob(data.content.replace(/\n/g, ''));
-            
-            let arr = extractArray(rawContent);
-            arr.unshift(newAsset);
-            
-            await fetch(API_URL, { 
-                method: "PUT", 
-                headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, 
-                body: JSON.stringify({ 
-                    message: "Dispatch " + type, 
-                    content: btoa(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), 
-                    sha: data.sha 
-                }) 
-            });
-            status.innerText = "SUCCESS: " + type + " added.";
-            loadCatalog();
-        } catch (e) { status.innerText = "WRITE ERROR: " + e.message; }
-    }
-</script>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>DEBUG TEST</title>
+</head>
+<body>
+    <h1>IF YOU SEE THIS, THE PAGE IS LOADING.</h1>
+    <div id="test-box" style="border: 1px solid red; padding: 20px;">
+        Test Box
+    </div>
+    <script>
+        document.getElementById('test-box').innerText = "THE SCRIPT IS RUNNING.";
+    </script>
+</body>
+</html>
