@@ -1,15 +1,80 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>DEBUG TEST</title>
+    <title>STEPIO // DISPATCH</title>
+    <style>
+        body { font-family: monospace; padding: 20px; max-width: 800px; }
+        .group { margin-bottom: 15px; }
+        input, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
+        .action-bar { display: flex; gap: 10px; margin-top: 10px; }
+        button { padding: 10px; cursor: pointer; flex: 1; }
+        #catalog { margin-top: 30px; border-top: 2px solid #000; padding-top: 10px; }
+        .asset-card { border-bottom: 1px solid #ccc; padding: 10px 0; }
+    </style>
 </head>
 <body>
-    <h1>IF YOU SEE THIS, THE PAGE IS LOADING.</h1>
-    <div id="test-box" style="border: 1px solid red; padding: 20px;">
-        Test Box
+    <h3>CENTRAL DISPATCH</h3>
+    <div class="group"><label>GitHub PAT</label><input type="password" id="token" placeholder="Enter your GitHub PAT here"></div>
+    <div class="group"><label>Title (EN)</label><input type="text" id="title" placeholder="Entry Title"></div>
+    <div class="group"><label>Payload (EN)</label><textarea id="payload" rows="4" placeholder="Enter your content here..."></textarea></div>
+    
+    <div class="action-bar">
+        <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
+        <button onclick="dispatch('DIARY')">DISPATCH DIARY</button>
+        <button onclick="dispatch('VLOG')">DISPATCH VLOG</button>
     </div>
+    <div style="margin-top:10px;">
+        <button style="width:100%" onclick="loadCatalog()">VIEW ALL ASSETS</button>
+    </div>
+    
+    <div id="status"></div>
+    <div id="catalog"></div>
+
     <script>
-        document.getElementById('test-box').innerText = "THE SCRIPT IS RUNNING.";
+        const API_URL = "https://api.github.com/repos/stepiocom/stepioscrapbook-160508/contents/data.js";
+
+        function extractArray(rawContent) {
+            const start = rawContent.indexOf('[');
+            const end = rawContent.lastIndexOf(']') + 1;
+            return JSON.parse(rawContent.substring(start, end));
+        }
+
+        async function loadCatalog() {
+            const token = document.getElementById('token').value;
+            const catDiv = document.getElementById('catalog');
+            catDiv.innerHTML = "Loading...";
+            try {
+                const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
+                const data = await res.json();
+                const arr = extractArray(atob(data.content.replace(/\n/g, '')));
+                
+                catDiv.innerHTML = "<h4>MASTER CATALOG:</h4>";
+                arr.forEach(a => {
+                    catDiv.innerHTML += `<div class="asset-card"><strong>[${a.type}]</strong> ${a.title?.en || 'Untitled'} <em>(${a.date})</em></div>`;
+                });
+            } catch (e) { catDiv.innerHTML = "Error loading catalog: " + e.message; }
+        }
+
+        async function dispatch(type) {
+            const token = document.getElementById('token').value;
+            const status = document.getElementById('status');
+            const newAsset = { id: `a-${Date.now()}`, date: new Date().toISOString().split('T')[0], type: type, title: { en: document.getElementById('title').value }, payload: document.getElementById('payload').value };
+
+            try {
+                const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
+                const data = await res.json();
+                let arr = extractArray(atob(data.content.replace(/\n/g, '')));
+                arr.unshift(newAsset);
+                
+                await fetch(API_URL, { 
+                    method: "PUT", 
+                    headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, 
+                    body: JSON.stringify({ message: "Dispatch " + type, content: btoa(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), sha: data.sha }) 
+                });
+                status.innerText = "SUCCESS: " + type + " added.";
+                loadCatalog();
+            } catch (e) { status.innerText = "ERROR: " + e.message; }
+        }
     </script>
 </body>
 </html>
