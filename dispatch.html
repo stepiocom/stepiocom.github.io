@@ -1,31 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>STEPIO // DISPATCH</title>
+    <title>STEPIO // CENTRAL DISPATCH</title>
     <style>
         body { font-family: monospace; padding: 20px; max-width: 800px; }
         .group { margin-bottom: 15px; }
-        input, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
-        .action-bar { display: flex; gap: 10px; margin-top: 10px; }
-        button { padding: 10px; cursor: pointer; flex: 1; }
+        input, textarea, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        button { padding: 15px; cursor: pointer; width: 100%; margin-top: 10px; }
         #catalog { margin-top: 30px; border-top: 2px solid #000; padding-top: 10px; }
         .asset-card { border-bottom: 1px solid #ccc; padding: 10px 0; }
     </style>
 </head>
 <body>
     <h3>CENTRAL DISPATCH</h3>
-    <div class="group"><label>GitHub PAT</label><input type="password" id="token" placeholder="Enter your GitHub PAT here"></div>
-    <div class="group"><label>Title (EN)</label><input type="text" id="title" placeholder="Entry Title"></div>
-    <div class="group"><label>Payload (EN)</label><textarea id="payload" rows="4" placeholder="Enter your content here..."></textarea></div>
+    <div class="group"><label>GitHub PAT</label><input type="password" id="token"></div>
+    <div class="group"><label>Type</label><select id="type"><option>BLOG</option><option>DIARY</option><option>VLOG</option></select></div>
+    <div class="group"><label>Title (EN)</label><input type="text" id="title"></div>
+    <div class="group"><label>Payload</label><textarea id="payload" rows="4"></textarea></div>
     
-    <div class="action-bar">
-        <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
-        <button onclick="dispatch('DIARY')">DISPATCH DIARY</button>
-        <button onclick="dispatch('VLOG')">DISPATCH VLOG</button>
-    </div>
-    <div style="margin-top:10px;">
-        <button style="width:100%" onclick="loadCatalog()">VIEW ALL ASSETS</button>
-    </div>
+    <button onclick="dispatch()">DISPATCH ASSET</button>
+    <button onclick="loadCatalog()">REFRESH ALL ASSETS</button>
     
     <div id="status"></div>
     <div id="catalog"></div>
@@ -33,10 +27,13 @@
     <script>
         const API_URL = "https://api.github.com/repos/stepiocom/stepioscrapbook-160508/contents/data.js";
 
-        function extractArray(rawContent) {
-            const start = rawContent.indexOf('[');
-            const end = rawContent.lastIndexOf(']') + 1;
-            return JSON.parse(rawContent.substring(start, end));
+        // Modern Unicode-safe encoding
+        function safeBase64(str) {
+            return btoa(encodeURIComponent(str).replace(/%([0-9A-F]{2})/g, (match, p1) => String.fromCharCode('0x' + p1)));
+        }
+
+        function safeDecode(str) {
+            return decodeURIComponent(atob(str).split('').map(c => '%' + ('00' + c.charCodeAt(0).toString(16)).slice(-2)).join(''));
         }
 
         async function loadCatalog() {
@@ -46,32 +43,37 @@
             try {
                 const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
                 const data = await res.json();
-                const arr = extractArray(atob(data.content.replace(/\n/g, '')));
+                const rawContent = safeDecode(data.content.replace(/\n/g, ''));
+                const arr = JSON.parse(rawContent.substring(rawContent.indexOf('['), rawContent.lastIndexOf(']') + 1));
                 
                 catDiv.innerHTML = "<h4>MASTER CATALOG:</h4>";
                 arr.forEach(a => {
-                    catDiv.innerHTML += `<div class="asset-card"><strong>[${a.type}]</strong> ${a.title?.en || 'Untitled'} <em>(${a.date})</em></div>`;
+                    catDiv.innerHTML += `<div class="asset-card"><strong>[${a.type}]</strong> ${a.title?.en || 'Untitled'} - ${a.date}</div>`;
                 });
-            } catch (e) { catDiv.innerHTML = "Error loading catalog: " + e.message; }
+            } catch (e) { catDiv.innerHTML = "ERROR: " + e.message; }
         }
 
-        async function dispatch(type) {
+        async function dispatch() {
             const token = document.getElementById('token').value;
             const status = document.getElementById('status');
-            const newAsset = { id: `a-${Date.now()}`, date: new Date().toISOString().split('T')[0], type: type, title: { en: document.getElementById('title').value }, payload: document.getElementById('payload').value };
+            const newAsset = { id: `a-${Date.now()}`, date: new Date().toISOString().split('T')[0], type: document.getElementById('type').value, title: { en: document.getElementById('title').value }, payload: document.getElementById('payload').value };
 
             try {
                 const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
                 const data = await res.json();
-                let arr = extractArray(atob(data.content.replace(/\n/g, '')));
+                let arr = JSON.parse(safeDecode(data.content.replace(/\n/g, '')).substring(data.content.indexOf('['), data.content.lastIndexOf(']') + 1));
                 arr.unshift(newAsset);
                 
                 await fetch(API_URL, { 
                     method: "PUT", 
                     headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, 
-                    body: JSON.stringify({ message: "Dispatch " + type, content: btoa(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), sha: data.sha }) 
+                    body: JSON.stringify({ 
+                        message: "Dispatch", 
+                        content: safeBase64(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), 
+                        sha: data.sha 
+                    }) 
                 });
-                status.innerText = "SUCCESS: " + type + " added.";
+                status.innerText = "SUCCESS: Added.";
                 loadCatalog();
             } catch (e) { status.innerText = "ERROR: " + e.message; }
         }
