@@ -1,11 +1,79 @@
 <!DOCTYPE html>
 <html>
+<head>
+    <title>STEPIO // CENTRAL DISPATCH</title>
+    <style>
+        body { font-family: monospace; padding: 20px; }
+        .group { margin-bottom: 15px; }
+        input, textarea { width: 100%; display: block; padding: 8px; }
+        #status { margin-top: 20px; padding: 10px; border: 1px solid #000; }
+    </style>
+</head>
 <body>
-    <button onclick="alert('The button works!')">TEST BUTTON</button>
-    <div id="status"></div>
+    <h3>DISPATCH TERMINAL</h3>
+    <p>Target: <b>stepiocom/stepioscrapbook-160508</b></p>
+    <div class="group"><label>GitHub PAT</label><input type="password" id="token"></div>
+    <div class="group"><label>Title</label><input type="text" id="title"></div>
+    <div class="group"><label>Content</label><textarea id="payload" rows="5"></textarea></div>
+    
+    <button onclick="checkConnection()">1. VERIFY CONNECTION TO DATA REPO</button>
+    <button onclick="dispatch()">2. DISPATCH</button>
+    
+    <div id="status">Ready.</div>
+
     <script>
-        // No logic, just a test to see if the browser sees this file
-        console.log("Script loaded");
+        // TERMINAL is here, but DATA is there:
+        const REPO_OWNER = "stepiocom";
+        const REPO_NAME = "stepioscrapbook-160508"; 
+        const FILE_PATH = "data.js";
+        const API_URL = `https://api.github.com/repos/${REPO_OWNER}/${REPO_NAME}/contents/${FILE_PATH}`;
+
+        function getHeaders(token) {
+            return { "Authorization": `token ${token}`, "Content-Type": "application/json" };
+        }
+
+        async function checkConnection() {
+            const token = document.getElementById('token').value;
+            const status = document.getElementById('status');
+            status.innerText = "Checking...";
+            try {
+                const res = await fetch(API_URL, { headers: getHeaders(token) });
+                if (res.ok) status.innerText = "SUCCESS: Connected to " + REPO_NAME;
+                else status.innerText = "ERROR: " + res.status + " - Verify PAT has 'repo' access.";
+            } catch (e) { status.innerText = "ERROR: " + e.message; }
+        }
+
+        async function dispatch() {
+            const token = document.getElementById('token').value;
+            const title = document.getElementById('title').value;
+            const payload = document.getElementById('payload').value;
+            const status = document.getElementById('status');
+
+            try {
+                const getRes = await fetch(API_URL, { headers: getHeaders(token) });
+                const data = await getRes.json();
+                
+                // Parse the JS variable from the file content
+                let content = atob(data.content.replace(/\n/g, ''));
+                let jsonStr = content.replace('const clientWorkspaceData = ', '').replace(';', '');
+                let arr = JSON.parse(jsonStr);
+
+                // Add new item
+                arr.unshift({ date: new Date().toISOString().split('T')[0], title, payload });
+
+                // Push back
+                await fetch(API_URL, {
+                    method: "PUT",
+                    headers: getHeaders(token),
+                    body: JSON.stringify({
+                        message: "Dispatch: " + title,
+                        content: btoa(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`),
+                        sha: data.sha
+                    })
+                });
+                status.innerText = "DISPATCH SUCCESSFUL";
+            } catch (e) { status.innerText = "DISPATCH FAILED: " + e.message; }
+        }
     </script>
 </body>
 </html>
