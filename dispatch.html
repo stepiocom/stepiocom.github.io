@@ -3,26 +3,35 @@
 <head>
     <title>STEPIO // CENTRAL DISPATCH</title>
     <style>
-        body { font-family: monospace; padding: 20px; }
+        body { font-family: monospace; padding: 20px; max-width: 600px; }
         .group { margin-bottom: 15px; }
-        input, textarea { width: 100%; display: block; padding: 8px; }
-        #status { margin-top: 20px; padding: 10px; border: 1px solid #000; }
+        label { display: block; font-weight: bold; margin-bottom: 5px; }
+        input, textarea, select { width: 100%; padding: 8px; box-sizing: border-box; }
+        #status { margin-top: 20px; padding: 15px; border: 1px solid #000; background: #f9f9f9; }
     </style>
 </head>
 <body>
-    <h3>DISPATCH TERMINAL</h3>
+    <h3>CENTRAL DISPATCH</h3>
     <p>Target: <b>stepiocom/stepioscrapbook-160508</b></p>
-    <div class="group"><label>GitHub PAT</label><input type="password" id="token"></div>
-    <div class="group"><label>Title</label><input type="text" id="title"></div>
-    <div class="group"><label>Content</label><textarea id="payload" rows="5"></textarea></div>
     
-    <button onclick="checkConnection()">1. VERIFY CONNECTION TO DATA REPO</button>
-    <button onclick="dispatch()">2. DISPATCH</button>
+    <div class="group"><label>GitHub PAT</label><input type="password" id="token"></div>
+    <div class="group">
+        <label>Asset Type</label>
+        <select id="type">
+            <option value="BLOG">BLOG</option>
+            <option value="DIARY">DIARY</option>
+            <option value="VLOG">VLOG</option>
+        </select>
+    </div>
+    <div class="group"><label>Title (EN)</label><input type="text" id="title"></div>
+    <div class="group"><label>Payload (EN)</label><textarea id="payload" rows="5"></textarea></div>
+    
+    <button onclick="checkConnection()">1. VERIFY CONNECTION</button>
+    <button onclick="dispatch()" style="background:#000; color:#fff; padding:10px;">2. DISPATCH ASSET</button>
     
     <div id="status">Ready.</div>
 
     <script>
-        // TERMINAL is here, but DATA is there:
         const REPO_OWNER = "stepiocom";
         const REPO_NAME = "stepioscrapbook-160508"; 
         const FILE_PATH = "data.js";
@@ -39,39 +48,42 @@
             try {
                 const res = await fetch(API_URL, { headers: getHeaders(token) });
                 if (res.ok) status.innerText = "SUCCESS: Connected to " + REPO_NAME;
-                else status.innerText = "ERROR: " + res.status + " - Verify PAT has 'repo' access.";
+                else status.innerText = "ERROR: " + res.status + " - Verify PAT.";
             } catch (e) { status.innerText = "ERROR: " + e.message; }
         }
 
         async function dispatch() {
             const token = document.getElementById('token').value;
-            const title = document.getElementById('title').value;
-            const payload = document.getElementById('payload').value;
             const status = document.getElementById('status');
+            
+            const newAsset = {
+                id: `asset-${Date.now()}`,
+                date: new Date().toISOString().split('T')[0],
+                type: document.getElementById('type').value,
+                title: { en: document.getElementById('title').value },
+                payload: document.getElementById('payload').value
+            };
 
             try {
                 const getRes = await fetch(API_URL, { headers: getHeaders(token) });
                 const data = await getRes.json();
                 
-                // Parse the JS variable from the file content
                 let content = atob(data.content.replace(/\n/g, ''));
                 let jsonStr = content.replace('const clientWorkspaceData = ', '').replace(';', '');
                 let arr = JSON.parse(jsonStr);
 
-                // Add new item
-                arr.unshift({ date: new Date().toISOString().split('T')[0], title, payload });
+                arr.unshift(newAsset);
 
-                // Push back
                 await fetch(API_URL, {
                     method: "PUT",
                     headers: getHeaders(token),
                     body: JSON.stringify({
-                        message: "Dispatch: " + title,
+                        message: "Dispatch: " + newAsset.type,
                         content: btoa(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`),
                         sha: data.sha
                     })
                 });
-                status.innerText = "DISPATCH SUCCESSFUL";
+                status.innerText = "DISPATCH SUCCESSFUL: " + newAsset.type;
             } catch (e) { status.innerText = "DISPATCH FAILED: " + e.message; }
         }
     </script>
