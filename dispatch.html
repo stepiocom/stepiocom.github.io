@@ -3,84 +3,71 @@
 <head>
     <title>STEPIO // CENTRAL DISPATCH</title>
     <style>
-        body { font-family: monospace; padding: 20px; max-width: 800px; }
-        .group { margin-bottom: 15px; }
-        input, textarea { width: 100%; padding: 8px; box-sizing: border-box; }
-        button { padding: 15px; cursor: pointer; width: 100%; margin-top: 10px; font-weight: bold; }
-        #catalog { margin-top: 30px; border-top: 2px solid #000; padding-top: 10px; }
-        .asset-card { border-bottom: 1px solid #ccc; padding: 10px 0; display: flex; gap: 10px; }
+        body { font-family: monospace; padding: 20px; }
+        .grid-container { display: flex; gap: 20px; }
+        .column { flex: 1; border: 1px solid #ccc; padding: 10px; }
+        .input-area { margin-bottom: 20px; border-bottom: 2px solid #000; padding-bottom: 20px; }
+        .asset-card { border-bottom: 1px solid #eee; padding: 5px 0; font-size: 0.9em; }
     </style>
 </head>
 <body onload="loadCatalog()">
     <h3>CENTRAL DISPATCH</h3>
-    <div class="group"><label>GitHub PAT</label><input type="password" id="token"></div>
-    <div class="group"><label>Type (BLOG, DIARY, or VLOG)</label><input type="text" id="type"></div>
-    <div class="group"><label>Title</label><input type="text" id="title"></div>
-    <div class="group"><label>Payload</label><textarea id="payload" rows="4"></textarea></div>
-    
-    <button onclick="dispatch()">DISPATCH ASSET</button>
-    
-    <div id="status"></div>
-    <div id="catalog">Loading assets...</div>
+    <div class="input-area">
+        <label>GitHub PAT:</label><input type="password" id="token" style="width:100%"><br>
+        <label>Type:</label><input type="text" id="type" placeholder="BLOG / DIARY / VLOG" style="width:100%"><br>
+        <label>Title:</label><input type="text" id="title" style="width:100%"><br>
+        <label>Payload:</label><textarea id="payload" rows="3" style="width:100%"></textarea>
+        <button onclick="dispatch()" style="width:100%; padding:10px; margin-top:5px;">DISPATCH ASSET</button>
+        <div id="status"></div>
+    </div>
+
+    <div class="grid-container">
+        <div class="column" id="col-BLOG"><h4>BLOGS</h4></div>
+        <div class="column" id="col-DIARY"><h4>DIARIES</h4></div>
+        <div class="column" id="col-VLOG"><h4>VLOGS</h4></div>
+    </div>
 
     <script>
         const API_URL = "https://api.github.com/repos/stepiocom/stepioscrapbook-160508/contents/data.js";
-
         function safeBase64(str) { return btoa(unescape(encodeURIComponent(str))); }
         function safeDecode(str) { return decodeURIComponent(escape(atob(str))); }
 
         async function loadCatalog() {
             const token = document.getElementById('token').value;
-            const catDiv = document.getElementById('catalog');
             try {
                 const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
                 const data = await res.json();
                 const rawContent = safeDecode(data.content.replace(/\n/g, ''));
-                const start = rawContent.indexOf('[');
-                const end = rawContent.lastIndexOf(']') + 1;
-                const arr = JSON.parse(rawContent.substring(start, end));
+                const arr = JSON.parse(rawContent.substring(rawContent.indexOf('['), rawContent.lastIndexOf(']') + 1));
                 
-                catDiv.innerHTML = "<h4>MASTER CATALOG:</h4>";
+                document.querySelectorAll('.column').forEach(c => c.innerHTML = `<h4>${c.id.replace('col-', '')}S</h4>`);
                 arr.forEach(a => {
-                    catDiv.innerHTML += `<div class="asset-card">
-                        <span>[${a.type || 'N/A'}]</span> 
-                        <span>${a.title?.en || a.title || 'Untitled'}</span> 
-                        <em style="margin-left:auto">${a.date}</em>
-                    </div>`;
+                    const col = document.getElementById(`col-${a.type.toUpperCase()}`);
+                    if (col) col.innerHTML += `<div class="asset-card">${a.title?.en || a.title} <em>(${a.date})</em></div>`;
                 });
-            } catch (e) { catDiv.innerHTML = "Waiting for valid PAT to load catalog."; }
+            } catch (e) { console.log("Load error: " + e.message); }
         }
 
         async function dispatch() {
             const token = document.getElementById('token').value;
-            const status = document.getElementById('status');
-            const newAsset = { 
-                id: `a-${Date.now()}`, 
-                date: new Date().toISOString().split('T')[0], 
+            const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
+            const data = await res.json();
+            const rawContent = safeDecode(data.content.replace(/\n/g, ''));
+            let arr = JSON.parse(rawContent.substring(rawContent.indexOf('['), rawContent.lastIndexOf(']') + 1));
+            
+            arr.unshift({ 
+                id: `a-${Date.now()}`, date: new Date().toISOString().split('T')[0], 
                 type: document.getElementById('type').value.toUpperCase(), 
                 title: { en: document.getElementById('title').value }, 
                 payload: document.getElementById('payload').value 
-            };
+            });
 
-            try {
-                const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
-                const data = await res.json();
-                const rawContent = safeDecode(data.content.replace(/\n/g, ''));
-                let arr = JSON.parse(rawContent.substring(rawContent.indexOf('['), rawContent.lastIndexOf(']') + 1));
-                arr.unshift(newAsset);
-                
-                await fetch(API_URL, { 
-                    method: "PUT", 
-                    headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, 
-                    body: JSON.stringify({ 
-                        message: "Dispatch", 
-                        content: safeBase64(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), 
-                        sha: data.sha 
-                    }) 
-                });
-                status.innerText = "SUCCESS: Added.";
-                loadCatalog();
-            } catch (e) { status.innerText = "ERROR: " + e.message; }
+            await fetch(API_URL, { 
+                method: "PUT", 
+                headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, 
+                body: JSON.stringify({ message: "Dispatch", content: safeBase64(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), sha: data.sha }) 
+            });
+            loadCatalog();
         }
     </script>
 </body>
