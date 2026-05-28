@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html>
-<head><title>STEPIO // CENTRAL DISPATCH</title>
-<style>
-    body { font-family: monospace; padding: 20px; }
-    .grid { display: flex; gap: 20px; }
-    .column { flex: 1; border: 1px solid #000; padding: 15px; }
-    input, textarea { width: 100%; box-sizing: border-box; padding: 5px; margin-bottom: 10px; }
-    button { width: 100%; padding: 10px; font-weight: bold; cursor: pointer; }
-    .asset-card { border-bottom: 1px solid #ccc; padding: 5px 0; font-size: 0.8em; }
-</style>
+<head>
+    <title>DISPATCH</title>
+    <style>
+        .grid { display: flex; gap: 20px; }
+        .column { border: 1px solid #000; padding: 10px; flex: 1; }
+    </style>
 </head>
 <body onload="loadCatalog()">
-    <h3>CENTRAL DISPATCH</h3>
-    <label>GitHub PAT:</label><input type="password" id="token">
+    <input type="password" id="token" placeholder="GitHub PAT">
     <div class="grid">
-        <div class="column" id="col-BLOG"><h4>BLOG</h4><input type="text" id="title-BLOG" placeholder="Title"><textarea id="payload-BLOG" rows="3"></textarea><button onclick="dispatch('BLOG')">DISPATCH BLOG</button><div id="list-BLOG"></div></div>
-        <div class="column" id="col-DIARY"><h4>DIARY</h4><input type="text" id="title-DIARY" placeholder="Title"><textarea id="payload-DIARY" rows="3"></textarea><button onclick="dispatch('DIARY')">DISPATCH DIARY</button><div id="list-DIARY"></div></div>
-        <div class="column" id="col-VLOG"><h4>VLOG</h4><input type="text" id="title-VLOG" placeholder="Title"><textarea id="payload-VLOG" rows="3"></textarea><button onclick="dispatch('VLOG')">DISPATCH VLOG</button><div id="list-VLOG"></div></div>
+        <div class="column" id="col-BLOG"><h4>BLOG</h4><input type="text" id="title-BLOG"><textarea id="payload-BLOG"></textarea><button onclick="dispatch('BLOG')">DISPATCH</button><div id="list-BLOG"></div></div>
+        <div class="column" id="col-DIARY"><h4>DIARY</h4><input type="text" id="title-DIARY"><textarea id="payload-DIARY"></textarea><button onclick="dispatch('DIARY')">DISPATCH</button><div id="list-DIARY"></div></div>
+        <div class="column" id="col-VLOG"><h4>VLOG</h4><input type="text" id="title-VLOG"><textarea id="payload-VLOG"></textarea><button onclick="dispatch('VLOG')">DISPATCH</button><div id="list-VLOG"></div></div>
     </div>
+
     <script>
         const API_URL = "https://api.github.com/repos/stepiocom/stepioscrapbook-160508/contents/data.js";
-        function safeBase64(s) { return btoa(unescape(encodeURIComponent(s))); }
-        function safeDecode(s) { return decodeURIComponent(escape(atob(s))); }
+        function b64(s) { return btoa(unescape(encodeURIComponent(s))); }
+        function atob64(s) { return decodeURIComponent(escape(atob(s))); }
 
         async function loadCatalog() {
             const token = document.getElementById('token').value;
-            if (!token) return;
-            const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
+            if(!token) return;
+            const res = await fetch(API_URL, { headers: {"Authorization": `token ${token}`} });
             const data = await res.json();
-            const raw = safeDecode(data.content.replace(/\n/g, ''));
+            const raw = atob64(data.content.replace(/\n/g, ''));
             const arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
             ['BLOG', 'DIARY', 'VLOG'].forEach(t => document.getElementById(`list-${t}`).innerHTML = "");
             arr.forEach(a => {
                 const el = document.getElementById(`list-${a.type.toUpperCase()}`);
-                if (el) el.innerHTML += `<div class="asset-card">${a.title.en} (${a.date})</div>`;
+                if(el) el.innerHTML += `<div>${a.title.en}</div>`;
             });
         }
 
         async function dispatch(type) {
             const token = document.getElementById('token').value;
-            const res = await fetch(API_URL, { headers: { "Authorization": `token ${token}` } });
+            const res = await fetch(API_URL, { headers: {"Authorization": `token ${token}`} });
             const data = await res.json();
-            const raw = safeDecode(data.content.replace(/\n/g, ''));
+            const raw = atob64(data.content.replace(/\n/g, ''));
             let arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
-            arr.unshift({ id: `a-${Date.now()}`, date: new Date().toISOString().split('T')[0], type: type, title: { en: document.getElementById(`title-${type}`).value }, payload: document.getElementById(`payload-${type}`).value });
-            await fetch(API_URL, { method: "PUT", headers: { "Authorization": `token ${token}`, "Content-Type": "application/json" }, body: JSON.stringify({ message: "Update", content: safeBase64(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), sha: data.sha }) });
+            arr.unshift({ id: Date.now(), date: new Date().toISOString().split('T')[0], type: type, title: { en: document.getElementById(`title-${type}`).value }, payload: document.getElementById(`payload-${type}`).value });
+            await fetch(API_URL, { method: "PUT", headers: {"Authorization": `token ${token}`, "Content-Type": "application/json"}, body: JSON.stringify({ message: "Update", content: b64(`const clientWorkspaceData = ${JSON.stringify(arr, null, 4)};`), sha: data.sha }) });
             loadCatalog();
         }
     </script>
-</body>
-</html>
 </body>
 </html>
