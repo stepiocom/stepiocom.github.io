@@ -8,9 +8,8 @@
     <style>
         body { font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; }
         .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; width: 100%; box-sizing: border-box; }
-        input, textarea, select { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 10px; }
+        input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 10px; }
         button { width: 100%; padding: 12px; cursor: pointer; background: #333; color: white; border: none; }
-        button:hover { background: #555; }
         #status { padding: 10px; margin-bottom: 15px; display: none; text-align: center; }
     </style>
 </head>
@@ -23,46 +22,48 @@
     <hr>
     
     <div class="box">
-        <h3>Dispatch New Content</h3>
-        <select id="type-select">
-            <option value="BLOG">BLOG</option>
-            <option value="DIARY">DIARY</option>
-            <option value="VLOG">VLOG</option>
-        </select>
-        <input type="text" id="title-input" placeholder="Title">
-        <textarea id="payload-input" rows="6" placeholder="Content..."></textarea>
-        <button onclick="dispatch()">DISPATCH</button>
+        <h3>BLOG</h3>
+        <input type="text" id="title-BLOG" placeholder="Blog Title">
+        <textarea id="payload-BLOG" rows="4" placeholder="Blog Content..."></textarea>
+        <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
+    </div>
+
+    <div class="box">
+        <h3>DIARY</h3>
+        <input type="text" id="title-DIARY" placeholder="Diary Title">
+        <textarea id="payload-DIARY" rows="4" placeholder="Diary Content..."></textarea>
+        <button onclick="dispatch('DIARY')">DISPATCH DIARY</button>
+    </div>
+
+    <div class="box">
+        <h3>VLOG</h3>
+        <input type="text" id="title-VLOG" placeholder="Vlog Title">
+        <textarea id="payload-VLOG" rows="4" placeholder="Vlog Content..."></textarea>
+        <button onclick="dispatch('VLOG')">DISPATCH VLOG</button>
     </div>
 
     <script>
-        async function dispatch() {
+        async function dispatch(type) {
             const code = document.getElementById('client-code').value;
             const token = document.getElementById('token').value;
-            const type = document.getElementById('type-select').value;
-            const title = document.getElementById('title-input').value;
-            const payload = document.getElementById('payload-input').value;
+            const title = document.getElementById('title-' + type).value;
+            const payload = document.getElementById('payload-' + type).value;
             const status = document.getElementById('status');
             
             if(!code || !token) { alert("Please enter Client ID and Token"); return; }
-
             const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
             
             try {
-                status.style.display = 'block'; 
-                status.innerText = "Dispatching...";
+                status.style.display = 'block'; status.innerText = "Dispatching...";
                 status.style.background = '#fff3cd';
 
                 const response = await fetch(apiUrl, { headers: { "Authorization": "token " + token } });
                 const data = await response.json();
-                
-                // Decode base64 content
                 const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
                 let arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
                 
-                // Add new entry
                 arr.unshift({ id: Date.now(), type: type, title: { en: title }, payload: payload });
                 
-                // Push back to GitHub
                 await fetch(apiUrl, { 
                     method: "PUT", 
                     headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, 
@@ -72,12 +73,9 @@
                         sha: data.sha 
                     }) 
                 });
-                
-                status.style.background = '#d4edda';
-                status.innerText = "Success! Dispatched " + type + " to " + code;
+                status.style.background = '#d4edda'; status.innerText = "Success! Dispatched " + type + " to " + code;
             } catch (e) {
-                status.style.background = '#f8d7da';
-                status.innerText = "Error: " + e.message;
+                status.style.background = '#f8d7da'; status.innerText = "Error: " + e.message;
             }
         }
     </script>
