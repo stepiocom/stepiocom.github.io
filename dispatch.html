@@ -1,32 +1,36 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Dispatch</title>
     <link rel="icon" href="29083386.png" type="image/png">
     <style>
-        body { font-family: sans-serif; padding: 20px; }
-        .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; width: 100%; max-width: 400px; }
-        input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 8px; }
-        button { width: 100%; padding: 10px; cursor: pointer; }
+        body { font-family: sans-serif; padding: 20px; max-width: 500px; margin: auto; }
+        .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; width: 100%; box-sizing: border-box; }
+        input, textarea, select { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 10px; }
+        button { width: 100%; padding: 12px; cursor: pointer; background: #333; color: white; border: none; }
+        button:hover { background: #555; }
+        #status { padding: 10px; margin-bottom: 15px; display: none; text-align: center; }
     </style>
 </head>
 <body>
     <h2>MASTER DISPATCH</h2>
-    <div id="status" style="display:none; padding:10px; margin-bottom:10px; background:#e0e0e0;"></div>
+    <div id="status"></div>
+    
     <input type="text" id="client-code" placeholder="Client ID (e.g., 160508)">
     <input type="password" id="token" placeholder="GitHub PAT Token">
+    <hr>
     
     <div class="box">
-        <h3>Dispatch</h3>
+        <h3>Dispatch New Content</h3>
         <select id="type-select">
             <option value="BLOG">BLOG</option>
             <option value="DIARY">DIARY</option>
             <option value="VLOG">VLOG</option>
         </select>
         <input type="text" id="title-input" placeholder="Title">
-        <textarea id="payload-input" rows="5" placeholder="Content..."></textarea>
+        <textarea id="payload-input" rows="6" placeholder="Content..."></textarea>
         <button onclick="dispatch()">DISPATCH</button>
     </div>
 
@@ -38,17 +42,27 @@
             const title = document.getElementById('title-input').value;
             const payload = document.getElementById('payload-input').value;
             const status = document.getElementById('status');
+            
+            if(!code || !token) { alert("Please enter Client ID and Token"); return; }
+
             const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
             
             try {
-                status.style.display = 'block'; status.innerText = "Dispatching...";
+                status.style.display = 'block'; 
+                status.innerText = "Dispatching...";
+                status.style.background = '#fff3cd';
+
                 const response = await fetch(apiUrl, { headers: { "Authorization": "token " + token } });
                 const data = await response.json();
+                
+                // Decode base64 content
                 const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
                 let arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
                 
+                // Add new entry
                 arr.unshift({ id: Date.now(), type: type, title: { en: title }, payload: payload });
                 
+                // Push back to GitHub
                 await fetch(apiUrl, { 
                     method: "PUT", 
                     headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, 
@@ -58,8 +72,13 @@
                         sha: data.sha 
                     }) 
                 });
-                status.style.backgroundColor = '#ccffcc'; status.innerText = "Success! Dispatched " + type;
-            } catch (e) { status.style.backgroundColor = '#ffcccc'; status.innerText = "Error: " + e.message; }
+                
+                status.style.background = '#d4edda';
+                status.innerText = "Success! Dispatched " + type + " to " + code;
+            } catch (e) {
+                status.style.background = '#f8d7da';
+                status.innerText = "Error: " + e.message;
+            }
         }
     </script>
 </body>
