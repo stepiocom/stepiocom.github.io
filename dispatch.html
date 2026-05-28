@@ -1,52 +1,109 @@
-async function dispatch(type) {
-    const code = document.getElementById('client-code').value;
-    const token = document.getElementById('token').value;
-    const title = document.getElementById('title-' + type).value;
-    const payload = document.getElementById('payload-' + type).value;
-    const status = document.getElementById('status');
-    const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>MASTER DISPATCH</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 900px; margin: auto; }
+        .grid { display: flex; gap: 20px; }
+        .column { flex: 1; border: 1px solid #333; padding: 15px; border-radius: 8px; }
+        input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 8px; }
+        textarea { height: 150px; }
+        button { width: 100%; padding: 10px; cursor: pointer; font-weight: bold; }
+        #status { padding: 15px; margin-bottom: 20px; border: 1px solid #000; display: none; font-weight: bold; }
+    </style>
+</head>
+<body>
 
-    try {
-        status.style.display = 'block';
-        status.innerText = "Dispatching...";
-        const response = await fetch(apiUrl, {
-            headers: {
-                "Authorization": "token " + token,
-                "Accept": "application/vnd.github.v3+json"
+    <h3>MASTER DISPATCH</h3>
+    <div id="status"></div>
+
+    <input type="text" id="client-code" placeholder="6-digit Client Code (e.g., 160508)">
+    <input type="password" id="token" placeholder="GitHub PAT">
+
+    <div class="grid">
+        <div class="column">
+            <h4>BLOG</h4>
+            <input type="text" id="title-BLOG" placeholder="Title">
+            <textarea id="payload-BLOG" placeholder="Content"></textarea>
+            <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
+        </div>
+        <div class="column">
+            <h4>DIARY</h4>
+            <input type="text" id="title-DIARY" placeholder="Title">
+            <textarea id="payload-DIARY" placeholder="Content"></textarea>
+            <button onclick="dispatch('DIARY')">DISPATCH DIARY</button>
+        </div>
+        <div class="column">
+            <h4>VLOG</h4>
+            <input type="text" id="title-VLOG" placeholder="Title">
+            <textarea id="payload-VLOG" placeholder="Content"></textarea>
+            <button onclick="dispatch('VLOG')">DISPATCH VLOG</button>
+        </div>
+    </div>
+
+    <script>
+        async function dispatch(type) {
+            const code = document.getElementById('client-code').value;
+            const token = document.getElementById('token').value;
+            const title = document.getElementById('title-' + type).value;
+            const payload = document.getElementById('payload-' + type).value;
+            const status = document.getElementById('status');
+            const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
+
+            status.style.display = 'block';
+            status.innerText = "Dispatching...";
+
+            try {
+                const response = await fetch(apiUrl, {
+                    headers: {
+                        "Authorization": "token " + token,
+                        "Accept": "application/vnd.github.v3+json"
+                    }
+                });
+
+                if (!response.ok) throw new Error("GitHub error: " + response.status);
+
+                const data = await response.json();
+                const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+                
+                let jsonString = raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1);
+                if (!jsonString || jsonString === "[]") jsonString = "[]";
+                
+                let arr = JSON.parse(jsonString);
+
+                arr.unshift({
+                    id: Date.now(),
+                    type: type,
+                    title: { en: title },
+                    payload: payload
+                });
+
+                const putResponse = await fetch(apiUrl, {
+                    method: "PUT",
+                    headers: {
+                        "Authorization": "token " + token,
+                        "Content-Type": "application/json"
+                    },
+                    body: JSON.stringify({
+                        message: "Update " + type,
+                        content: btoa(unescape(encodeURIComponent("const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";"))),
+                        sha: data.sha
+                    })
+                });
+
+                if (putResponse.ok) {
+                    status.style.backgroundColor = '#ccffcc';
+                    status.innerText = "Success! Dispatched to " + code;
+                } else {
+                    throw new Error("GitHub rejected the update.");
+                }
+            } catch (e) {
+                status.style.backgroundColor = '#ffcccc';
+                status.innerText = "Error: " + e.message;
+                console.error(e);
             }
-        });
-        const data = await response.json();
-        const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
-        let jsonString = raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1);
-        if (!jsonString || jsonString === "[]") jsonString = "[]";
-        let arr = JSON.parse(jsonString);
-        arr.unshift({
-            id: Date.now(),
-            type: type,
-            title: { en: title },
-            payload: payload
-        });
-        const putResponse = await fetch(apiUrl, {
-            method: "PUT",
-            headers: {
-                "Authorization": "token " + token,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: "Update " + type,
-                content: btoa(unescape(encodeURIComponent("const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";"))),
-                sha: data.sha
-            })
-        });
-        if (putResponse.ok) {
-            status.style.backgroundColor = '#ccffcc';
-            status.innerText = "Success! Dispatched to " + code;
-        } else {
-            throw new Error("GitHub rejected the update.");
         }
-    } catch (e) {
-        status.style.backgroundColor = '#ffcccc';
-        status.innerText = "Error: " + e.message;
-        console.error(e);
-    }
-}
+    </script>
+</body>
+</html>
