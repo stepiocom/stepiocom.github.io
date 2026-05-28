@@ -53,25 +53,39 @@
             const payload = document.getElementById('payload-'+type).value;
             
             if (code.length !== 6) return updateStatus("Error: Client code must be 6 digits.", true);
+            if (!token) return updateStatus("Error: GitHub PAT required.", true);
             
+            // The API URL is constructed dynamically using the 6-digit code
             const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
             updateStatus("Dispatching to " + code + "...");
 
             try {
-                const res = await fetch(apiUrl, { headers: {"Authorization": "token " + token} });
-                if (!res.ok) throw new Error("Repo not found or access denied.");
+                // IMPORTANT: The 'Authorization' header is required to see private repositories
+                const res = await fetch(apiUrl, { 
+                    headers: { 
+                        "Authorization": "token " + token,
+                        "Accept": "application/vnd.github.v3+json"
+                    } 
+                });
+                
+                if (!res.ok) throw new Error("Could not access data.js. Check PAT permissions or 6-digit code.");
                 
                 const data = await res.json();
                 const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
-                let arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+                // Extract only the JSON array content
+                const jsonString = raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1);
+                let arr = JSON.parse(jsonString);
                 
                 arr.unshift({ id: Date.now(), type, title: { en: title }, payload });
                 
                 await fetch(apiUrl, { 
                     method: "PUT", 
-                    headers: {"Authorization": "token " + token, "Content-Type": "application/json"}, 
+                    headers: { 
+                        "Authorization": "token " + token, 
+                        "Content-Type": "application/json" 
+                    }, 
                     body: JSON.stringify({ 
-                        message: "Update", 
+                        message: "Update " + type, 
                         content: btoa(unescape(encodeURIComponent("const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";"))), 
                         sha: data.sha 
                     }) 
