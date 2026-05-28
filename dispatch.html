@@ -6,31 +6,35 @@
         body { font-family: sans-serif; padding: 20px; }
         .grid { display: flex; gap: 20px; }
         .column { flex: 1; border: 1px solid #000; padding: 15px; }
-        input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+        input[type="text"], textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; }
+        textarea { height: 120px; }
         button { width: 100%; padding: 10px; font-weight: bold; cursor: pointer; }
-        #status { padding: 15px; margin-bottom: 20px; border: 1px solid #000; display: none; }
+        #status { padding: 15px; margin-bottom: 20px; border: 1px solid #000; display: none; font-weight: bold; }
     </style>
 </head>
 <body>
     <h3>CENTRAL DISPATCH</h3>
     <div id="status"></div>
-    <input type="text" id="client-code" placeholder="Enter 6-digit Code (e.g., 160508)">
+    <input type="text" id="client-code" placeholder="6-digit Client Code (e.g., 160508)">
     <input type="password" id="token" placeholder="GitHub PAT">
     
     <div class="grid">
         <div class="column">
             <h4>BLOG</h4>
-            <textarea id="payload-BLOG" rows="4"></textarea>
+            <input type="text" id="title-BLOG" placeholder="Title">
+            <textarea id="payload-BLOG"></textarea>
             <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
         </div>
         <div class="column">
             <h4>DIARY</h4>
-            <textarea id="payload-DIARY" rows="4"></textarea>
+            <input type="text" id="title-DIARY" placeholder="Title">
+            <textarea id="payload-DIARY"></textarea>
             <button onclick="dispatch('DIARY')">DISPATCH DIARY</button>
         </div>
         <div class="column">
             <h4>VLOG</h4>
-            <textarea id="payload-VLOG" rows="4"></textarea>
+            <input type="text" id="title-VLOG" placeholder="Title">
+            <textarea id="payload-VLOG"></textarea>
             <button onclick="dispatch('VLOG')">DISPATCH VLOG</button>
         </div>
     </div>
@@ -40,19 +44,21 @@
             const el = document.getElementById('status');
             el.style.display = 'block';
             el.style.backgroundColor = isError ? '#ffcccc' : '#ccffcc';
+            el.style.color = isError ? '#cc0000' : '#006600';
             el.innerText = msg;
         }
 
         async function dispatch(type) {
             const code = document.getElementById('client-code').value;
             const token = document.getElementById('token').value;
+            const title = document.getElementById('title-'+type).value;
             const payload = document.getElementById('payload-'+type).value;
             
-            if (!code || code.length !== 6) return updateStatus("Error: 6-digit code required.", true);
-            if (!token) return updateStatus("Error: PAT required.", true);
+            if (code.length !== 6) return updateStatus("Error: 6-digit code required.", true);
+            if (!token) return updateStatus("Error: GitHub PAT required.", true);
             
             const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
-            updateStatus("Connecting to " + code + "...");
+            updateStatus("Dispatching to " + code + "...");
 
             try {
                 const res = await fetch(apiUrl, { 
@@ -63,14 +69,15 @@
                 });
                 
                 if (res.status === 404) throw new Error("404: File/Repo not found. Check if repo name is 'stepioscrapbook-" + code + "'");
-                if (res.status === 401) throw new Error("401: Unauthorized. Check PAT 'repo' permissions.");
+                if (res.status === 401) throw new Error("401: Unauthorized. Check if PAT has 'repo' scope.");
                 if (!res.ok) throw new Error("GitHub Error: " + res.status);
                 
                 const data = await res.json();
                 const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
-                let arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
+                const jsonString = raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1);
+                let arr = JSON.parse(jsonString);
                 
-                arr.unshift({ id: Date.now(), type, payload });
+                arr.unshift({ id: Date.now(), type, title: { en: title }, payload });
                 
                 await fetch(apiUrl, { 
                     method: "PUT", 
