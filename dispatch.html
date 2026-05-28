@@ -7,48 +7,61 @@
         .grid { display: flex; gap: 20px; }
         .column { flex: 1; border: 1px solid #000; padding: 15px; }
         input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; }
-        button { width: 100%; padding: 10px; cursor: pointer; }
+        button { width: 100%; padding: 10px; cursor: pointer; font-weight: bold; background: #eee; border: 1px solid #000; }
+        button:hover { background: #ccc; }
     </style>
 </head>
-<body onload="loadCatalog()">
+<body>
     <h3>CENTRAL DISPATCH</h3>
     <input type="password" id="token" placeholder="GitHub PAT">
     <div class="grid">
-        <div class="column" id="BLOG"><h4>BLOG</h4><input type="text" id="title-BLOG"><textarea id="payload-BLOG" rows="4"></textarea><button onclick="dispatch('BLOG')">DISPATCH BLOG</button></div>
-        <div class="column" id="DIARY"><h4>DIARY</h4><input type="text" id="title-DIARY"><textarea id="payload-DIARY" rows="4"></textarea><button onclick="dispatch('DIARY')">DISPATCH DIARY</button></div>
-        <div class="column" id="VLOG"><h4>VLOG</h4><input type="text" id="title-VLOG"><textarea id="payload-VLOG" rows="4"></textarea><button onclick="dispatch('VLOG')">DISPATCH VLOG</button></div>
+        <div class="column" id="col-BLOG">
+            <h4>BLOG</h4>
+            <input type="text" id="title-BLOG" placeholder="Title">
+            <textarea id="payload-BLOG" rows="4"></textarea>
+            <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
+        </div>
+        <div class="column" id="col-DIARY">
+            <h4>DIARY</h4>
+            <input type="text" id="title-DIARY" placeholder="Title">
+            <textarea id="payload-DIARY" rows="4"></textarea>
+            <button onclick="dispatch('DIARY')">DISPATCH DIARY</button>
+        </div>
+        <div class="column" id="col-VLOG">
+            <h4>VLOG</h4>
+            <input type="text" id="title-VLOG" placeholder="Title">
+            <textarea id="payload-VLOG" rows="4"></textarea>
+            <button onclick="dispatch('VLOG')">DISPATCH VLOG</button>
+        </div>
     </div>
 
     <script>
         const API_URL = "https://api.github.com/repos/stepiocom/stepioscrapbook-160508/contents/data.js";
         
-        async function loadCatalog() { /* Keep existing load logic */ }
-
         async function dispatch(type) {
             const token = document.getElementById('token').value;
+            const title = document.getElementById('title-' + type).value;
+            const payload = document.getElementById('payload-' + type).value;
+            
+            // 1. Fetch
             const res = await fetch(API_URL, { headers: {"Authorization": "token " + token} });
             const data = await res.json();
+            
+            // 2. Decode & Update
             const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
             let arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
             
-            arr.unshift({ 
-                id: Date.now(), 
-                date: new Date().toISOString().split('T')[0], 
-                type: type, 
-                title: { en: document.getElementById('title-' + type).value }, 
-                payload: document.getElementById('payload-' + type).value 
-            });
+            arr.unshift({ id: Date.now(), date: new Date().toISOString().split('T')[0], type: type, title: { en: title }, payload: payload });
             
+            // 3. Encode & Put
+            const newContent = "const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";";
             await fetch(API_URL, { 
                 method: "PUT", 
                 headers: {"Authorization": "token " + token, "Content-Type": "application/json"}, 
-                body: JSON.stringify({ 
-                    message: "Dispatch", 
-                    content: btoa(unescape(encodeURIComponent("const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";"))), 
-                    sha: data.sha 
-                }) 
+                body: JSON.stringify({ message: "Dispatch " + type, content: btoa(unescape(encodeURIComponent(newContent))), sha: data.sha }) 
             });
-            alert("Dispatched!");
+            
+            alert("Dispatched to " + type + "!");
         }
     </script>
 </body>
