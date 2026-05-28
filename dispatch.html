@@ -1,50 +1,57 @@
 async function dispatch(type) {
     const code = document.getElementById('client-code').value;
     const token = document.getElementById('token').value;
-    const title = document.getElementById('title-' + type).value;
-    const payload = document.getElementById('payload-' + type).value;
+    const title = document.getElementById('title-'+type).value;
+    const payload = document.getElementById('payload-'+type).value;
     const status = document.getElementById('status');
+
     const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
 
     try {
         status.style.display = 'block';
         status.innerText = "Dispatching...";
-        const response = await fetch(apiUrl, {
-            headers: {
-                "Authorization": "token " + token,
-                "Accept": "application/vnd.github.v3+json"
-            }
+
+        const response = await fetch(apiUrl, { 
+            headers: { "Authorization": "token " + token, "Accept": "application/vnd.github.v3+json" } 
         });
+
         const data = await response.json();
+        
+        // Decode the base64 content
         const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
+        
+        // CLEANUP: Extract only the array part and ensure it's valid
         let jsonString = raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1);
-        if (!jsonString || jsonString === "[]") jsonString = "[]";
+        if (!jsonString || jsonString === "[]") jsonString = "[]"; 
+        
         let arr = JSON.parse(jsonString);
-        arr.unshift({
-            id: Date.now(),
-            type: type,
-            title: { en: title },
-            payload: payload
+        
+        // Add new entry using plain objects (no template literals)
+        arr.unshift({ 
+            id: Date.now(), 
+            type: type, 
+            title: { en: title }, 
+            payload: payload 
         });
-        const putResponse = await fetch(apiUrl, {
-            method: "PUT",
-            headers: {
-                "Authorization": "token " + token,
-                "Content-Type": "application/json"
-            },
-            body: JSON.stringify({
-                message: "Update " + type,
-                content: btoa(unescape(encodeURIComponent("const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";"))),
-                sha: data.sha
-            })
+
+        // PUT request
+        const putResponse = await fetch(apiUrl, { 
+            method: "PUT", 
+            headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, 
+            body: JSON.stringify({ 
+                message: "Update " + type, 
+                content: btoa(unescape(encodeURIComponent("const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";"))), 
+                sha: data.sha 
+            }) 
         });
+
         if (putResponse.ok) {
             status.style.backgroundColor = '#ccffcc';
             status.innerText = "Success! Dispatched to " + code;
         } else {
             throw new Error("GitHub rejected the update.");
         }
-    } catch (e) {
+    } catch(e) { 
         status.style.backgroundColor = '#ffcccc';
         status.innerText = "Error: " + e.message;
         console.error(e);
