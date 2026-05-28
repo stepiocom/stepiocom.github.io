@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>MASTER DISPATCH</title>
+    <title>CENTRAL DISPATCH</title>
     <style>
         body { font-family: sans-serif; padding: 20px; }
         .grid { display: flex; gap: 20px; }
-        .column { flex: 1; border: 1px solid #ccc; padding: 15px; border-radius: 8px; }
+        .column { flex: 1; border: 1px solid #000; padding: 15px; }
         input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; }
-        button { width: 100%; padding: 10px; cursor: pointer; }
-        #status-box { padding: 15px; background: #f0f0f0; border: 1px solid #333; margin-bottom: 20px; display: none; }
+        button { width: 100%; padding: 10px; font-weight: bold; cursor: pointer; }
+        #status { padding: 15px; margin-bottom: 20px; border: 1px solid #000; display: none; }
     </style>
 </head>
 <body>
-    <h3>MASTER DISPATCH</h3>
-    <div id="status-box"></div>
-    
+    <h3>CENTRAL DISPATCH</h3>
+    <div id="status"></div>
+    <input type="text" id="client-code" placeholder="Enter 6-digit Client Code (e.g. 160508)">
     <input type="password" id="token" placeholder="GitHub PAT">
-    <select id="client-select" onchange="updateRepo()"></select>
-
+    
     <div class="grid">
         <div class="column">
             <h4>BLOG</h4>
@@ -40,42 +39,27 @@
     </div>
 
     <script>
-        let clients = {};
-        let activeApiUrl = "";
-
-        // Load client map on startup
-        async function init() {
-            const res = await fetch('clients.json');
-            clients = await res.json();
-            const select = document.getElementById('client-select');
-            Object.keys(clients).forEach(repo => {
-                const opt = document.createElement('option');
-                opt.value = repo; opt.innerText = repo;
-                select.appendChild(opt);
-            });
-            updateRepo();
-        }
-
-        function updateRepo() {
-            activeApiUrl = clients[document.getElementById('client-select').value];
-        }
-
-        function log(msg, err = false) {
-            const el = document.getElementById('status-box');
+        function updateStatus(msg, isError = false) {
+            const el = document.getElementById('status');
             el.style.display = 'block';
-            el.style.color = err ? 'red' : 'green';
+            el.style.backgroundColor = isError ? '#ffcccc' : '#ccffcc';
             el.innerText = msg;
         }
 
         async function dispatch(type) {
+            const code = document.getElementById('client-code').value;
             const token = document.getElementById('token').value;
             const title = document.getElementById('title-'+type).value;
             const payload = document.getElementById('payload-'+type).value;
+            
+            if (code.length !== 6) return updateStatus("Error: Client code must be 6 digits.", true);
+            
+            const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
+            updateStatus("Dispatching to " + code + "...");
 
-            log("Fetching target...");
             try {
-                const res = await fetch(activeApiUrl, { headers: {"Authorization": "token " + token} });
-                if(!res.ok) throw new Error("Unauthorized or Repo Not Found");
+                const res = await fetch(apiUrl, { headers: {"Authorization": "token " + token} });
+                if (!res.ok) throw new Error("Repo not found or access denied.");
                 
                 const data = await res.json();
                 const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ''))));
@@ -83,20 +67,18 @@
                 
                 arr.unshift({ id: Date.now(), type, title: { en: title }, payload });
                 
-                log("Pushing to GitHub...");
-                await fetch(activeApiUrl, { 
+                await fetch(apiUrl, { 
                     method: "PUT", 
                     headers: {"Authorization": "token " + token, "Content-Type": "application/json"}, 
                     body: JSON.stringify({ 
-                        message: "Dispatch " + type, 
+                        message: "Update", 
                         content: btoa(unescape(encodeURIComponent("const clientWorkspaceData = " + JSON.stringify(arr, null, 4) + ";"))), 
                         sha: data.sha 
                     }) 
                 });
-                log("Success: Dispatched to " + document.getElementById('client-select').value);
-            } catch(e) { log(e.message, true); }
+                updateStatus("Successfully dispatched to " + code);
+            } catch(e) { updateStatus("Error: " + e.message, true); }
         }
-        init();
     </script>
 </body>
 </html>
