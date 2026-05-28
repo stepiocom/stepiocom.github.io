@@ -1,12 +1,15 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Master Dispatch</title>
     <link rel="icon" href="29083386.png" type="image/png">
     <style>
         body { font-family: sans-serif; padding: 20px; }
-        .box { border: 1px solid #000; padding: 15px; margin-bottom: 20px; width: 300px; display: inline-block; vertical-align: top; }
-        input, textarea { width: 100%; margin-bottom: 10px; }
+        .box { border: 1px solid #ccc; padding: 15px; margin-bottom: 20px; width: 100%; max-width: 400px; }
+        input, textarea { width: 100%; box-sizing: border-box; margin-bottom: 10px; padding: 8px; }
+        button { width: 100%; padding: 10px; cursor: pointer; }
     </style>
 </head>
 <body>
@@ -14,40 +17,39 @@
     <div id="status" style="display:none; padding:10px; margin-bottom:10px; background:#e0e0e0;"></div>
     <input type="text" id="client-code" placeholder="Client ID (e.g., 160508)">
     <input type="password" id="token" placeholder="GitHub PAT Token">
-    <hr>
     
     <div class="box">
-        <h3>BLOG</h3>
-        <input type="text" id="title-BLOG" placeholder="Title">
-        <textarea id="payload-BLOG" rows="5"></textarea>
-        <button onclick="dispatch('BLOG')">DISPATCH BLOG</button>
+        <h3>Dispatch</h3>
+        <select id="type-select">
+            <option value="BLOG">BLOG</option>
+            <option value="DIARY">DIARY</option>
+            <option value="VLOG">VLOG</option>
+        </select>
+        <input type="text" id="title-input" placeholder="Title">
+        <textarea id="payload-input" rows="5" placeholder="Content..."></textarea>
+        <button onclick="dispatch()">DISPATCH</button>
     </div>
 
     <script>
-        async function dispatch(type) {
+        async function dispatch() {
             const code = document.getElementById('client-code').value;
             const token = document.getElementById('token').value;
-            const title = document.getElementById('title-' + type).value;
-            const payload = document.getElementById('payload-' + type).value;
+            const type = document.getElementById('type-select').value;
+            const title = document.getElementById('title-input').value;
+            const payload = document.getElementById('payload-input').value;
             const status = document.getElementById('status');
             const apiUrl = `https://api.github.com/repos/stepiocom/stepioscrapbook-${code}/contents/data.js`;
             
             try {
-                status.style.display = 'block';
-                status.innerText = "Dispatching...";
-                
-                // 1. Fetch current data
+                status.style.display = 'block'; status.innerText = "Dispatching...";
                 const response = await fetch(apiUrl, { headers: { "Authorization": "token " + token } });
                 const data = await response.json();
                 const raw = decodeURIComponent(escape(atob(data.content.replace(/\n/g, ""))));
-                const jsonString = raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1);
-                let arr = JSON.parse(jsonString);
+                let arr = JSON.parse(raw.substring(raw.indexOf('['), raw.lastIndexOf(']') + 1));
                 
-                // 2. Add entry
                 arr.unshift({ id: Date.now(), type: type, title: { en: title }, payload: payload });
                 
-                // 3. Push back to GitHub
-                const putResponse = await fetch(apiUrl, { 
+                await fetch(apiUrl, { 
                     method: "PUT", 
                     headers: { "Authorization": "token " + token, "Content-Type": "application/json" }, 
                     body: JSON.stringify({ 
@@ -56,15 +58,8 @@
                         sha: data.sha 
                     }) 
                 });
-                
-                if (putResponse.ok) {
-                    status.style.backgroundColor = '#ccffcc';
-                    status.innerText = "Success! Dispatched to " + code;
-                } else { throw new Error("GitHub rejected the update."); }
-            } catch (e) {
-                status.style.backgroundColor = '#ffcccc';
-                status.innerText = "Error: " + e.message;
-            }
+                status.style.backgroundColor = '#ccffcc'; status.innerText = "Success! Dispatched " + type;
+            } catch (e) { status.style.backgroundColor = '#ffcccc'; status.innerText = "Error: " + e.message; }
         }
     </script>
 </body>
