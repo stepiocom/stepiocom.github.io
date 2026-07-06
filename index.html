@@ -64,8 +64,8 @@
         }
         
         body.lang-en [lang-content="en"],
-        body.lang-zh [lang-content="zh"],
-        body.lang-ja [lang-content="ja"],
+        body.lang-cn [lang-content="cn"],
+        body.lang-jp [lang-content="jp"],
         body.lang-fr [lang-content="fr"] {
             display: block;
         }
@@ -200,8 +200,8 @@
         
         <nav class="lang-selector">
             <button class="lang-btn active" onclick="setLang('en')">en</button>
-            <button class="lang-btn" onclick="setLang('zh')">繁中</button>
-            <button class="lang-btn" onclick="setLang('ja')">ja</button>
+            <button class="lang-btn" onclick="setLang('cn')">繁中</button>
+            <button class="lang-btn" onclick="setLang('jp')">ja</button>
             <button class="lang-btn" onclick="setLang('fr')">fr</button>
         </nav>
 
@@ -269,12 +269,12 @@
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak/build-high-signal-research-archive-for-career-advancement-and-build-business-ip" class="btn" target="_blank">Secure Your Entry Diagnostic on Fiverr ──►</a>
+                    <a href="https://forms.gle/zxYmEgHzgRB419bN8" class="btn" target="_blank">Secure Your Entry Diagnostic on Fiverr ──►</a>
                 </div>
             </main>
         </div>
 
-        <div lang-content="zh">
+        <div lang-content="cn">
             <header>
                 <h1>STEPIO  一步</h1>
                 <h2>您專注專業實踐。我們構建您的權威產出。</h2>
@@ -336,12 +336,12 @@
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak/build-high-signal-research-archive-for-career-advancement-and-build-business-ip" class="btn" target="_blank">在 Fiverr 上啟動您的首次全面診斷 ──►</a>
+                    <a href="https://forms.gle/17WEEhEBcWGzFQm16" class="btn" target="_blank">在 Fiverr 上啟動您的首次全面診斷 ──►</a>
                 </div>
             </main>
         </div>
 
-        <div lang-content="ja">
+        <div lang-content="jp">
             <header>
                 <h1>STEPIO 一步</h1>
                 <h2>現場の知見を、確固たる知的遺産へ。</h2>
@@ -403,7 +403,7 @@
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak/build-high-signal-research-archive-for-career-advancement-and-build-business-ip" class="btn" target="_blank">Fiverrで初回診断を確定する ──►</a>
+                    <a href="https://forms.gle/AsgY21mG13fJiM6L8" class="btn" target="_blank">Fiverrで初回診断を確定する ──►</a>
                 </div>
             </main>
         </div>
@@ -469,7 +469,7 @@
                 </section>
 
                 <div class="cta-container">
-                    <a href="https://www.fiverr.com/edwardpak/build-high-signal-research-archive-for-career-advancement-and-build-business-ip" class="btn" target="_blank">Sécurisez Votre Diagnostic Initial sur Fiverr ──►</a>
+                    <a href="https://forms.gle/Y3XYUefZm6fJmDNg8" class="btn" target="_blank">Sécurisez Votre Diagnostic Initial sur Fiverr ──►</a>
                 </div>
             </main>
         </div>
@@ -485,8 +485,8 @@
             const buttons = document.querySelectorAll('.lang-btn');
             buttons.forEach(btn => {
                 if(btn.textContent.toLowerCase() === langCode || 
-                   (langCode === 'zh' && btn.textContent === '繁中') ||
-                   (langCode === 'ja' && btn.textContent === 'ja') ||
+                   (langCode === 'cn' && btn.textContent === '繁中') ||
+                   (langCode === 'jp' && btn.textContent === 'jp') ||
                    (langCode === 'fr' && btn.textContent === 'fr')) {
                     btn.classList.add('active');
                 } else {
