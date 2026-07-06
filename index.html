@@ -201,7 +201,7 @@
         <nav class="lang-selector">
             <button class="lang-btn active" onclick="setLang('en')">en</button>
             <button class="lang-btn" onclick="setLang('cn')">中文</button>
-            <button class="lang-btn" onclick="setLang('jp')">ja</button>
+            <button class="lang-btn" onclick="setLang('jp')">jp</button>
             <button class="lang-btn" onclick="setLang('fr')">fr</button>
         </nav>
 
@@ -604,7 +604,7 @@
             buttons.forEach(btn => {
                 if(btn.textContent.toLowerCase() === langCode || 
                    (langCode === 'cn' && btn.textContent === '中文') ||
-                   (langCode === 'jp' && btn.textContent === 'ja') ||
+                   (langCode === 'jp' && btn.textContent === 'jp') ||
                    (langCode === 'fr' && btn.textContent === 'fr')) {
                     btn.classList.add('active');
                 } else {
